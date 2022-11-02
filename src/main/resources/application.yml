@@ -2,13 +2,7 @@
 server:
   port: 9000
 
-# jsp
 spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/mycar/
-      suffix: .jsp
-
   # MySQL setting
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -37,6 +31,6 @@ spring:
 
 # MyBatis
 mybatis:
-  type-aliases-package: shop.data
+  type-aliases-package: data.dto
   mapper-locations:
     - /mapper/**/*.xml
