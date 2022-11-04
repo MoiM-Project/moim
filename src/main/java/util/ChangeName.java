@@ -28,5 +28,7 @@ public class ChangeName {
 		fileName = ""+y+(m<10?"0"+m:m)+(d<10?"0"+d:d)+(hh<10?"0"+hh:hh)+(mm<10?"0"+mm:mm)+(ss<10?"0"+ss:ss)+ms+rn+ext;
 		
 		return fileName;
+
+		//test
 	}
 }
