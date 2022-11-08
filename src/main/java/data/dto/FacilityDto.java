@@ -7,6 +7,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("FacilityDto")
 public class FacilityDto {
     private int num;
-    private String name;
+    private String fname;
     private String imageUrl;
 }

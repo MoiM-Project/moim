@@ -7,6 +7,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("CategoryDto")
 public class CategoryDto {
     private int num;
-    private String name;
+    private String cname;
     private int mainCategoryNum;
 }

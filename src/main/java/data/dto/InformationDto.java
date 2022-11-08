@@ -7,6 +7,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("InformationDto")
 public class InformationDto {
     private int num;
-    private String content;
+    private String icontent;
     private int roomNum;
 }
