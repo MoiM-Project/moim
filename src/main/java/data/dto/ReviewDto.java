@@ -7,8 +7,8 @@ import org.apache.ibatis.type.Alias;
 import java.sql.Timestamp;
 
 @Data
-@Alias("reviewDto")
-public class reviewDto {
+@Alias("ReviewDto")
+public class ReviewDto {
     private int num;
     private String content;
     private String answerContent;
