@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Data
 @Alias("BookingDetail")
-public class BookingDetail {
+public class BookingDetailDto {
     private int num;
     private String bookingTime;
     private int headCount;
