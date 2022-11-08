@@ -5,7 +5,7 @@ import org.apache.ibatis.type.Alias;
 
 @Data
 @Alias("BookingDetailRoption")
-public class BookingDetailRoption {
+public class BookingDetailRoptionDto {
     private int num;
     private int count;
     private int userNum;

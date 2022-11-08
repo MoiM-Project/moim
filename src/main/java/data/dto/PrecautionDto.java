@@ -5,7 +5,7 @@ import org.apache.ibatis.type.Alias;
 
 @Data
 @Alias("Precaution")
-public class Precaution {
+public class PrecautionDto {
     private int num;
     private String content;
     private int roomNum;
