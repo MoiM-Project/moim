@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("RoptionDto")
 public class RoptionDto {
     private int num;
-    private String name;
+    private String oname;
     private int price;
-    private String imageUrl;
+    private String oimageUrl;
 }
