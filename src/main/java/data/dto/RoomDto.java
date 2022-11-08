@@ -18,8 +18,7 @@ public class RoomDto {
     private int headcount;
     private int stime;
     private int etime;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Timestamp holiday;
+    private int holiday;
     private int floor;
     private int parking;
     private int elevator;
