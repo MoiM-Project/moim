@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="data.mapper.ThemeMapper">
+    <insert id="insertTheme" parameterType="ThemeDto">
+        insert into theme values (null,#{title},#{description},#{bannerImage})
+    </insert>
+    <select id="selectThemeList" resultType="ThemeDto">
+        select * from theme order by num desc
+    </select>
+    <select id="selectThemeRoomList" parameterType="int" resultType="RoomDto">
+        select * from room where num in (select * from roomTheme where themeNum=#{themeNum}) order by num desc
+    </select>
+    <select id="selectThemeCount" parameterType="int" resultType="int">
+        select count(*) from roomTheme where themeNum=#{themeNum}
+    </select>
+    <update id="updateTheme" parameterType="ThemeDto">
+        update theme set title=#{title}, description=#{description},bannerImage=#{bannerImage} where num=#{num};
+    </update>
+    <delete id="deleteTheme" parameterType="int">
+        delete from theme where num=#{num};
+    </delete>
+</mapper>
