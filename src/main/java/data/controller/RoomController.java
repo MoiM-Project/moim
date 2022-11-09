@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/room")
@@ -22,4 +24,23 @@ public class RoomController {
 
         return dto;
     }
+
+    @GetMapping("/category")
+    public List<RoomDto> getCategory(int num)
+    {
+        return roomMapper.getCategoryData(num);
+    }
+
+    @GetMapping("/facility")
+    public List<RoomDto> getFacility(int num)
+    {
+        return roomMapper.getFacilityList(num);
+    }
+
+    @GetMapping("/option")
+    public List<RoomDto> getOption(int num)
+    {
+        return roomMapper.getOptionList(num);
+    }
+
 }
