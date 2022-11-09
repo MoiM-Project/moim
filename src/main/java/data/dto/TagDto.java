@@ -7,6 +7,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("TagDto")
 public class TagDto {
     private int num;
-    private String name;
+    private String tname;
     private int roomNum;
 }
