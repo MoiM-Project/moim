@@ -7,11 +7,14 @@
     <select id="selectThemeList" resultType="ThemeDto">
         select * from theme order by num desc
     </select>
-    <select id="selectThemeRoomList" parameterType="int" resultType="RoomDto">
-        select * from room where num in (select * from roomTheme where themeNum=#{themeNum}) order by num desc
+    <select id="selectTheme" parameterType="int" resultType="ThemeDto">
+        select * from theme where num=#{num}
+    </select>
+    <select id="selectThemeRoomList" parameterType="Map" resultType="RoomDto">
+        select * from room where num in (select roomNum from roomTheme where themeNum=#{num}) order by #{sort} desc
     </select>
     <select id="selectThemeCount" parameterType="int" resultType="int">
-        select count(*) from roomTheme where themeNum=#{themeNum}
+        select count(*) from roomTheme where themeNum=#{num}
     </select>
     <update id="updateTheme" parameterType="ThemeDto">
         update theme set title=#{title}, description=#{description},bannerImage=#{bannerImage} where num=#{num};
