@@ -132,4 +132,10 @@ public class HostController {
         }
         return roomList;
     }
+
+    @GetMapping("/delphoto")
+    public void deletePhoto(@RequestParam int idx){
+        System.out.println(idx+"번 삭제");
+        roomList.remove(idx);
+    }
 }
