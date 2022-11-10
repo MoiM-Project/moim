@@ -27,4 +27,10 @@
             inner join roption rop on ro.roptionNum = rop.num
                                        where r.num = #{num};
     </select>
+
+    <select id="selectRoomImageList" parameterType="int" resultType="RoomImageDto">
+        select * from roomImage where roomNum=#{num}
+    </select>
+
 </mapper>
+

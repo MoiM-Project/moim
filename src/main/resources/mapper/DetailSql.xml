@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="data.mapper.DetailMapper">
+    <select id="getRoomData" parameterType="int" resultType="RoomDto">
+        select * from room where num=#{num}
+    </select>
+    <update id="updateReadCount" parameterType="int">
+        update room set readCount=readCount+1 where num=#{num}
+    </update>
+    <select id="getTagName" parameterType="int" resultType="String">
+        select tname from tag where roomNum=#{num}
+    </select>
+    <select id="getImg" parameterType="int" resultType="String">
+        select rimageUrl from roomImage where roomNum=#{num}
+    </select>
+</mapper>

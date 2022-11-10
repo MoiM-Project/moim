@@ -15,6 +15,7 @@ public class RoomDto {
     private String fullIntroduction;
     private String thumbnailImage;
     private String address;
+    private String address2;
     private int headcount;
     private int stime;
     private int etime;
@@ -32,6 +33,7 @@ public class RoomDto {
     private int holiAmPrice;
     private int holiPmPrice;
     private int hostNum;
+    private int readCount;
 
     // categoryDto
     private String cname;
