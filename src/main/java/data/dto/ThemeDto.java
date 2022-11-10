@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("ThemeDto")
 public class ThemeDto {
     private int num;
-    private String content;
+    private String title;
     private String description;
     private String bannerImage;
 }

@@ -33,4 +33,17 @@ public class RoomDto {
     private int holiAmPrice;
     private int holiPmPrice;
     private int hostNum;
+    private int readCount;
+
+    // categoryDto
+    private String cname;
+
+    // facilityDto
+    private String fname;
+    private String imageUrl;
+
+    //roptionDto
+    private String oname;
+    private int price;
+    private String oimageUrl;
 }
