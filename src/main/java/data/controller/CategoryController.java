@@ -19,7 +19,7 @@ public class CategoryController {
     @GetMapping("/categoryList")
     public List<CategoryDto> categoryList()
     {
-        System.out.println("asd");
+
         return categoryMapper.getAllCategory();
     }
 }
