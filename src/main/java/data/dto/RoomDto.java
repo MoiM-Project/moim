@@ -33,4 +33,5 @@ public class RoomDto {
     private int holiAmPrice;
     private int holiPmPrice;
     private int hostNum;
+    private int readCount;
 }
