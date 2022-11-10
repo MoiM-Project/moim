@@ -1,10 +1,8 @@
 package data.mapper;
 
-<<<<<<< HEAD
 import data.dto.RoomDto;
-=======
 import data.dto.RoomImageDto;
->>>>>>> 3c4590ae2fca5b23a5d55a49db6777b4d4068765
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
