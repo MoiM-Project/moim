@@ -7,5 +7,5 @@ import org.apache.ibatis.type.Alias;
 @Alias("MainCategoryDto")
 public class MainCategoryDto {
     private int num;
-    private String name;
+    private String mcname;
 }
