@@ -23,7 +23,7 @@ public class BookingDetailDto {
     private int bookingStatus;
     private String cancelReason;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-    private Timestamp cancleDate;
+    private Timestamp cancelDate;
     private int roomNum;
     private int userNum;
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="data.mapper.BookingDetailMapper">
+    <insert id="insertBookingDetail">
+        insert into bookingDetail (num, bookingTime, headCount, name, phone, email, purpose, request, totalPrice, createdAt,
+                                   bookingStatus, roomNum, userNum)
+        values (null, #{bookingTime}, #{headCount}, #{name}, #{phone}, #{email}, #{purpose},
+                #{request}, #{totalPrice}, now(), #{bookingStatus}, #{roomNum}, #{userNum})
+    </insert>
+
+</mapper>
