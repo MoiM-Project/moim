@@ -35,4 +35,50 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+
+    <!--Num값 가져오기-->
+    <select id="getData" parameterType="int" resultType="RoomDto">
+        select *
+        from room
+        where num = #{num}
+    </select>
+
+    <!--삭제-->
+    <delete id="deleteRoom" parameterType="int">
+        delete
+        from room
+        where num = #{num}
+    </delete>
+
+    <insert id="insertInformation" parameterType="java.util.HashMap">
+        insert into info information (icontent,roomNum) value
+        <foreach collection="InfoList" item="item" separator=",">
+            (#{item.icontent} #{item.roomNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertPrecaution" parameterType="java.util.HashMap">
+        insert into precaution (pcontent, roomNum)
+        values
+        <foreach collection="PreList" item="item" separator=",">
+            (#{pcontent}, #{roomNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertRoomImage" parameterType="java.util.HashMap">
+        insert into roomImage (rimageUrl, roomNum)
+        values
+        <foreach collection="RoomList" item="item" separator=",">
+            (#{item.rimageUrl}, #{item.roomNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertRoomOption" parameterType="java.util.HashMap">
+        insert into roption (oname, price, oimageUrl, roomNum)
+        values
+        <foreach collection="OtionList" item="item" separator=",">
+            (#{item.oname}, #{item.price}, #{item.oimageUrl}, #{item.roomNum})
+        </foreach>
+    </insert>
 </mapper>

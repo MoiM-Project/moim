@@ -6,4 +6,11 @@
     <select id="getAllCategory" resultType="CategoryDto">
         select * from category
     </select>
+    <insert id="insertCategory" parameterType="java.util.HashMap">
+        insert into roomCategory (roomNum, categoryNum)
+        values
+        <foreach collection="CateList" item="item" separator=",">
+            (#{item.roomNum}, #{item.categoryNum})
+        </foreach>
+    </insert>
 </mapper>

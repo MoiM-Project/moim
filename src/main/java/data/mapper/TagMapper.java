@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface TagMapper {
     List<TagDto> selectTagList(int num);
+    public void insertTag(TagDto dto);
 }
