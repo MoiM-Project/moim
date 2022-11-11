@@ -16,5 +16,6 @@ public interface RoomMapper {
     public List<RoomDto> getFacilityList(int num);
     public List<RoomDto> getOptionList(int num);
     List<RoomImageDto> selectRoomImageList(int num);
-
+    //mainpage suggestRoom
+    List<RoomDto> getRoomList();
 }

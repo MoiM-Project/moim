@@ -6,4 +6,6 @@
     <select id="getAllCategory" resultType="CategoryDto">
         select * from category
     </select>
+
+
 </mapper>

@@ -6,4 +6,5 @@
         select tname from tag where roomNum=#{num}
     </select>
 
+
 </mapper>

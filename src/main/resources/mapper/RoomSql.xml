@@ -32,5 +32,10 @@
         select * from roomImage where roomNum=#{num}
     </select>
 
+    <!--  main > suggestRoom List  -->
+    <select id="getRoomList" resultType="RoomDto">
+        select * from room
+
+    </select>
 </mapper>
 
