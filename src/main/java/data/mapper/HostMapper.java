@@ -16,10 +16,8 @@ public interface HostMapper {
     public void insertRoom(RoomDto dto); // 인서트
     public RoomDto getData(int num); //num값 가져오기
     public void deleteRoom(int num); //삭제
-//    public void insertTag(TagDto dto);
     public void insertInformation(InformationDto dto);
     public void insertPrecaution(PrecautionDto dto);
-//    public void insertCategory(RoomCategoryDto dto);
     public void insertRoomImage(RoomImageDto dto);
     public void insertRoomOption(RoptionDto dto);
 }
