@@ -6,6 +6,7 @@
         select tname from tag where roomNum=#{num}
     </select>
 
+
     <insert id="insertTag" parameterType="java.util.HashMap">
         insert into tag (tname, roomNum)
         values
@@ -13,4 +14,5 @@
             (#{item.tname}, #{item.roomNum})
         </foreach>
     </insert>
+
 </mapper>
