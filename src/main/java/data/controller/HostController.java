@@ -15,14 +15,12 @@ import util.FileUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/host")
+
 public class HostController {
     String uploadFileName;
 
