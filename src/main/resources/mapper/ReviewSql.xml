@@ -6,4 +6,10 @@
         select count(*) from review where roomNum=#{num}
     </select>
 
+    <!--  mainpage > reviewZone DESC LIST -->
+    <select id="getReviewList" resultType="reviewDto">
+        select tname from review re
+                          inner join tag t on re.roomNum = t.roomNum;
+    </select>
+
 </mapper>

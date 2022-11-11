@@ -32,5 +32,10 @@
         select * from roomImage where roomNum=#{num}
     </select>
 
+    <!--  main > suggestRoom List  -->
+    <select id="getRoomList" resultType="RoomDto">
+        select * from room r
+            inner join tag t on t.roomNum = r.num group by r.name;
+    </select>
 </mapper>
 
