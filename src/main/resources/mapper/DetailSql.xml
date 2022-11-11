@@ -13,4 +13,10 @@
     <select id="getImg" parameterType="int" resultType="String">
         select rimageUrl from roomImage where roomNum=#{num}
     </select>
+    <select id="getInformation" parameterType="int" resultType="String">
+        select icontent from information where roomNum=#{num}
+    </select>
+    <select id="getPrecaution" parameterType="int" resultType="String">
+        select pcontent from precaution where roomNum=#{num}
+    </select>
 </mapper>
