@@ -74,6 +74,14 @@ public class HostController {
         hostMapper.insertUpdateRoom(dto);
     }
 
+    @PostMapping("/insert2")
+    public Map<String,Object> insertList (@RequestBody HashMap<String,Object> map ){
+        Map<String,Object> map = new HashMap<>();
+
+        map.put("InfoList",hostMapper.insertInformation(dtoㅋㅋ));
+
+     }
+
 
     //썸네일 업로드
     @PostMapping("/photoupload")
