@@ -26,7 +26,7 @@ public class MemberDao {
 
     public PostMemberRes createMember(PostMemberReq postMemberReq) {
 
-        String createMemberQuery = "insert into Member (email, password, nickname, phoneNum, gender, birthday, notification) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String createMemberQuery = "insert into member (email, password, nickname, phoneNum, gender, birthday, notification) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Object[] createMemberParams = new Object[]{postMemberReq.getEmail(), postMemberReq.getPassword(), postMemberReq.getNickname(), postMemberReq.getPhoneNum(), postMemberReq.getGender(), postMemberReq.getBirthday(), postMemberReq.getNotification()
         };
@@ -48,7 +48,7 @@ public class MemberDao {
 
     public Integer createMemberKakao(String kakaoemail, String nickname) {
 
-        String createMemberQuery = "insert into Member (email, password, nickname) VALUES (?, ?, ?)";
+        String createMemberQuery = "insert into member (email, password, nickname) VALUES (?, ?, ?)";
 
         Object[] createMemberParams = new Object[]{kakaoemail, "kakao", nickname
         };
@@ -186,7 +186,7 @@ public class MemberDao {
 
     public int modifyMemberInfo(PatchMemberModityReq patchMemberModityReq, BigInteger idx) {
         System.out.println(patchMemberModityReq.toString());
-        String modifyMemberQuery = "update Member set nickname=?, phoneNum=?, gender=?, birthday=?, notification=? where idx=?";
+        String modifyMemberQuery = "update member set nickname=?, phoneNum=?, gender=?, birthday=?, notification=? where idx=?";
         Object[] modifyMemberParams = new Object[]{patchMemberModityReq.getNickname(), patchMemberModityReq.getPhoneNum(), patchMemberModityReq.getGender(), patchMemberModityReq.getBirthday(), patchMemberModityReq.getNotification(), idx
         };
 

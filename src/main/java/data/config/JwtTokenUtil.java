@@ -23,11 +23,13 @@ public class JwtTokenUtil implements Serializable {
 
     //jwt 토큰에서 사용자 이름 검색.
     public String getUsernameFromToken(String token) {
+        System.out.println("토큰사용자 이름 검색");
         return getClaimFromToken(token, Claims::getSubject);
     }
 
     //jwt 토큰에서 만료 날짜 검색.
     public Date getExpirationDateFromToken(String token) {
+        System.out.println("토큰만료 날짜");
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
@@ -38,6 +40,7 @@ public class JwtTokenUtil implements Serializable {
 
     // JWT에서 회원 정보 추출.
     private Claims getAllClaimsFromToken(String token) {
+        System.out.println("회원벙보 추출");
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
@@ -49,6 +52,7 @@ public class JwtTokenUtil implements Serializable {
 
     //Jwt 생성.
     public String generateToken(UserDetails userDetails) {
+        System.out.println("일반토큰발급");
         UserLoginRes userLoginRes = (UserLoginRes) userDetails;
         Map<String, Object> claims = new HashMap<>();
         claims.put("social", "email");
@@ -60,6 +64,7 @@ public class JwtTokenUtil implements Serializable {
 
     //Jwt 생성.
     public String generateTokenForOAuth(String social, String email, String nickname) {
+        System.out.println("소셜토큰생성");
         Map<String, Object> claims = new HashMap<>();
         claims.put("social", social);
         claims.put("email", email);
@@ -70,6 +75,7 @@ public class JwtTokenUtil implements Serializable {
 
     //Jwt 발급.
     private String doGenerateToken(Map<String, Object> claims, String subject) {
+        System.out.println("토큰발급");
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis() * 1000))
                 .setExpiration(new Date((System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000) * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
@@ -89,6 +95,7 @@ public class JwtTokenUtil implements Serializable {
 
     // 토큰유효성 + 만료일자 확인.
     public Boolean validateToken(String token, UserDetails userDetails) {
+        System.out.println("토큰유효+만료일자 확인");
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 //        try {
