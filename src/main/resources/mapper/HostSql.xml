@@ -36,13 +36,30 @@
         </selectKey>
     </insert>
 
-
     <!--Num값 가져오기-->
     <select id="getData" parameterType="int" resultType="RoomDto">
         select *
         from room
         where num = #{num}
     </select>
+
+    <!--인서트 업데이트-->
+    <update id="insertUpdateRoom" parameterType="RoomDto">
+        update room
+        set headcount=#{headcount},
+            stime=#{stime},
+            etime=#{etime},
+            holiday=#{holiday},
+            floor=#{floor},
+            parking=#{parking},
+            elevator=#{elevator},
+            payment=#{payment},
+            weekAmPrice=#{weekAmPrice},
+            weekPmPrice=#{weekPmPrice},
+            holiAmPrice=#{holiAmPrice},
+            holiPmPrice=#{holiPmPrice}
+        where num = #{num}
+    </update>
 
     <!--삭제-->
     <delete id="deleteRoom" parameterType="int">
@@ -51,34 +68,34 @@
         where num = #{num}
     </delete>
 
-<!--    <insert id="insertInformation" parameterType="java.util.HashMap">-->
-<!--        insert into info information (icontent,roomNum) value-->
-<!--        <foreach collection="InfoList" item="item" separator=",">-->
-<!--            (#{item.icontent} #{item.roomNum})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+    <!--    <insert id="insertInformation" parameterType="java.util.HashMap">-->
+    <!--        insert into info information (icontent,roomNum) value-->
+    <!--        <foreach collection="InfoList" item="item" separator=",">-->
+    <!--            (#{item.icontent} #{item.roomNum})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
 
-<!--    <insert id="insertPrecaution" parameterType="java.util.HashMap">-->
-<!--        insert into precaution (pcontent, roomNum)-->
-<!--        values-->
-<!--        <foreach collection="PreList" item="item" separator=",">-->
-<!--            (#{pcontent}, #{roomNum})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+    <!--    <insert id="insertPrecaution" parameterType="java.util.HashMap">-->
+    <!--        insert into precaution (pcontent, roomNum)-->
+    <!--        values-->
+    <!--        <foreach collection="PreList" item="item" separator=",">-->
+    <!--            (#{pcontent}, #{roomNum})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
 
-<!--    <insert id="insertRoomImage" parameterType="java.util.HashMap">-->
-<!--        insert into roomImage (rimageUrl, roomNum)-->
-<!--        values-->
-<!--        <foreach collection="RoomList" item="item" separator=",">-->
-<!--            (#{item.rimageUrl}, #{item.roomNum})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+    <!--    <insert id="insertRoomImage" parameterType="java.util.HashMap">-->
+    <!--        insert into roomImage (rimageUrl, roomNum)-->
+    <!--        values-->
+    <!--        <foreach collection="RoomList" item="item" separator=",">-->
+    <!--            (#{item.rimageUrl}, #{item.roomNum})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
 
-<!--    <insert id="insertRoomOption" parameterType="java.util.HashMap">-->
-<!--        insert into roption (oname, price, oimageUrl, roomNum)-->
-<!--        values-->
-<!--        <foreach collection="OtionList" item="item" separator=",">-->
-<!--            (#{item.oname}, #{item.price}, #{item.oimageUrl}, #{item.roomNum})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+    <!--    <insert id="insertRoomOption" parameterType="java.util.HashMap">-->
+    <!--        insert into roption (oname, price, oimageUrl, roomNum)-->
+    <!--        values-->
+    <!--        <foreach collection="OtionList" item="item" separator=",">-->
+    <!--            (#{item.oname}, #{item.price}, #{item.oimageUrl}, #{item.roomNum})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
 </mapper>

@@ -6,11 +6,12 @@ import data.dto.RoomDto;
 import data.mapper.CategoryMapper;
 import data.mapper.HostMapper;
 import data.mapper.TagMapper;
+import data.util.ChangeName;
+import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import util.ChangeName;
-import util.FileUtil;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -65,6 +66,12 @@ public class HostController {
 
 //        System.out.println(dto.getNum());
         return dto.getNum();
+    }
+
+    @PostMapping("/insertupdate")
+    public void insertupdate(@RequestBody RoomDto dto) {
+        System.out.println("dto.getFloor()"+dto.getFloor());
+        hostMapper.insertUpdateRoom(dto);
     }
 
 
