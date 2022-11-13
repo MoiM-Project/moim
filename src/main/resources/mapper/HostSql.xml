@@ -69,7 +69,7 @@
     </delete>
 
         <insert id="insertInformation" parameterType="java.util.HashMap">
-            insert into info information (icontent,roomNum) value
+            insert into information (icontent,roomNum) value
             <foreach collection="InfoList" item="item" separator=",">
                 (#{item.icontent} #{item.roomNum})
             </foreach>

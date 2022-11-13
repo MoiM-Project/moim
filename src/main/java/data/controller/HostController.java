@@ -69,13 +69,26 @@ public class HostController {
     }
 
     @PostMapping("/insert2")
-    public void insertRoom2(@RequestBody HashMap<String,Object> params){
+    public void insertRoom2(@RequestBody HashMap<String,Object> params) throws Exception{
 
         HashMap<String,Object> map1 = new HashMap<>();
         List<Map<String,Object>> infoList = (List<Map<String, Object>>)params.get("InfoList");
         List<Map<String,Object>> preList = (List<Map<String, Object>>)params.get("PreList");
         List<Map<String,Object>> imgList = (List<Map<String, Object>>)params.get("RoomList");
         List<Map<String,Object>> optionList = (List<Map<String, Object>>)params.get("OptionList");
+
+        System.out.println(infoList.get(0));
+
+//        try {
+//            System.out.println(infoList.get(0));
+//        }catch (NullPointerException e) {
+//            System.out.println("--NullPointerException 발생--");
+//            System.out.println("기존 코드를 체크해 주세요!!");
+//        }finally {
+//            System.out.println("예외처리 코드가 오류없이 진행되었습니다.");
+//        }
+
+
         map1.put("infoList",infoList);
         map1.put("preList",preList);
         map1.put("imgList",imgList);
