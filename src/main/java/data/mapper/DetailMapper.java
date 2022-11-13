@@ -12,5 +12,8 @@ public interface DetailMapper {
     public void updateReadCount(int num);
     public List<TagDto> getTagName(int num);
     public List<TagDto> getImg(int num);
+    public List<TagDto> getInformation(int num);
+    public List<TagDto> getPrecaution(int num);
+
 
 }

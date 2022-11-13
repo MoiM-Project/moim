@@ -21,12 +21,22 @@ public class DetailController {
     @GetMapping("/detailroom")
     public Map<String,Object> detailroom(@RequestParam int num){
 
-        Map<String, Object> map=new HashMap<>();
         //조회수 증가
-        //map.put("readCount",detailMapper.updateReadCount(num));
+        //detailMapper.updateReadCount(num);
+
+        Map<String, Object> map=new HashMap<>();
         map.put("roomData",detailMapper.getRoomData(num));
         map.put("tag",detailMapper.getTagName(num));
         map.put("roomImg",detailMapper.getImg(num));
+        return map;
+    }
+
+    @GetMapping("/detailInfo")
+    public Map<String,Object> detailInfo(@RequestParam int num){
+        Map<String, Object> map=new HashMap<>();
+        map.put("roomData",detailMapper.getRoomData(num));
+        map.put("roomInfo",detailMapper.getInformation(num));
+        map.put("pre",detailMapper.getPrecaution(num));
         return map;
     }
 
