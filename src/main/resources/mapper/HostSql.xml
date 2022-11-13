@@ -5,4 +5,7 @@
         select *
         from room
     </select>
+    <select id="getHostInfoList" resultType="HostDto" parameterType="int">
+        select * from host where num=#{num}
+    </select>
 </mapper>
