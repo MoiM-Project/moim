@@ -3,6 +3,7 @@ package data.controller;
 import data.dto.CategoryDto;
 import data.dto.MainCategoryDto;
 import data.dto.RoomDto;
+import data.dto.RoptionDto;
 import data.mapper.CategoryMapper;
 import data.mapper.HostMapper;
 import data.mapper.TagMapper;
@@ -69,13 +70,13 @@ public class HostController {
     }
 
     @PostMapping("/insert2")
-    public void insertRoom2(@RequestBody HashMap<String,Object> params) throws Exception{
+    public void insertRoom2(@RequestBody HashMap<String,Object> params){
 
         HashMap<String,Object> map1 = new HashMap<>();
         List<Map<String,Object>> infoList = (List<Map<String, Object>>)params.get("InfoList");
         List<Map<String,Object>> preList = (List<Map<String, Object>>)params.get("PreList");
         List<Map<String,Object>> imgList = (List<Map<String, Object>>)params.get("RoomList");
-        List<Map<String,Object>> optionList = (List<Map<String, Object>>)params.get("OptionList");
+//        List<Map<String,Object>> optionList = (List<Map<String, Object>>)params.get("OptionList");
 
         System.out.println(infoList.get(0));
 
@@ -92,17 +93,17 @@ public class HostController {
         map1.put("infoList",infoList);
         map1.put("preList",preList);
         map1.put("imgList",imgList);
-        map1.put("optionList",optionList);
+//        map1.put("optionList",optionList);
 
         System.out.println("infoList="+infoList);
         System.out.println("preList="+preList);
         System.out.println("imgList="+imgList);
-        System.out.println("optionList="+optionList);
+//        System.out.println("optionList="+optionList);
 
         hostMapper.insertInformation(map1);
         hostMapper.insertPrecaution(map1);
         hostMapper.insertRoomImage(map1);
-        hostMapper.insertRoomOption(map1);
+//        hostMapper.insertRoomOption(map1);
 
         HashMap<String,Object> map2 = new HashMap<>();
         List<Map<String,Object>> tagList = (List<Map<String, Object>>)params.get("Taglist");
