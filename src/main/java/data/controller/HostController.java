@@ -68,13 +68,45 @@ public class HostController {
         return dto.getNum();
     }
 
+    @PostMapping("/insert2")
+    public void insertRoom2(@RequestBody HashMap<String,Object> params){
+
+        HashMap<String,Object> map1 = new HashMap<>();
+        List<Map<String,Object>> infoList = (List<Map<String, Object>>)params.get("InfoList");
+        List<Map<String,Object>> preList = (List<Map<String, Object>>)params.get("PreList");
+        List<Map<String,Object>> imgList = (List<Map<String, Object>>)params.get("RoomList");
+        List<Map<String,Object>> optionList = (List<Map<String, Object>>)params.get("OptionList");
+        map1.put("infoList",infoList);
+        map1.put("preList",preList);
+        map1.put("imgList",imgList);
+        map1.put("optionList",optionList);
+
+        System.out.println("infoList="+infoList);
+        System.out.println("preList="+preList);
+        System.out.println("imgList="+imgList);
+        System.out.println("optionList="+optionList);
+
+        hostMapper.insertInformation(map1);
+        hostMapper.insertPrecaution(map1);
+        hostMapper.insertRoomImage(map1);
+        hostMapper.insertRoomOption(map1);
+
+        HashMap<String,Object> map2 = new HashMap<>();
+        List<Map<String,Object>> tagList = (List<Map<String, Object>>)params.get("Taglist");
+        map2.put("tagList",tagList);
+        tagMapper.insertTag(map2);
+
+        HashMap<String,Object> map3 = new HashMap<>();
+        List<Map<String,Object>> cateList = (List<Map<String, Object>>)params.get("CateList");
+        map3.put("cateList",cateList);
+        categoryMapper.insertCategory(map3);
+    }
+
     @PostMapping("/insertupdate")
     public void insertupdate(@RequestBody RoomDto dto) {
         System.out.println("dto.getFloor()"+dto.getFloor());
         hostMapper.insertUpdateRoom(dto);
     }
-
-
     //썸네일 업로드
     @PostMapping("/photoupload")
     public String fileUploadlist(@RequestBody MultipartFile uploadFile, HttpServletRequest request) {
