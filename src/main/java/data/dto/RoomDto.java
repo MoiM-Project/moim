@@ -32,6 +32,8 @@ public class RoomDto {
     private int weekPmPrice;
     private int holiAmPrice;
     private int holiPmPrice;
+    private String lat;
+    private String lng;
     private int hostNum;
     private int readCount;
 

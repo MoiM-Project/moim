@@ -36,28 +36,35 @@ public class ThemeController {
         return themeMapper.selectThemeList();
     }
     @GetMapping("/theme/list")
-    public List<RoomDto> selectThemeRoomList(@RequestParam int num, String sort){
+    public List<RoomDto> selectThemeRoomList(
+            int themeNum,
+            @RequestParam(defaultValue = "readCount desc") String sort,
+            @RequestParam(defaultValue = "1") int headCount,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String address){
 
-        System.out.println(num+" / "+sort);
+        System.out.println(sort);
 
         HashMap<String, Object> map = new HashMap<>();
 
-        map.put("num",num);
+        map.put("themeNum",themeNum);
         map.put("sort",sort);
+        map.put("headCount",headCount);
+        map.put("name",name);
+        map.put("address",address);
 
         return themeMapper.selectThemeRoomList(map);
     }
     @GetMapping("/theme/data")
-    public ThemeDto selectTheme(@RequestParam int num){
+    public ThemeDto selectTheme(int themeNum){
 
-        return themeMapper.selectTheme(num);
+        return themeMapper.selectTheme(themeNum);
     }
     @GetMapping("/tag/list")
     public Map<String,Object> selectTagList(@RequestParam int num){
 
         Map<String,Object> map = new HashMap<>();
 
-        System.out.println(roomMapper.selectRoomImageList(num).size());
         map.put("roomImageData",roomMapper.selectRoomImageList(num));
         map.put("tagData",tagMapper.selectTagList(num));
         map.put("reviewCount",reviewMapper.selectReviewCount(num));
