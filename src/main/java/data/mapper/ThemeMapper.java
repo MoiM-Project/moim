@@ -11,9 +11,9 @@ import java.util.List;
 public interface ThemeMapper {
     void insertTheme(ThemeDto dto);
     List<ThemeDto> selectThemeList();
-    ThemeDto selectTheme(int num);
+    ThemeDto selectTheme(int themeNum);
     List<RoomDto> selectThemeRoomList(HashMap<String,Object> map);
     void updateTheme(ThemeDto dto);
-    void deleteTheme(int num);
-    int selectThemeCount(int num);
+    void deleteTheme(int themeNum);
+    int selectThemeCount(int themeNum);
 }
