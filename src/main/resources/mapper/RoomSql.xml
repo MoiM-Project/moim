@@ -22,7 +22,7 @@
 
     <!-- booking detail option  -->
     <select id="getOptionList" resultType="RoomDto" parameterType="int">
-        select  oname, price, oimageUrl from moim.room r
+        select  ro.num, oname, price, oimageUrl from moim.room r
             inner join roption ro 
             on r.num = ro.roomNum where r.num = #{num};
     </select>
