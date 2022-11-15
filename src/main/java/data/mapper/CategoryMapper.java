@@ -12,7 +12,7 @@ public interface CategoryMapper {
 
     public List<CategoryDto> getAllCategory();
 
-    public void insertCategory(HashMap<String,Object> map);
+    public void insertCategory(RoomCategoryDto dto);
 
 
 }

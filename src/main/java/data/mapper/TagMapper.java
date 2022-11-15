@@ -10,6 +10,6 @@ import java.util.List;
 public interface TagMapper {
     List<TagDto> selectTagList(int num);
 
-    public void insertTag(HashMap<String,Object> map);
+    public void insertTag(TagDto dto);
 
 }
