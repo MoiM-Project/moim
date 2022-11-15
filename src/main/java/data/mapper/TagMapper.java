@@ -9,4 +9,6 @@ import java.util.List;
 public interface TagMapper {
     List<TagDto> selectTagList(int num);
 
+    public void insertTag(TagDto map);
+
 }
