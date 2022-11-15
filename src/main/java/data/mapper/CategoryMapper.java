@@ -4,7 +4,6 @@ import data.dto.CategoryDto;
 import data.dto.RoomCategoryDto;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -12,7 +11,7 @@ public interface CategoryMapper {
 
     public List<CategoryDto> getAllCategory();
 
-    public void insertCategory(HashMap<String,Object> map);
+    public void insertCategory(RoomCategoryDto map);
 
 
 }

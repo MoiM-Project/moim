@@ -18,8 +18,9 @@ public interface HostMapper {
     public void insertUpdateRoom(RoomDto dto); // 번호 생성 후 (업데이트)인서트
     public RoomDto getData(int num); //num값 가져오기
     public void deleteRoom(int num); //삭제
-    public void insertInformation(HashMap<String,Object> map);
-    public void insertPrecaution(HashMap<String,Object> map);
-    public void insertRoomImage(HashMap<String,Object> map);
     public void insertRoomOption(HashMap<String,Object> map);
+    public void insertInformation(InformationDto dto);
+    public void insertPrecaution(PrecautionDto dto);
+    public void insertRoomImage(RoomImageDto dto);
+
 }
