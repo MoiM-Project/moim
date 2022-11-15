@@ -1,15 +1,22 @@
 package data.mapper;
 
 
+
 import data.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
+
+import data.dto.HostDto;
+import org.apache.ibatis.annotations.Mapper;
+
+
 import java.util.List;
 
 
 @Mapper
 public interface HostMapper {
+
     //    public void HostHome();
     public List<RoomDto> getRoomList(); // 룸 리스트
     public List<MainCategoryDto> getMainCategoryList(); // 메인카테고리 리스트
@@ -22,5 +29,10 @@ public interface HostMapper {
     public void insertInformation(InformationDto dto);
     public void insertPrecaution(PrecautionDto dto);
     public void insertRoomImage(RoomImageDto dto);
+
+
+//    public void HostHome();
+
+    List<HostDto> getHostList();
 
 }

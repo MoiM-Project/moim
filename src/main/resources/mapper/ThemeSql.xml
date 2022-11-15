@@ -8,10 +8,15 @@
         select * from theme order by num desc
     </select>
     <select id="selectTheme" parameterType="int" resultType="ThemeDto">
-        select * from theme where num=#{num}
+        select * from theme where num=#{themeNum}
     </select>
     <select id="selectThemeRoomList" parameterType="Map" resultType="RoomDto">
-        select * from room where num in (select roomNum from roomTheme where themeNum=#{num}) order by #{sort} desc
+        select * from room
+                 where name like CONCAT('%',#{name},'%')
+                   and headCount >= #{headCount}
+                   and address like CONCAT('%',#{address},'%')
+                   and num in (select roomNum from roomTheme where themeNum=#{themeNum})
+                 order by ${sort};
     </select>
     <select id="selectThemeCount" parameterType="int" resultType="int">
         select count(*) from roomTheme where themeNum=#{num}

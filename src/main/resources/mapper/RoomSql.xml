@@ -33,6 +33,7 @@
     </select>
 
     <!--  main > suggestRoom List  -->
+    <!--  admin > space List  -->
     <select id="getRoomList" resultType="RoomDto">
         select * from room
 
