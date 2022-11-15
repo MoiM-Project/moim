@@ -4,8 +4,12 @@
 
     <!--  메인페이지 카테고리 목록 출력  -->
     <select id="getAllCategory" resultType="CategoryDto">
-        select * from category
+        select *
+        from category
     </select>
 
-
+    <insert id="insertCategory" parameterType="RoomCategoryDto">
+        insert into roomCategory (roomNum, categoryNum)
+        values (#{roomNum}, #{categoryNum})
+    </insert>
 </mapper>

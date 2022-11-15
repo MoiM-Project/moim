@@ -6,4 +6,94 @@
         select * from host order by num desc
     </select>
 
+
+    <!--방 전체 리스트-->
+    <select id="getRoomList" resultType="RoomDto">
+        select *
+        from room
+        order by num desc
+    </select>
+
+    <!--메인카테고리 리스트-->
+    <select id="getMainCategoryList" resultType="MainCategoryDto">
+        select *
+        from mainCategory
+        order by num desc
+    </select>
+
+    <!--카테고리 리스트-->
+    <select id="getCategoryList" resultType="CategoryDto">
+        select *
+        from category
+        order by num desc
+    </select>
+
+    <!--인서트 기본-->
+    <insert id="insertRoom" parameterType="RoomDto">
+        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2, writeday,hostNum)
+        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address}, #{address2},now(),1)
+        <selectKey keyProperty="num" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!--Num값 가져오기-->
+    <select id="getData" parameterType="int" resultType="RoomDto">
+        select *
+        from room
+        where num = #{num}
+    </select>
+
+    <!--인서트 업데이트-->
+    <update id="insertUpdateRoom" parameterType="RoomDto">
+        update room
+        set headcount=#{headcount},
+            stime=#{stime},
+            etime=#{etime},
+            holiday=#{holiday},
+            floor=#{floor},
+            parking=#{parking},
+            elevator=#{elevator},
+            payment=#{payment},
+            weekAmPrice=#{weekAmPrice},
+            weekPmPrice=#{weekPmPrice},
+            holiAmPrice=#{holiAmPrice},
+            holiPmPrice=#{holiPmPrice}
+        where num = #{num}
+    </update>
+
+    <!--삭제-->
+    <delete id="deleteRoom" parameterType="int">
+        delete
+        from room
+        where num = #{num}
+    </delete>
+
+    <!-- 옵션인서트 -->
+    <insert id="insertRoomOption" parameterType="java.util.HashMap">
+        insert into roption (oname, price, oimageUrl, roomNum)
+        values
+        <foreach collection="OptionList" item="item" separator=",">
+            (#{item.oname}, #{item.price}, #{item.oimageUrl}, #{item.roomNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertInformation" parameterType="InformationDto">
+        insert into information (icontent, roomNum) value
+            (#{icontent}, #{roomNum})
+    </insert>
+
+    <insert id="insertPrecaution" parameterType="PrecautionDto">
+        insert into precaution (pcontent, roomNum)
+        values (#{pcontent}, #{roomNum})
+    </insert>
+
+
+    <insert id="insertRoomImage" parameterType="RoomImageDto">
+        insert into roomImage (rimageUrl, roomNum)
+        values (#{rimageUrl}, #{roomNum})
+    </insert>
 </mapper>
+
+
+
