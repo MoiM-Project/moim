@@ -73,8 +73,8 @@ public class HostController {
     }
 
     @PostMapping("/insert2")
-    public int insert2(@RequestBody Map<String, Object> params, RoomCategoryDto cdto,TagDto tdto,
-                        InformationDto idto,PrecautionDto pdto) {
+    public int insert2(@RequestBody Map<String, Object> params, RoomCategoryDto cdto, TagDto tdto,
+                       InformationDto idto, PrecautionDto pdto) {
 
         List<String> TagList = (List<String>) params.get("tname");
         List<String> IContentList = (List<String>) params.get("icontent");
@@ -82,22 +82,22 @@ public class HostController {
         List<Integer> CateList = (List<Integer>) params.get("categoryNum");
         int roomNum = Integer.parseInt((String) params.get("roomNum"));
 
-        for(Integer s:CateList){
+        for (Integer s : CateList) {
             cdto.setCategoryNum(s);
             cdto.setRoomNum(roomNum);
             categoryMapper.insertCategory(cdto);
         }
-        for (String s:TagList){
+        for (String s : TagList) {
             tdto.setTname(s);
             tdto.setRoomNum(roomNum);
             tagMapper.insertTag(tdto);
         }
-        for (String s:IContentList){
+        for (String s : IContentList) {
             idto.setIcontent(s);
             idto.setRoomNum(roomNum);
             hostMapper.insertInformation(idto);
         }
-        for (String s:PContentList){
+        for (String s : PContentList) {
             pdto.setPcontent(s);
             pdto.setRoomNum(roomNum);
             hostMapper.insertPrecaution(pdto);
@@ -257,9 +257,16 @@ public class HostController {
         hostMapper.deleteRoom(num);   //DB 데이터 삭제
     }
 
+    //방 리스트에서 삭제
+    @DeleteMapping("/delete")
+    public void deleteRoom(@RequestParam int num){
+        System.out.println(num);
+        hostMapper.deleteRoom(num);
+    }
+
     //방 공개 비공개 이벤트
     @PatchMapping("/status")
-    public void hideStatus(@RequestParam int num, @RequestParam boolean hideStatus){
+    public void hideStatus(@RequestParam int num, @RequestParam boolean hideStatus) {
         System.out.println(num);
         System.out.println(hideStatus);
         RoomDto dto = hostMapper.getData(num);
@@ -268,4 +275,6 @@ public class HostController {
         dto.setHideStatus(hideStatus);
         hostMapper.updateStatus(dto);
     }
+
+
 }
