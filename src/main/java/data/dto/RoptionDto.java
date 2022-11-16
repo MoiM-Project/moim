@@ -10,4 +10,5 @@ public class RoptionDto {
     private String oname;
     private int price;
     private String oimageUrl;
+    private int roomNum;
 }
