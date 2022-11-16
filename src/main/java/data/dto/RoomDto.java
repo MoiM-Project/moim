@@ -45,6 +45,7 @@ public class RoomDto {
     private String imageUrl;
 
     //roptionDto
+    private int ronum;
     private String oname;
     private int price;
     private String oimageUrl;
