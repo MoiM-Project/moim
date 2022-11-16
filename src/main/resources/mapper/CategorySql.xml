@@ -4,8 +4,28 @@
 
     <!--  메인페이지 카테고리 목록 출력  -->
     <select id="getAllCategory" resultType="CategoryDto">
-        select * from category
+        select *
+        from category
     </select>
 
+    <!-- 카테고리에 해당하는 방들 출력   -->
+    <select id="getCategoryRoom" parameterType="Map" resultType="RoomDto">
+        SELECT *
+        FROM room
+        WHERE name like CONCAT('%',#{name},'%')
+              and headcount >= #{headCount}
+              and address like CONCAT('%',#{address},'%')
+              and num IN (SELECT roomNum FROM roomCategory WHERE categoryNum = #{num})
+              order by ${sort};
+    </select>
 
+    <!-- 번호에 해당하는 카테고리 출력  -->
+    <select id="selectCategory" parameterType="int" resultType="CategoryDto">
+        select * from category where num=#{categoryNum}
+    </select>
+
+    <insert id="insertCategory" parameterType="RoomCategoryDto">
+        insert into roomCategory (roomNum, categoryNum)
+        values (#{roomNum}, #{categoryNum})
+    </insert>
 </mapper>
