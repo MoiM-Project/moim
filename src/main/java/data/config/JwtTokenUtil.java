@@ -40,7 +40,7 @@ public class JwtTokenUtil implements Serializable {
 
     // JWT에서 회원 정보 추출.
     private Claims getAllClaimsFromToken(String token) {
-        System.out.println("회원벙보 추출");
+        System.out.println("회원정보 추출");
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
