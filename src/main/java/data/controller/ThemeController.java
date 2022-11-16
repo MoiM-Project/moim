@@ -41,9 +41,10 @@ public class ThemeController {
             @RequestParam(defaultValue = "readCount desc") String sort,
             @RequestParam(defaultValue = "1") int headCount,
             @RequestParam(defaultValue = "") String name,
-            @RequestParam(defaultValue = "") String address){
-
-        System.out.println(sort);
+            @RequestParam(defaultValue = "") String address,
+            @RequestParam(defaultValue = "") String payment,
+            @RequestParam(defaultValue = "0") int sprice,
+            @RequestParam(defaultValue = "1000000") int eprice){
 
         HashMap<String, Object> map = new HashMap<>();
 
@@ -52,6 +53,9 @@ public class ThemeController {
         map.put("headCount",headCount);
         map.put("name",name);
         map.put("address",address);
+        map.put("payment",payment);
+        map.put("sprice",sprice);
+        map.put("eprice",eprice);
 
         return themeMapper.selectThemeRoomList(map);
     }
