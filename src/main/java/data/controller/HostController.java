@@ -43,6 +43,7 @@ public class HostController {
         return hostMapper.getRoomList();
     }
 
+
     //메인 카테고리 리스트
     @GetMapping("/maincategoryList")
     public List<MainCategoryDto> mainCategoryList() {
@@ -249,9 +250,22 @@ public class HostController {
         roomList.remove(idx);
     }
 
+    //인서트 캔슬
     @DeleteMapping("/cancel")
-    public void deleteBoard(@RequestParam int num, HttpServletRequest request) {
+    public void deleteRoom(@RequestParam int num, HttpServletRequest request) {
         System.out.println(num);
         hostMapper.deleteRoom(num);   //DB 데이터 삭제
+    }
+
+    //방 공개 비공개 이벤트
+    @PatchMapping("/status")
+    public void hideStatus(@RequestParam int num, @RequestParam boolean hideStatus){
+        System.out.println(num);
+        System.out.println(hideStatus);
+        RoomDto dto = hostMapper.getData(num);
+
+//        dto=hostMapper.getData(num);
+        dto.setHideStatus(hideStatus);
+        hostMapper.updateStatus(dto);
     }
 }

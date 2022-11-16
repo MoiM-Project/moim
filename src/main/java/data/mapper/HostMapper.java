@@ -29,6 +29,7 @@ public interface HostMapper {
     public void insertInformation(InformationDto dto);
     public void insertPrecaution(PrecautionDto dto);
     public void insertRoomImage(RoomImageDto dto);
+    public void updateStatus(RoomDto dto);
 
 
 //    public void HostHome();
