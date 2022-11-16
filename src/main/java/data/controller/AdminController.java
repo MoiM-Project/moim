@@ -9,8 +9,10 @@ import data.mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -43,11 +45,29 @@ public class AdminController {
         return hostMapper.getHostList();
     }
 
-    //관리자 페이지에서 공강 정보 가져오기
-    @GetMapping("/spaceList")
-    public List<RoomDto> roomList()
-    {
+    //관리자 페이지에서 공간 정보 가져오기
+//    @GetMapping("/spaceList")
+//    public List<RoomDto> roomList()
+//    {
+//
+//        return roomMapper.getRoomList();
+//    }
 
-        return roomMapper.getRoomList();
+    @GetMapping("/admin/spaceList")
+    public List<RoomDto> getSpaceList(
+            @RequestParam String searchWord,
+            @RequestParam String sort)
+    {
+        System.out.println(sort);
+        System.out.println(searchWord);
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("searchWord",searchWord);
+        map.put("sort",sort);
+
+        System.out.println(map);
+
+        return roomMapper.getSpaceSearchList(map);
     }
 }

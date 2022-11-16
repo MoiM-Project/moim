@@ -5,7 +5,9 @@ import data.dto.RoomImageDto;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface RoomMapper {
@@ -17,6 +19,12 @@ public interface RoomMapper {
     public List<RoomDto> getOptionList(int num);
     List<RoomImageDto> selectRoomImageList(int num);
 
-    //mainpage suggestRoom
+    //mainPage suggestRoom
     List<RoomDto> getRoomList();
+
+    //adminPage (search) space = room
+    int getSpaceSearchCount(Map<String,Object> map);
+    List<RoomDto> getSpaceSearchList(HashMap<String,Object> map);
+
+
 }

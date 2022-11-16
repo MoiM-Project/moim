@@ -33,10 +33,22 @@
     </select>
 
     <!--  main > suggestRoom List  -->
-    <!--  admin > space List  -->
     <select id="getRoomList" resultType="RoomDto">
         select * from room
 
     </select>
+
+    <!--  admin > Space (Search) List  -->
+    <select id="getSpaceSearchList" parameterType="map" resultType="RoomDto">
+        SELECT r.num, name, weekAmPrice, headcount, writeday, companyName, hideStatus, approvalStatus, readCount FROM room r
+            inner join host h on r.hostNum = h.num
+             where (name like concat('%',#{searchWord},'%') or companyName like concat('%',#{searchWord},'%')) ${sort}
+    </select>
+
+    <!-- admin > space > search Count -->
+    <select id="getSpaceSearchCount" parameterType="map" resultType="int">
+        SELECT count(*) FROM room r inner join host h on r.hostNum = h.num where (name like concat('%',#{searchWord},'%') or companyName like concat('%',#{searchWord},'%')) ${sort}
+    </select>
+
 </mapper>
 

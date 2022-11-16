@@ -48,4 +48,7 @@ public class RoomDto {
     private String oname;
     private int price;
     private String oimageUrl;
+
+    //hostDto
+    private String companyName;
 }
