@@ -146,19 +146,24 @@ public class MemberController {
 
     //     계정 탈퇴 API
     @ResponseBody
-    @PatchMapping("/delete/{idx}")
+    @DeleteMapping("/delete/{idx}")
     public BaseResponse<GetMemberRes> deleteUser(@PathVariable BigInteger idx) {
+        System.out.println("계정 탈퇴");
         if (idx == null) {
+            System.out.println("번호없음");
             return new BaseResponse<>(EMPTY_IDX);
         }
         if (!isValidatedIdx(idx)) {
+            System.out.println("유효한 번호아님");
             return new BaseResponse<>(INVALID_IDX);
         }
 
         try {
+            System.out.println("일단 삭제");
             GetMemberRes getMemberRes = memberService.deleteUser(idx);
             return new BaseResponse<>(getMemberRes);
         } catch (BaseException exception) {
+            System.out.println("일단 삭제안됨");
             return new BaseResponse<>(exception.getStatus());
         }
     }
@@ -205,7 +210,7 @@ public class MemberController {
         } catch (AccountExpiredException e) {
             throw new AccountExpiredException("AccountExpiredException", e);
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("비민번호 오류 입니다. INVALID_CREDENTIALS", e);
+            throw new BadCredentialsException("비밀번호 오류 입니다. INVALID_CREDENTIALS", e);
         } catch (InternalAuthenticationServiceException e) {
             throw new InternalAuthenticationServiceException("존재하지 않는 아이디 입니다. InternalAuthenticationServiceException", e);
         }
