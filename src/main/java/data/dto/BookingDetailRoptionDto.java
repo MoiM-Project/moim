@@ -4,7 +4,7 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 @Data
-@Alias("BookingDetailRoption")
+@Alias("BookingDetailRoptionDto")
 public class BookingDetailRoptionDto {
     private int num;
     private int count;

@@ -6,4 +6,13 @@
         select count(*) from review where roomNum=#{num}
     </select>
 
+    <!--  mainpage > reviewZone DESC LIST -->
+    <select id="getReviewList" resultType="reviewDto">
+        select * from review
+    </select>
+
+
+
 </mapper>
+
+

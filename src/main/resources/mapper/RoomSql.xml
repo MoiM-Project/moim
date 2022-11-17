@@ -10,27 +10,32 @@
         select cname from room r
             inner join roomCategory rc on r.num = rc.roomNum
             inner join category c on rc.categoryNum = c.num
-                     where r.num = #{num};
+                     where r.num = #{num}
     </select>
 
     <select id="getFacilityList" resultType="RoomDto" parameterType="int">
         select fname, imageUrl from room r
             inner join roomFacility rf on r.num = rf.roomNum
             inner join facility f on rf.facilityNum = f.num
-                               where r.num = #{num};
+                               where r.num = #{num}
     </select>
 
     <!-- booking detail option  -->
     <select id="getOptionList" resultType="RoomDto" parameterType="int">
-        select oname, price, oimageUrl from room r
-            inner join roomOption ro on r.num = ro.roomNum
-            inner join roption rop on ro.roptionNum = rop.num
-                                       where r.num = #{num};
+        select  ro.num as ronum, oname, price, oimageUrl from moim.room r
+            inner join roption ro 
+            on r.num = ro.roomNum where r.num = #{num};
     </select>
 
     <select id="selectRoomImageList" parameterType="int" resultType="RoomImageDto">
         select * from roomImage where roomNum=#{num}
     </select>
 
+    <!--  main > suggestRoom List  -->
+    <!--  admin > space List  -->
+    <select id="getRoomList" resultType="RoomDto">
+        select * from room
+
+    </select>
 </mapper>
 
