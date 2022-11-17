@@ -195,8 +195,8 @@ public class MemberDao {
 
     //    삭제
     public void deleteUser(BigInteger idx) {
-        String deleteUserQuery = "update member set status = ? where idx = ?";
-        Object[] deleteUserParams = new Object[]{0, idx};
+        String deleteUserQuery = "delete from member where idx = ?";
+        Object[] deleteUserParams = new Object[]{idx};
 
         this.jdbcTemplate.update(deleteUserQuery, deleteUserParams);
     }

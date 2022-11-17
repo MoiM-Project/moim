@@ -74,24 +74,29 @@ public class MemberService {
         }
     }
 
+//    public GetMemberRes deleteUser(BigInteger idx) throws BaseException {
     public GetMemberRes deleteUser(BigInteger idx) throws BaseException {
         System.out.println(idx);
         System.out.println(memberDao.isNotExistedUser(idx));
 
-        if (memberDao.isNotExistedUser(idx)) {
-            throw new BaseException(RESPONSE_NULL_ERROR_BY_IDX);
-        }
-
-        if (memberDao.isDeletedUser(idx)) {
-            System.out.println("PATCH_PRE_DELETED_USER");
-            throw new BaseException(PATCH_PRE_DELETED_USER);
-        }
+//        if (memberDao.isNotExistedUser(idx)) {
+//            System.out.println("안되는데?1");
+//            throw new BaseException(RESPONSE_NULL_ERROR_BY_IDX);
+//        }
+//
+//        if (memberDao.isDeletedUser(idx)) {
+//            System.out.println("안되는데?2");
+//            System.out.println("PATCH_PRE_DELETED_USER");
+//            throw new BaseException(PATCH_PRE_DELETED_USER);
+//        }
 
         try {
             memberDao.deleteUser(idx);
+            System.out.println("회원삭제 성공");
             GetMemberRes getMemberRes = memberDao.getDeletedUser(idx);
             return getMemberRes;
         } catch (Exception exception) {
+            System.out.println("회원삭제 실패");
             throw new BaseException(DATABASE_ERROR);
         }
     }

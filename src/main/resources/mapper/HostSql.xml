@@ -8,12 +8,15 @@
         order by num desc
     </select>
 
-
     <!--방 전체 리스트-->
     <select id="getRoomList" resultType="RoomDto">
         select *
         from room
         order by num desc
+    </select>
+
+    <select id="getHostInfoList" resultType="HostDto" parameterType="int">
+        select * from host where num=#{num}
     </select>
 
     <!--메인카테고리 리스트-->
@@ -92,7 +95,10 @@
         values (#{pcontent}, #{roomNum})
     </insert>
 
+<<<<<<< HEAD
     <!--룸 이미지들 인서트-->
+=======
+>>>>>>> afd17f82a884a2fdf7ee5a629f79b14bbe421647
     <insert id="insertRoomImage" parameterType="RoomImageDto">
         insert into roomImage (rimageUrl, roomNum)
         values (#{rimageUrl}, #{roomNum})
@@ -105,6 +111,5 @@
         where num = #{num}
     </update>
 </mapper>
-
 
 
