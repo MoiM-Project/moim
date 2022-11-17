@@ -1,5 +1,11 @@
 package data.controller;
 
+import data.dto.HostDto;
+import data.mapper.HostMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import data.dto.*;
 import data.mapper.CategoryMapper;
 import data.mapper.HostMapper;
@@ -9,18 +15,17 @@ import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/host")
-
 public class HostController {
+
     String uploadFileName;
 
     ArrayList<String> uploadFileNames = new ArrayList<>();
@@ -253,5 +258,14 @@ public class HostController {
     public void deleteBoard(@RequestParam int num, HttpServletRequest request) {
         System.out.println(num);
         hostMapper.deleteRoom(num);   //DB 데이터 삭제
+    }
+
+    // booking detail page - host info
+    @GetMapping("/info")
+    public HostDto getHostInfoList(int num)
+    {
+        HostDto dto = hostMapper.getHostInfoList(num);
+//        System.out.println(dto);
+        return dto;
     }
 }
