@@ -19,11 +19,8 @@ public class HostDto {
     private String address;
     private String bank;
     private String accountNumber;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private Timestamp createdAt;
-
     private int warningCount;
     private int active;
-
 }
