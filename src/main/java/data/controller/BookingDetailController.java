@@ -16,8 +16,6 @@ public class BookingDetailController {
     @PostMapping("/insert")
     public void insertFood(@RequestBody BookingDetailDto dto)
     {
-        System.out.println("dddd");
-        System.out.println(dto);
         bookingDetailMapper.insertBookingDetail(dto);
     }
 }
