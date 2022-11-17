@@ -35,8 +35,8 @@
 
     <!--인서트 기본-->
     <insert id="insertRoom" parameterType="RoomDto">
-        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2, writeday,hostNum)
-        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address}, #{address2},now(),1)
+        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2, writeday,lat,lng,hostNum)
+        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address}, #{address2},now(),#{lat},#{lng},1)
         <selectKey keyProperty="num" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -95,10 +95,9 @@
         values (#{pcontent}, #{roomNum})
     </insert>
 
-<<<<<<< HEAD
+
     <!--룸 이미지들 인서트-->
-=======
->>>>>>> afd17f82a884a2fdf7ee5a629f79b14bbe421647
+
     <insert id="insertRoomImage" parameterType="RoomImageDto">
         insert into roomImage (rimageUrl, roomNum)
         values (#{rimageUrl}, #{roomNum})
