@@ -58,8 +58,8 @@ public class AdminController {
             @RequestParam String searchWord,
             @RequestParam String sort)
     {
-        System.out.println(sort);
-        System.out.println(searchWord);
+        System.out.println("sort = "+sort);
+        System.out.println("searchWord = "+ searchWord);
 
         HashMap<String, Object> map = new HashMap<>();
 
