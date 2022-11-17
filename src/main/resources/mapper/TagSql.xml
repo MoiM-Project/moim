@@ -3,8 +3,14 @@
 <mapper namespace="data.mapper.TagMapper">
 
     <select id="selectTagList" parameterType="int" resultType="TagDto">
-        select tname from tag where roomNum=#{num}
+        select tname
+        from tag
+        where roomNum = #{num}
     </select>
 
+    <insert id="insertTag" parameterType="TagDto">
+        insert into tag (tname, roomNum)
+        values (#{tname}, #{roomNum})
+    </insert>
 
 </mapper>
