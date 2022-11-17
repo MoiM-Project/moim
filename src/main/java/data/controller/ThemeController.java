@@ -57,6 +57,8 @@ public class ThemeController {
         map.put("sprice",sprice);
         map.put("eprice",eprice);
 
+        System.out.println(map);
+
         return themeMapper.selectThemeRoomList(map);
     }
     @GetMapping("/theme/data")

@@ -14,7 +14,7 @@
         select * from room
                  where name like CONCAT('%',#{name},'%')
                    and headCount >= #{headCount}
-                   and #{sprice} <= weekAmPrice <= #{eprice}
+                   and weekAmPrice between #{sprice} and #{eprice}
                    and address like CONCAT('%',#{address},'%')
                    and payment like CONCAT('%',#{payment},'%')
                    and num in (select roomNum from roomTheme where themeNum=#{themeNum})
