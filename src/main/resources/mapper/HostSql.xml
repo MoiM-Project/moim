@@ -8,7 +8,9 @@
     </select>
 
     <select id="getHostList" resultType="HostDto">
-        select * from host order by num desc
+        select *
+        from host
+        order by num desc
     </select>
 
 
@@ -45,8 +47,8 @@
 
     <!--인서트 기본-->
     <insert id="insertRoom" parameterType="RoomDto">
-        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2, writeday,hostNum)
-        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address}, #{address2},now(),1)
+        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2, writeday,lat,lng,hostNum)
+        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address}, #{address2},now(),#{lat},#{lng},1)
         <selectKey keyProperty="num" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -93,20 +95,33 @@
         </foreach>
     </insert>
 
+    <!--    인포메이션 인서트-->
     <insert id="insertInformation" parameterType="InformationDto">
         insert into information (icontent, roomNum) value
             (#{icontent}, #{roomNum})
     </insert>
 
+    <!--주의사항 인서트-->
     <insert id="insertPrecaution" parameterType="PrecautionDto">
         insert into precaution (pcontent, roomNum)
         values (#{pcontent}, #{roomNum})
     </insert>
 
+
+    <!--룸 이미지들 인서트-->
+
     <insert id="insertRoomImage" parameterType="RoomImageDto">
         insert into roomImage (rimageUrl, roomNum)
         values (#{rimageUrl}, #{roomNum})
     </insert>
+
+
+    <!--공개비공개-->
+    <update id="updateStatus" parameterType="RoomDto">
+        update room
+        set hideStatus=#{hideStatus}
+        where num = #{num}
+    </update>
 
 </mapper>
 
