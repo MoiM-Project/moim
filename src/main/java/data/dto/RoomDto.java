@@ -24,7 +24,7 @@ public class RoomDto {
     private int parking;
     private int elevator;
     private String payment;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Timestamp writeday;
     private boolean hideStatus;
     private boolean approvalStatus;
