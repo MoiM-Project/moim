@@ -14,6 +14,8 @@ public interface DetailMapper {
     public List<TagDto> getImg(int num);
     public List<TagDto> getInformation(int num);
     public List<TagDto> getPrecaution(int num);
+    public List<RoomDto> getCategoryData(int num);
+    public List<RoomDto> getFacilityList(int num);
 
 
 }
