@@ -37,6 +37,8 @@ public class DetailController {
         map.put("roomData",detailMapper.getRoomData(num));
         map.put("roomInfo",detailMapper.getInformation(num));
         map.put("pre",detailMapper.getPrecaution(num));
+        map.put("category",detailMapper.getCategoryData(num));
+        map.put("facility",detailMapper.getFacilityList(num));
         return map;
     }
 
