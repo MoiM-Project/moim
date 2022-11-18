@@ -1,5 +1,6 @@
 package data.mapper;
 
+import data.dto.QnADto;
 import data.dto.RoomDto;
 import data.dto.TagDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,6 +17,5 @@ public interface DetailMapper {
     public List<TagDto> getPrecaution(int num);
     public List<RoomDto> getCategoryData(int num);
     public List<RoomDto> getFacilityList(int num);
-
-
+    public List<QnADto> getQnaList(int num);
 }

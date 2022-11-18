@@ -13,10 +13,14 @@ public class QnADto {
     private String question;
     private String answer;
     private String status;
+    private int roomNum;
+    private int userNum;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp writeday;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp answerday;
+
+    private String nickname;
 }

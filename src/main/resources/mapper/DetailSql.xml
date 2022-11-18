@@ -34,4 +34,12 @@
         inner join facility f on rf.facilityNum = f.num
         where r.num = #{num};
     </select>
+
+    <!--qna-->
+    <select id="getQnaList" resultType="QnADto" parameterType="int">
+        select nickname,question,answer,writeday,answerday from QnA q
+        inner join member m on q.userNum = m.idx
+        where q.roomNum = #{num};
+    </select>
+
 </mapper>

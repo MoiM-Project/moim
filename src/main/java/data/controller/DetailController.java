@@ -41,5 +41,11 @@ public class DetailController {
         map.put("facility",detailMapper.getFacilityList(num));
         return map;
     }
-
+    @GetMapping("/detailReview")
+    public Map<String,Object> detailReview(@RequestParam int num){
+        Map<String, Object> map=new HashMap<>();
+        map.put("Qna",detailMapper.getQnaList(num));
+        System.out.println(map);
+        return map;
+    }
 }
