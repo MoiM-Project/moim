@@ -36,7 +36,8 @@ public class ThemeController {
         return themeMapper.selectThemeList();
     }
     @GetMapping("/theme/list")
-    public List<RoomDto> selectThemeRoomList(
+//    public List<RoomDto> selectThemeRoomList(
+    public void selectThemeRoomList(
             int themeNum,
             @RequestParam(defaultValue = "readCount desc") String sort,
             @RequestParam(defaultValue = "1") int headCount,
@@ -44,7 +45,8 @@ public class ThemeController {
             @RequestParam(defaultValue = "") String address,
             @RequestParam(defaultValue = "") String payment,
             @RequestParam(defaultValue = "0") int sprice,
-            @RequestParam(defaultValue = "1000000") int eprice){
+            @RequestParam(defaultValue = "1000000") int eprice,
+            HashMap<String,Object> list){
 
         HashMap<String, Object> map = new HashMap<>();
 
@@ -56,10 +58,11 @@ public class ThemeController {
         map.put("payment",payment);
         map.put("sprice",sprice);
         map.put("eprice",eprice);
+        map.put("facilityList",list);
 
         System.out.println(map);
 
-        return themeMapper.selectThemeRoomList(map);
+//        return themeMapper.selectThemeRoomList(map);
     }
     @GetMapping("/theme/data")
     public ThemeDto selectTheme(int themeNum){
