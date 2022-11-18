@@ -44,10 +44,7 @@
              where (name like concat('%',#{searchWord},'%') or companyName like concat('%',#{searchWord},'%')) ${sort}
     </select>
 
-    <!-- admin > space > search Count -->
-    <select id="getSpaceSearchCount" parameterType="map" resultType="int">
-        SELECT count(*) FROM room r inner join host h on r.hostNum = h.num where (name like concat('%',#{searchWord},'%') or companyName like concat('%',#{searchWord},'%')) ${sort}
-    </select>
+
 
 </mapper>
 

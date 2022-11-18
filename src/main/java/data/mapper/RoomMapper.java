@@ -23,7 +23,6 @@ public interface RoomMapper {
     List<RoomDto> getRoomList();
 
     //adminPage (search) space = room
-    int getSpaceSearchCount(Map<String,Object> map);
     List<RoomDto> getSpaceSearchList(HashMap<String,Object> map);
 
 

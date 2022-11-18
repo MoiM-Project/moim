@@ -3,16 +3,16 @@
 <mapper namespace="data.mapper.MemberMapper">
 
     <!--  admin > memberList  -->
-    <select id="getMemberCount" resultType="int">
-        select count(*) from member
-    </select>
+<!--    <select id="getMemberCount" resultType="int">-->
+<!--        select count(*) from member-->
+<!--    </select>-->
 
-    <select id="getMemberList" resultType="MemberDto">
-        select * from member order by idx desc
-    </select>
+<!--    <select id="getMemberList" resultType="MemberDto">-->
+<!--        select * from member order by idx desc-->
+<!--    </select>-->
 
     <select id="getMemberSearchList" parameterType="map" resultType="MemberDto">
-        select * from member where nickname like concat('%'#{search}'%') or email like concat('%'#{search}'%')
+        select * from member where (nickname like concat('%',#{searchWord},'%') or email like concat('%',#{searchWord},'%')) ${sort}
     </select>
 
 </mapper>

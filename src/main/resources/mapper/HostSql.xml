@@ -3,20 +3,8 @@
 <mapper namespace="data.mapper.HostMapper">
 
     <!--  admin > hostList  -->
-    <select id="getHostCount" resultType="int">
-        select count(*) from host
-    </select>
-
-    <select id="getHostList" resultType="HostDto">
-        select *
-        from host
-        order by num desc
-    </select>
-
-
-    <!--  admin > hostList 개선 예정  -->
     <select id="getHostSearchList" parameterType="map" resultType="MemberDto">
-        select * from host where companyName like concat('%'#{search}'%') or email like concat('%'#{search}'%')
+        select * from host where companyName like concat('%',#{searchWord},'%') or email like like concat('%',#{searchWord},'%') ${sort}
     </select>
 
 
@@ -109,7 +97,6 @@
 
 
     <!--룸 이미지들 인서트-->
-
     <insert id="insertRoomImage" parameterType="RoomImageDto">
         insert into roomImage (rimageUrl, roomNum)
         values (#{rimageUrl}, #{roomNum})
