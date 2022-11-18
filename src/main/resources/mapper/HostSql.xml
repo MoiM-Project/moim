@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="data.mapper.HostMapper">
 
-    <select id="getHostList" resultType="HostDto">
-        select *
-        from host
-        order by num desc
+    <!--  admin > hostList  -->
+    <select id="getHostSearchList" parameterType="map" resultType="MemberDto">
+        select * from host where companyName like concat('%',#{searchWord},'%') or email like like concat('%',#{searchWord},'%') ${sort}
     </select>
+
 
     <!--방 전체 리스트-->
     <select id="getRoomList" resultType="RoomDto">
@@ -97,11 +97,11 @@
 
 
     <!--룸 이미지들 인서트-->
-
     <insert id="insertRoomImage" parameterType="RoomImageDto">
         insert into roomImage (rimageUrl, roomNum)
         values (#{rimageUrl}, #{roomNum})
     </insert>
+
 
     <!--공개비공개-->
     <update id="updateStatus" parameterType="RoomDto">
@@ -109,6 +109,7 @@
         set hideStatus=#{hideStatus}
         where num = #{num}
     </update>
+
 </mapper>
 
 
