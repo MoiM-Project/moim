@@ -10,6 +10,12 @@
     <select id="selectTheme" parameterType="int" resultType="ThemeDto">
         select * from theme where num=#{themeNum}
     </select>
+
+    <sql id="res">
+        <foreach collection="facilityList" item="item" saparator="union all">
+            SELECT roomNum FROM roomFacility where facilityNum=#{item}
+        </foreach>
+    </sql>
     <select id="selectThemeRoomList" parameterType="Map" resultType="RoomDto">
         select * from room
                  where name like CONCAT('%',#{name},'%')
@@ -17,7 +23,9 @@
                    and weekAmPrice between #{sprice} and #{eprice}
                    and address like CONCAT('%',#{address},'%')
                    and payment like CONCAT('%',#{payment},'%')
-                   and num in (select roomNum from roomTheme where themeNum=#{themeNum})
+                   and num in
+                       (select roomNum from roomTheme where roomNum in
+                       (select roomNum from (<include refid="res"/>) group by roomNum having count(*)=#{facilityCount}) and themeNum=#{themeNum})
                  order by ${sort};
     </select>
     <select id="selectThemeCount" parameterType="int" resultType="int">
