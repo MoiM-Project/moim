@@ -15,9 +15,25 @@
         WHERE name like CONCAT('%',#{name},'%')
               and headcount >= #{headCount}
               and address like CONCAT('%',#{address},'%')
-              and num IN (SELECT roomNum FROM roomCategory WHERE categoryNum = #{num})
+              and payment like CONCAT('%',#{payment},'%')
+              and weekAmprice between #{sprice} and #{eprice}
+              and num IN (<include refid="facility"/>)
+#                   SELECT roomNum FROM roomCategory WHERE categoryNum = #{num})
               order by ${sort};
     </select>
+    <!-- weekAmprice, facility, payment-->
+    <sql id="union">
+        <foreach collection="facilityList" item="item" separator="UNION ALL">
+            SELECT roomNum FROM roomFacility where facilityNum=#{item}
+        </foreach>
+    </sql>
+
+    <sql id="facility">
+        with res as( <include refid="union"/>)
+        -- count 개수는 list length
+        SELECT roomNum FROM res GROUP BY roomNum HAVING COUNT(*)=#{facilityLength};
+    </sql>
+
 
     <!-- 번호에 해당하는 카테고리 출력  -->
     <select id="selectCategory" parameterType="int" resultType="CategoryDto">
@@ -28,4 +44,5 @@
         insert into roomCategory (roomNum, categoryNum)
         values (#{roomNum}, #{categoryNum})
     </insert>
+
 </mapper>
