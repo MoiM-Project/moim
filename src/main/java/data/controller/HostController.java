@@ -282,6 +282,11 @@ public class HostController {
         hostMapper.updateStatus(dto);
     }
 
+    @PatchMapping("/update")
+    public void firstUpdateForm(@RequestBody RoomDto dto){
+        System.out.println(dto.getNum());
+        hostMapper.updateForm1(dto);
+    }
 
 
     // booking detail page - host info
@@ -293,4 +298,42 @@ public class HostController {
         return dto;
     }
 
+    //num에 해당하는 데이터 호출
+    @GetMapping("/select")
+    public RoomDto getData(@RequestParam int num){
+//        System.out.println(num);
+        return hostMapper.getData(num);
+    }
+
+    //roomNum에 해당하는 데이터 호출
+    @GetMapping("/category")
+    public List<RoomCategoryDto> getCateData(@RequestParam int roomNum){
+        System.out.println(roomNum);
+        return hostMapper.getCategoryData(roomNum);
+    }
+    @GetMapping("/optionselect")
+    public List<RoptionDto> getOptionData(@RequestParam int roomNum){
+        System.out.println(roomNum);
+        return hostMapper.getOptionData(roomNum);
+    }
+    @GetMapping("/images")
+    public List<RoomImageDto> getImagesData(@RequestParam int roomNum){
+        System.out.println(roomNum);
+        return hostMapper.getImageData(roomNum);
+    }
+    @GetMapping("/tag")
+    public List<TagDto> getTagData(@RequestParam int roomNum){
+        System.out.println(roomNum);
+        return hostMapper.getTagData(roomNum);
+    }
+    @GetMapping("/information")
+    public List<InformationDto> getInfoData(@RequestParam int roomNum){
+        System.out.println(roomNum);
+        return hostMapper.getInfoData(roomNum);
+    }
+    @GetMapping("/precautions")
+    public List<PrecautionDto> getPreData(@RequestParam int roomNum){
+        System.out.println(roomNum);
+        return hostMapper.getPreData(roomNum);
+    }
 }

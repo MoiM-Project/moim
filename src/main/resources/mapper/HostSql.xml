@@ -16,7 +16,9 @@
     </select>
 
     <select id="getHostInfoList" resultType="HostDto" parameterType="int">
-        select * from host where num=#{num}
+        select *
+        from host
+        where num = #{num}
     </select>
 
     <!--메인카테고리 리스트-->
@@ -35,8 +37,10 @@
 
     <!--인서트 기본-->
     <insert id="insertRoom" parameterType="RoomDto">
-        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2, writeday,lat,lng,hostNum)
-        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address}, #{address2},now(),#{lat},#{lng},1)
+        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2,
+        writeday,lat,lng,hostNum)
+        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address},
+        #{address2},now(),#{lat},#{lng},1)
         <selectKey keyProperty="num" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -97,7 +101,6 @@
 
 
     <!--룸 이미지들 인서트-->
-
     <insert id="insertRoomImage" parameterType="RoomImageDto">
         insert into roomImage (rimageUrl, roomNum)
         values (#{rimageUrl}, #{roomNum})
@@ -109,6 +112,52 @@
         set hideStatus=#{hideStatus}
         where num = #{num}
     </update>
+
+    <!--첫번째 업데이트 폼-->
+    <update id="updateForm1" parameterType="RoomDto">
+        update room
+        set name=#{name},
+            oneIntroduction=#{oneIntroduction},
+            fullIntroduction=#{fullIntroduction},
+            thumbnailImage=#{thumbnailImage},
+            address=#{address},
+            address2=#{address2},
+            lat=#{lat},
+            lng=#{lng}
+        where num = #{num}
+    </update>
+
+    <!--roomNum값 가져오기-->
+    <select id="getCategoryData" parameterType="int" resultType="RoomCategoryDto">
+        select *
+        from roomCategory
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getOptionData" parameterType="int" resultType="RoptionDto">
+        select *
+        from roption
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getImageData" parameterType="int" resultType="RoomImageDto">
+        select *
+        from roomImage
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getTagData" parameterType="int" resultType="TagDto">
+        select *
+        from tag
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getInfoData" parameterType="int" resultType="InformationDto">
+        select *
+        from information
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getPreData" parameterType="int" resultType="PrecautionDto">
+        select *
+        from precaution
+        where roomNum = #{roomNum}
+    </select>
 </mapper>
 
 
