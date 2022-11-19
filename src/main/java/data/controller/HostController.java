@@ -306,7 +306,7 @@ public class HostController {
     }
 
     //roomNum에 해당하는 데이터 호출
-    @GetMapping("/category")
+    @GetMapping("/categoryselect")
     public List<RoomCategoryDto> getCateData(@RequestParam int roomNum){
         System.out.println(roomNum);
         return hostMapper.getCategoryData(roomNum);
@@ -316,22 +316,22 @@ public class HostController {
         System.out.println(roomNum);
         return hostMapper.getOptionData(roomNum);
     }
-    @GetMapping("/images")
+    @GetMapping("/imagesselect")
     public List<RoomImageDto> getImagesData(@RequestParam int roomNum){
         System.out.println(roomNum);
         return hostMapper.getImageData(roomNum);
     }
-    @GetMapping("/tag")
+    @GetMapping("/tagselect")
     public List<TagDto> getTagData(@RequestParam int roomNum){
         System.out.println(roomNum);
         return hostMapper.getTagData(roomNum);
     }
-    @GetMapping("/information")
+    @GetMapping("/informationselect")
     public List<InformationDto> getInfoData(@RequestParam int roomNum){
         System.out.println(roomNum);
         return hostMapper.getInfoData(roomNum);
     }
-    @GetMapping("/precautions")
+    @GetMapping("/precautionsselect")
     public List<PrecautionDto> getPreData(@RequestParam int roomNum){
         System.out.println(roomNum);
         return hostMapper.getPreData(roomNum);
