@@ -6,6 +6,8 @@ import data.mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/bookingDetail")
@@ -17,5 +19,12 @@ public class BookingDetailController {
     public void insertFood(@RequestBody BookingDetailDto dto)
     {
         bookingDetailMapper.insertBookingDetail(dto);
+    }
+
+    @GetMapping("/list")
+    public List<BookingDetailDto> getBookingDetail(int userNum){
+        List<BookingDetailDto> dto = bookingDetailMapper.getBookingDetailList(userNum);
+
+        return dto;
     }
 }

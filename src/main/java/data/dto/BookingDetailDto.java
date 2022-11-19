@@ -7,9 +7,10 @@ import org.apache.ibatis.type.Alias;
 import java.sql.Timestamp;
 
 @Data
-@Alias("BookingDetail")
+@Alias("BookingDetailDto")
 public class BookingDetailDto {
     private int num;
+    private String bookingDate;
     private String bookingTime;
     private int headCount;
     private String name;
@@ -26,4 +27,13 @@ public class BookingDetailDto {
     private Timestamp cancelDate;
     private int roomNum;
     private int userNum;
+    private String roomOption;
+
+    // room
+    private String roomName;
+    private String thumbnailImage;
+    private String address;
+    private String address2;
+    private String lat;
+    private String lng;
 }
