@@ -4,7 +4,10 @@
 
     <!--  admin > hostList  -->
     <select id="getHostSearchList" parameterType="map" resultType="MemberDto">
-        select * from host where companyName like concat('%',#{searchWord},'%') or email like like concat('%',#{searchWord},'%') ${sort}
+        select *
+        from host
+        where companyName like concat('%', #{searchWord}, '%')
+           or email like like concat('%', #{searchWord}, '%') ${sort}
     </select>
 
 
@@ -87,7 +90,8 @@
         </foreach>
     </insert>
 
-    <!--    인포메이션 인서트-->
+
+    <!--인포메이션 인서트-->
     <insert id="insertInformation" parameterType="InformationDto">
         insert into information (icontent, roomNum) value
             (#{icontent}, #{roomNum})
@@ -128,6 +132,25 @@
             lng=#{lng}
         where num = #{num}
     </update>
+
+    <!--roomNum값 가져오기-->
+    <!--    <select id="getRoomNum" parameterType="int" resultType="list">-->
+    <!--        select *-->
+    <!--        from room r-->
+    <!--                 inner join information i-->
+    <!--                            on r.num = i.roomNum-->
+    <!--                 inner join roption ro-->
+    <!--                            on r.num = ro.roomNum-->
+    <!--                 inner join roomCategory rc-->
+    <!--                            on r.num = rc.roomNum-->
+    <!--                 inner join tag t-->
+    <!--                            on r.num = t.roomNum-->
+    <!--                 inner join roomImage ri-->
+    <!--                            on r.num = ri.roomNum-->
+    <!--                 inner join precaution p-->
+    <!--                            on r.num = p.roomNum-->
+    <!--        where r.num = #{num};-->
+    <!--    </select>-->
 
     <!--roomNum값 가져오기-->
     <select id="getCategoryData" parameterType="int" resultType="RoomCategoryDto">
