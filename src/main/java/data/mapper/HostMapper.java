@@ -8,7 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface HostMapper {
-    public void HostHome();
 
     // booking detail page host info
     public HostDto getHostInfoList(int num);
@@ -38,7 +37,6 @@ public interface HostMapper {
 
 
 
-//    public void HostHome();
-
-    List<HostDto> getHostList();
+//    List<HostDto> getHostList();
+    List<HostDto> getHostSearchList(HashMap<String,Object> map);    // 호스트 리스트 출력
 }
