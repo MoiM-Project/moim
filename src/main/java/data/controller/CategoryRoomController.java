@@ -39,7 +39,7 @@ public class CategoryRoomController {
 
         List<String> facilityList = Arrays.asList(facility);
         System.out.println(facilityList);
-        map.put("num",categoryNum);
+        map.put("categoryNum",categoryNum);
         map.put("sort",sort);
         map.put("headCount",headCount);
         map.put("name",name);
@@ -47,7 +47,8 @@ public class CategoryRoomController {
         map.put("payment",payment);
         map.put("sprice",sprice);
         map.put("eprice",eprice);
-        map.put("facilityLength",facilityLength);
+        map.put("facilityCount",facilityLength);
+        map.put("facilityList",facilityList);
         System.out.println(map);
         return categoryMapper.getCategoryRoom(map);
     }

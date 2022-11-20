@@ -9,30 +9,29 @@
     </select>
 
     <!-- 카테고리에 해당하는 방들 출력   -->
-    <select id="getCategoryRoom" parameterType="Map" resultType="RoomDto">
-        SELECT *
-        FROM room
-        WHERE name like CONCAT('%',#{name},'%')
-              and headcount >= #{headCount}
-              and address like CONCAT('%',#{address},'%')
-              and payment like CONCAT('%',#{payment},'%')
-              and weekAmprice between #{sprice} and #{eprice}
-              and num IN (<include refid="facility"/>)
-#                   SELECT roomNum FROM roomCategory WHERE categoryNum = #{num})
-              order by ${sort};
-    </select>
-    <!-- weekAmprice, facility, payment-->
-    <sql id="union">
-        <foreach collection="facilityList" item="item" separator="UNION ALL">
+    <sql id="res">
+        <foreach collection="facilityList" item="item" separator="union all">
             SELECT roomNum FROM roomFacility where facilityNum=#{item}
         </foreach>
     </sql>
-
-    <sql id="facility">
-        with res as( <include refid="union"/>)
-        -- count 개수는 list length
-        SELECT roomNum FROM res GROUP BY roomNum HAVING COUNT(*)=#{facilityLength};
-    </sql>
+    <select id="getCategoryRoom" parameterType="HashMap" resultType="RoomDto">
+        select * from room a
+        where a.name like CONCAT('%',#{name},'%')
+        and a.headCount >= #{headCount}
+        and a.weekAmPrice between #{sprice} and #{eprice}
+        and a.address like CONCAT('%',#{address},'%')
+        and a.payment like CONCAT('%',#{payment},'%')
+        and a.num in
+        (select roomNum from roomCategory b where
+        <if test="facilityCount!=0">
+            b.roomNum in
+            (select c.roomNum from (<include refid="res" />) c
+            group by c.roomNum
+            having count(*)=#{facilityCount}) and
+        </if>
+        b.categoryNum=#{categoryNum})
+        order by ${sort}
+    </select>
 
 
     <!-- 번호에 해당하는 카테고리 출력  -->
