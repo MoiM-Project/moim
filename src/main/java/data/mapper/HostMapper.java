@@ -29,6 +29,6 @@ public interface HostMapper {
 
 //    public void HostHome();
 
-//    List<HostDto> getHostList();
     List<HostDto> getHostSearchList(HashMap<String,Object> map);    // 호스트 리스트 출력
+
 }
