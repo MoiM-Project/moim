@@ -9,6 +9,5 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
-//    List<MemberDto> getMemberList();
     List<MemberDto> getMemberSearchList(HashMap<String,Object> map);
 }

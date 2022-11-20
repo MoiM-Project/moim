@@ -3,8 +3,8 @@
 <mapper namespace="data.mapper.HostMapper">
 
     <!--  admin > hostList  -->
-    <select id="getHostSearchList" parameterType="map" resultType="MemberDto">
-        select * from host where companyName like concat('%',#{searchWord},'%') or email like like concat('%',#{searchWord},'%') ${sort}
+    <select id="getHostSearchList" parameterType="map" resultType="HostDto">
+        select * from host where companyName like concat('%',#{searchWord},'%') or email like concat('%',#{searchWord},'%') ${sort}
     </select>
 
 
