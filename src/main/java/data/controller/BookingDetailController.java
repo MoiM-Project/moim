@@ -6,6 +6,7 @@ import data.mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -22,9 +23,15 @@ public class BookingDetailController {
     }
 
     @GetMapping("/list")
-    public List<BookingDetailDto> getBookingDetail(int userNum){
-        List<BookingDetailDto> dto = bookingDetailMapper.getBookingDetailList(userNum);
+    public List<BookingDetailDto> getBookingDetail(int userNum,
+                                                   @RequestParam(defaultValue = "1") String bookingStatus,
+                                                   @RequestParam(defaultValue = "num desc") String sort){
 
-        return dto;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userNum",userNum);
+        map.put("bookingStatus",bookingStatus);
+        map.put("sort",sort);
+
+        return bookingDetailMapper.getBookingDetailList(map);
     }
 }
