@@ -34,4 +34,11 @@ public class BookingDetailController {
 
         return bookingDetailMapper.getBookingDetailList(map);
     }
+
+    @GetMapping("/detail")
+    public BookingDetailDto getBookingDetail(int bookingDetailNum){
+        BookingDetailDto dto = bookingDetailMapper.getBookingDetailData(bookingDetailNum);
+
+        return dto;
+    }
 }
