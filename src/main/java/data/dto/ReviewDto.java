@@ -19,4 +19,7 @@ public class ReviewDto {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp writeday;
+
+    //member
+    private String nickname;
 }

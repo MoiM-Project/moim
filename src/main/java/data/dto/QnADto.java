@@ -22,5 +22,6 @@ public class QnADto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp answerday;
 
+    //member
     private String nickname;
 }
