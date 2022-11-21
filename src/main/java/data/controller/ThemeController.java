@@ -33,10 +33,10 @@ public class ThemeController {
         return themeMapper.selectThemeList();
     }
     @PostMapping("/theme/list")
-    public List<RoomDto> selectThemeRoomList(@RequestBody Map<String,Object> data){
+    public List<RoomDto> selectThemeRoomList(@RequestBody HashMap<String,Object> data){
 
         HashMap<String, Object> map = new HashMap<>();
-//
+
         map.put("themeNum",data.get("themeNum"));
         map.put("sort",data.get("sort"));
         map.put("headCount",data.get("headCount"));
@@ -47,6 +47,9 @@ public class ThemeController {
         map.put("eprice",data.get("eprice"));
         map.put("facilityList",data.get("facility"));
         map.put("facilityCount",data.get("facilityCount"));
+        map.put("holiday",data.get("holiday"));
+        map.put("stime",data.get("stime"));
+        map.put("etime",data.get("etime"));
 
         System.out.println(data);
         System.out.println(map);
