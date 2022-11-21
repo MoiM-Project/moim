@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
@@ -114,13 +115,17 @@ public class HostController {
     @PostMapping("/optioninsert")
     public void insertOption(@RequestBody Map<String, Object> params) {
 //        System.out.println("호출이라도되나용");
+
         System.out.println(params);
+
         HashMap<String, Object> map = new HashMap<>();
 
         List<Map<String, Object>> OptionList = (List<Map<String, Object>>) params.get("roptionList");
 
-        map.put("OptionList", OptionList);
-        hostMapper.insertRoomOption(map);
+        if (OptionList.size() !=0) {
+            map.put("OptionList", OptionList);
+            hostMapper.insertRoomOption(map);
+        }
     }
 
     //인서트 업데이트
@@ -257,7 +262,7 @@ public class HostController {
 
     //인서트 캔슬
     @DeleteMapping("/cancel")
-    public void deleteRoom(@RequestParam int num, HttpServletRequest request) {
+    public void deleteRoom(@RequestParam int num) {
         System.out.println(num);
         hostMapper.deleteRoom(num);   //DB 데이터 삭제
     }
@@ -265,7 +270,17 @@ public class HostController {
 
     //방 리스트에서 삭제
     @DeleteMapping("/delete")
-    public void deleteRoom(@RequestParam int num){
+    public void deleteRoom(@RequestParam int num, HttpServletRequest request){
+        System.out.println(num);
+
+        //경로 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+
+        //삭제할 기존 파일명
+        String oldFileName = hostMapper.getData(num).getThumbnailImage();
+        FileUtil.deletePhoto(path, oldFileName);
+
+        System.out.println(oldFileName+"삭제");
         System.out.println(num);
         hostMapper.deleteRoom(num);
     }
@@ -317,5 +332,42 @@ public class HostController {
         map.put("preData",hostMapper.getPreData(roomNum));
         return map;
     }
+
+    //수정폼에서 옵션삭제
+    @DeleteMapping("/roptindel")
+    public void roptindel(@RequestParam int num,HttpServletRequest request){
+        System.out.println(num);
+        //경로 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+        //삭제할 기존 파일명
+        String oldFileName = hostMapper.getOptionNum(num).getOimageUrl();
+        FileUtil.deletePhoto(path, oldFileName);    //사진파일 삭제
+        System.out.println(oldFileName+"삭제완료");
+
+        hostMapper.deleteoption(num);
+    }
+
+    //수정폼에서 이미지들 삭제
+    @DeleteMapping("/imagesdel")
+    public void roomImagedel(@RequestParam int num,HttpServletRequest request){
+        System.out.println(num);
+        //경로 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+        //삭제할 기존 파일명
+        String oldFileName = hostMapper.getImagesNum(num).getRimageUrl();
+        FileUtil.deletePhoto(path, oldFileName);    //사진파일 삭제
+        System.out.println(oldFileName+"삭제완료");
+
+        hostMapper.deleteimages(num);
+    }
+
+    //수정폼에서 태그,인포,주의사항 삭제
+    @DeleteMapping("/updatedel")
+    public void updatedel(@RequestParam int num){
+        hostMapper.deltag(num);
+        hostMapper.delinfo(num);
+        hostMapper.delpre(num);
+    }
+
 
 }

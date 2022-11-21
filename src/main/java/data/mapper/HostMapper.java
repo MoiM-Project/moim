@@ -32,6 +32,14 @@ public interface HostMapper {
     public List<TagDto> getTagData (int roomNum); // 태그에서 룸 넘버
     public List<InformationDto> getInfoData (int roomNum); //인포에서 룸 넘버
     public List<PrecautionDto> getPreData (int roomNum); //주의사항에서 룸 넘버
+    public RoptionDto getOptionNum(int num); //수정시 옵션 데이타 넘버 가져오기
+    public void deleteoption(int num); //// 수정시 옵션삭제
+    public RoomImageDto getImagesNum(int num); //수정시 이미지 데이타 넘버 가져오기
+    public void deleteimages(int num); //// 수정시 이미지 삭제
+    public void deltag(int num); //수정시 태그삭제
+    public void delinfo(int num); //수정시 인포 삭제
+    public void delpre(int num); //수정시 인포 삭제
+
 
 
 

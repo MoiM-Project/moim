@@ -133,6 +133,48 @@
         where num = #{num}
     </update>
 
+    <!-- 수정시 옵션삭제-->
+    <delete id="deleteoption" parameterType="int">
+        delete
+        from roption
+        where num = #{num}
+    </delete>
+    <select id="getOptionNum" parameterType="int" resultType="RoptionDto">
+        select *
+        from roption
+        where num = #{num}
+    </select>
+
+    <!-- 수정시 사진삭제-->
+    <delete id="deleteimages" parameterType="int">
+        delete
+        from roomImage
+        where num = #{num}
+    </delete>
+    <select id="getImagesNum" parameterType="int" resultType="RoomImageDto">
+        select *
+        from roomImage
+        where num = #{num}
+    </select>
+
+    <!--수정시 인포,주의사항,태그 삭제-->
+    <delete id="deltag" parameterType="int">
+        delete
+        from tag
+        where num = #{num}
+    </delete>
+    <delete id="delinfo" parameterType="int">
+        delete
+        from information
+        where num = #{num}
+    </delete>
+    <delete id="delpre" parameterType="int">
+        delete
+        from precaution
+        where num = #{num}
+    </delete>
+
+
     <!--roomNum값 가져오기-->
     <!--    <select id="getRoomNum" parameterType="int" resultType="list">-->
     <!--        select *-->
