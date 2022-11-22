@@ -7,6 +7,7 @@ import data.mapper.DetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,15 +29,26 @@ public class CategoryRoomController {
             @RequestParam(defaultValue = "readCount desc") String sort,
             @RequestParam(defaultValue = "1") int headCount,
             @RequestParam(defaultValue = "") String name,
-            @RequestParam(defaultValue = "")String address){
+            @RequestParam(defaultValue = "")String address,
+            @RequestParam(defaultValue = "")String payment,
+            @RequestParam(defaultValue = "0")int sprice,
+            @RequestParam(defaultValue = "500000")int eprice,
+            @RequestParam(defaultValue = "1")int facilityLength,
+            @RequestParam(defaultValue = "1") String facility){
         HashMap<String, Object> map = new HashMap<>();
 
-        System.out.println("호출");
-        map.put("num",categoryNum);
+        List<String> facilityList = Arrays.asList(facility);
+        System.out.println(facilityList);
+        map.put("categoryNum",categoryNum);
         map.put("sort",sort);
         map.put("headCount",headCount);
         map.put("name",name);
         map.put("address",address);
+        map.put("payment",payment);
+        map.put("sprice",sprice);
+        map.put("eprice",eprice);
+        map.put("facilityCount",facilityLength);
+        map.put("facilityList",facilityList);
         System.out.println(map);
         return categoryMapper.getCategoryRoom(map);
     }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="data.mapper.SearchMapper">
+
+    <select id="getSearchRoom" parameterType="HashMap" resultType="RoomDto">
+    SELECT * FROM room a
+        where (a.address like concat('%',#{searchWord},'%') or a.name like concat('%',#{searchWord},'%')
+        or a.num in (SELECT roomNum FROM roomCategory b where b.categoryNum in(
+        SELECT c.num FROM category c where c.cname like concat('%',#{searchWord},'%'))))
+        order by ${sort}
+    </select>
+
+</mapper>

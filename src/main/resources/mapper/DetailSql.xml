@@ -19,4 +19,19 @@
     <select id="getPrecaution" parameterType="int" resultType="String">
         select pcontent from precaution where roomNum=#{num}
     </select>
+
+    <!-- category-->
+    <select id="getCategoryData" resultType="String" parameterType="int">
+        select cname from room r
+        inner join roomCategory rc on r.num = rc.roomNum
+        inner join category c on rc.categoryNum = c.num
+        where r.num = #{num};
+    </select>
+    <!--facilityList-->
+    <select id="getFacilityList" resultType="RoomDto" parameterType="int">
+        select fname, imageUrl from room r
+        inner join roomFacility rf on r.num = rf.roomNum
+        inner join facility f on rf.facilityNum = f.num
+        where r.num = #{num};
+    </select>
 </mapper>
