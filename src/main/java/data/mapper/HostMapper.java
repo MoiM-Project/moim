@@ -44,6 +44,11 @@ public interface HostMapper {
 
 
 
-//    List<HostDto> getHostList();
-    List<HostDto> getHostSearchList(HashMap<String,Object> map);    // 호스트 리스트 출력
+//    public void HostHome();
+    
+    List<HostDto> getHostSearchList(HashMap<String,Object> map);    // admin > hostList 출력
+
+    void updateHostWarning(int hostNum);
+
+    void updateHostPassword(int hostNum);
 }
