@@ -23,5 +23,5 @@ public interface DetailMapper {
     public  List<ReviewDto> getReviewPhoto(int num);
     public String getBookingTime(Map<String,Object> map);
     public RoomDto getHostByNum(int num);
-    public List<RoomDto> getRoomByHostNum(int hostNum);
+    public List<RoomDto> getRoomByHostNum(Map<String,Object> map);
 }

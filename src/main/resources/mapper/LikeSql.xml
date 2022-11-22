@@ -6,4 +6,16 @@
         select count(*) from moim.like where roomNum=#{num}
     </select>
 
+    <insert id="insertLike" >
+        insert into moim.like  (num,userNum,roomNum) values (null,#{userNum},#{num})
+    </insert>
+
+    <delete id="deleteLike" parameterType="LikeDto">
+        delete  from moim.like where userNum=#{userNum} and roomNum=#{num}
+    </delete>
+
+    <select id="selectLike" parameterType="Map" resultType="LikeDto">
+        select * from moim.like where roomNum=#{num} and userNum=#{userNum}
+    </select>
+
 </mapper>
