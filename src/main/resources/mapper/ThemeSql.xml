@@ -10,13 +10,32 @@
     <select id="selectTheme" parameterType="int" resultType="ThemeDto">
         select * from theme where num=#{themeNum}
     </select>
-    <select id="selectThemeRoomList" parameterType="Map" resultType="RoomDto">
-        select * from room
-                 where name like CONCAT('%',#{name},'%')
-                   and headCount >= #{headCount}
-                   and address like CONCAT('%',#{address},'%')
-                   and num in (select roomNum from roomTheme where themeNum=#{themeNum})
-                 order by ${sort};
+
+    <sql id="res">
+        <foreach collection="facilityList" item="item" separator="union all">
+            SELECT roomNum FROM roomFacility where facilityNum=#{item}
+        </foreach>
+    </sql>
+    <select id="selectThemeRoomList" parameterType="HashMap" resultType="RoomDto">
+        select * from room a
+                 where a.name like CONCAT('%',#{name},'%')
+                   and a.headCount >= #{headCount}
+                   and a.weekAmPrice between #{sprice} and #{eprice}
+                   and a.address like CONCAT('%',#{address},'%')
+                   and a.payment like CONCAT('%',#{payment},'%')
+                   and a.holiday != #{holiday}
+                   and a.stime <![CDATA[>=]]> #{stime}
+                   and a.etime <![CDATA[<=]]> #{etime}
+                   and a.num in
+                       (select roomNum from roomTheme b where
+                        <if test="facilityCount!=0">
+                            b.roomNum in
+                            (select c.roomNum from (<include refid="res" />) c
+                                              group by c.roomNum
+                                              having count(*)=#{facilityCount}) and
+                        </if>
+                        b.themeNum=#{themeNum})
+                 order by ${sort}
     </select>
     <select id="selectThemeCount" parameterType="int" resultType="int">
         select count(*) from roomTheme where themeNum=#{num}
