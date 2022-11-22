@@ -41,9 +41,11 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         String nickname = (String) properties.get("nickname");
 
+        String profile_image = (String) properties.get("thumbnail_image");
+
 //        가입한적 없음.
         if (memberDao.checkEmail(email) == 0) {
-            memberDao.createMemberKakao(email, nickname);
+            memberDao.createMemberKakao(email, nickname, profile_image);
         } else {
             System.out.println("가입한적 있음.");
         }
