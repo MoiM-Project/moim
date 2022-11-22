@@ -2,28 +2,27 @@ package data.controller;
 
 import data.dto.HostDto;
 import data.mapper.HostMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import data.dto.*;
 import data.mapper.CategoryMapper;
-import data.mapper.HostMapper;
 import data.mapper.TagMapper;
 import data.util.ChangeName;
 import data.util.FileUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
 @RestController
 @CrossOrigin
+@Slf4j
 @RequestMapping("/host")
 public class HostController {
 
@@ -46,6 +45,12 @@ public class HostController {
     @GetMapping("/list")
     public List<RoomDto> roomList() {
 //        System.out.println(hostMapper.getRoomList().size());
+        log.info("------로그테스트------");
+        String value1 = "1번값";
+        String value2 = "2번값";
+        log.info("1번값은:"+value1+" 2번값은:"+value2);
+        log.info("1번값은:{} 2번값은:{}",value1,value2);
+        
         return hostMapper.getRoomList();
     }
 
