@@ -42,7 +42,7 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         String nickname = (String) properties.get("nickname");
 
         String profile_image = (String) properties.get("thumbnail_image");
-
+        System.out.println(profile_image);
 //        가입한적 없음.
         if (memberDao.checkEmail(email) == 0) {
             memberDao.createMemberKakao(email, nickname, profile_image);
