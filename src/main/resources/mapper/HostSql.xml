@@ -7,6 +7,16 @@
         select * from host where companyName like concat('%',#{searchWord},'%') or email like concat('%',#{searchWord},'%') ${sort}
     </select>
 
+    <!--  admin > hostList > update Warning reset  -->
+    <update id="updateHostWarning" parameterType="int">
+        UPDATE host SET warningCount = 0, active = 0 WHERE num = #{hostNum};
+    </update>
+
+    <!--  admin > hostList > update password / 호스트 비밀번호 초기화  -->
+    <!--  비밀번호가 1일 경우 로그인하면 비밀번호 변경 화면으로 이동되도록?  -->
+    <update id="updateHostPassword" parameterType="int">
+        update host set password=1 where num = #{hostNum}
+    </update>
 
     <!--방 전체 리스트-->
     <select id="getRoomList" resultType="RoomDto">
