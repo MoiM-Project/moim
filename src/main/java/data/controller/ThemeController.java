@@ -5,10 +5,7 @@ import data.dto.TagDto;
 import data.dto.ThemeDto;
 import data.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,23 +32,27 @@ public class ThemeController {
 
         return themeMapper.selectThemeList();
     }
-    @GetMapping("/theme/list")
-    public List<RoomDto> selectThemeRoomList(
-            int themeNum,
-            @RequestParam(defaultValue = "readCount desc") String sort,
-            @RequestParam(defaultValue = "1") int headCount,
-            @RequestParam(defaultValue = "") String name,
-            @RequestParam(defaultValue = "") String address){
-
-        System.out.println(sort);
+    @PostMapping("/theme/list")
+    public List<RoomDto> selectThemeRoomList(@RequestBody HashMap<String,Object> data){
 
         HashMap<String, Object> map = new HashMap<>();
 
-        map.put("themeNum",themeNum);
-        map.put("sort",sort);
-        map.put("headCount",headCount);
-        map.put("name",name);
-        map.put("address",address);
+        map.put("themeNum",data.get("themeNum"));
+        map.put("sort",data.get("sort"));
+        map.put("headCount",data.get("headCount"));
+        map.put("name",data.get("roomName"));
+        map.put("address",data.get("address"));
+        map.put("payment",data.get("payment"));
+        map.put("sprice",data.get("sprice"));
+        map.put("eprice",data.get("eprice"));
+        map.put("facilityList",data.get("facility"));
+        map.put("facilityCount",data.get("facilityCount"));
+        map.put("holiday",data.get("holiday"));
+        map.put("stime",data.get("stime"));
+        map.put("etime",data.get("etime"));
+
+        System.out.println(data);
+        System.out.println(map);
 
         return themeMapper.selectThemeRoomList(map);
     }

@@ -33,7 +33,7 @@
 
     <!--  main > suggestRoom List  -->
     <select id="getRoomList" resultType="RoomDto">
-        select * from room
+        select * from room limit 3
 
     </select>
 
