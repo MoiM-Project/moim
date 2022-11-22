@@ -10,5 +10,6 @@ import java.util.List;
 public interface ReviewMapper {
     int selectReviewCount(int num);
     List<ReviewDto> getReviewList();
+    int getReviewAvg(int num);
 
 }
