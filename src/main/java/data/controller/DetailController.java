@@ -28,6 +28,7 @@ public class DetailController {
         map.put("roomData",detailMapper.getRoomData(num));
         map.put("tag",detailMapper.getTagName(num));
         map.put("roomImg",detailMapper.getImg(num));
+
         return map;
     }
 
@@ -39,6 +40,7 @@ public class DetailController {
         map.put("pre",detailMapper.getPrecaution(num));
         map.put("category",detailMapper.getCategoryData(num));
         map.put("facility",detailMapper.getFacilityList(num));
+
         return map;
     }
 
