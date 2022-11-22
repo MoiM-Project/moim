@@ -39,7 +39,7 @@
 
     <!--  admin > Space (Search) List  -->
     <select id="getSpaceSearchList" parameterType="map" resultType="RoomDto">
-        SELECT r.num, name, weekAmPrice, headcount, writeday, companyName, hideStatus, approvalStatus, readCount FROM room r
+        SELECT r.num, name, weekAmPrice, headcount, writeday, companyName, hideStatus, approvalStatus, readCount, thumbnailImage FROM room r
             inner join host h on r.hostNum = h.num
              where (name like concat('%',#{searchWord},'%') or companyName like concat('%',#{searchWord},'%')) ${sort}
     </select>
