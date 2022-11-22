@@ -28,7 +28,10 @@ public interface HostMapper {
     public void updateStatus(RoomDto dto); // 방 공개 비공개
 
 //    public void HostHome();
+    
+    List<HostDto> getHostSearchList(HashMap<String,Object> map);    // admin > hostList 출력
 
-//    List<HostDto> getHostList();
-    List<HostDto> getHostSearchList(HashMap<String,Object> map);    // 호스트 리스트 출력
+    void updateHostWarning(int hostNum);
+
+    void updateHostPassword(int hostNum);
 }

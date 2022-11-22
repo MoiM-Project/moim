@@ -11,8 +11,10 @@
         select * from review
     </select>
 
-
-
+    <!-- rating avg -->
+    <select id="getReviewAvg" parameterType="int" resultType="int">
+        select ifnull(round(avg(rating),0),0) from review where roomNum=#{num};
+    </select>
 </mapper>
 
 
