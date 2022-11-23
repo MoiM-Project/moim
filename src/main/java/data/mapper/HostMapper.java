@@ -39,6 +39,8 @@ public interface HostMapper {
     public void deltag(int num); //수정시 태그삭제
     public void delinfo(int num); //수정시 인포 삭제
     public void delpre(int num); //수정시 인포 삭제
+    public List<BookingDetailDto> getBookingList(HashMap<String,Object> map); // 호스트넘에 대한 정렬 예약리스트 가져오기
+    public List<BookingDetailDto> getBookingList2(int hostNum);
 
 
 

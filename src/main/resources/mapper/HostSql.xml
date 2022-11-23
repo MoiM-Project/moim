@@ -190,26 +190,6 @@
         where num = #{num}
     </delete>
 
-
-    <!--roomNum값 가져오기-->
-    <!--    <select id="getRoomNum" parameterType="int" resultType="list">-->
-    <!--        select *-->
-    <!--        from room r-->
-    <!--                 inner join information i-->
-    <!--                            on r.num = i.roomNum-->
-    <!--                 inner join roption ro-->
-    <!--                            on r.num = ro.roomNum-->
-    <!--                 inner join roomCategory rc-->
-    <!--                            on r.num = rc.roomNum-->
-    <!--                 inner join tag t-->
-    <!--                            on r.num = t.roomNum-->
-    <!--                 inner join roomImage ri-->
-    <!--                            on r.num = ri.roomNum-->
-    <!--                 inner join precaution p-->
-    <!--                            on r.num = p.roomNum-->
-    <!--        where r.num = #{num};-->
-    <!--    </select>-->
-
     <!--roomNum값 가져오기-->
     <select id="getCategoryData" parameterType="int" resultType="RoomCategoryDto">
         select *
@@ -242,6 +222,77 @@
         where roomNum = #{roomNum}
     </select>
 
+    <!--호스트Num에 따른 예약 리스트 가져오기 -->
+    <select id="getBookingList" parameterType="int" resultType="BookingDetailDto">
+        select bd.num,
+               bd.bookingDate,
+               bd.bookingTime,
+               bd.name,
+               bd.phone,
+               bd.email,
+               bd.purpose,
+               bd.request,
+               bd.totalPrice,
+               bd.createdAt,
+               bd.bookingStatus,
+               bd.cancelReason,
+               bd.cancelDate,
+               bd.roomNum,
+               bd.userNum,
+               bd.roomOption,
+               r.name as roomName,
+               r.thumbnailImage,
+               r.address,
+               r.address2,
+               r.lat,
+               r.lng
+        from bookingDetail bd
+                 inner join room r
+                            on bd.roomNum = r.num
+                 inner join host h
+                            on r.hostNum = h.num
+        where r.hostNum = ${hostNum}
+            and bookingStatus = #{bookingStatus}
+            and r.name like concat('%', #{search}, '%')
+           or bd.name like concat('%', #{search}, '%')
+        order by ${sort};
+    </select>
+    <!--호스트Num에 따른 예약 리스트 가져오기 -->
+    <select id="getBookingList2" parameterType="int" resultType="BookingDetailDto">
+        select bd.num,
+               bd.bookingDate,
+               bd.bookingTime,
+               bd.name,
+               bd.phone,
+               bd.email,
+               bd.purpose,
+               bd.request,
+               bd.totalPrice,
+               bd.createdAt,
+               bd.bookingStatus,
+               bd.cancelReason,
+               bd.cancelDate,
+               bd.roomNum,
+               bd.userNum,
+               bd.roomOption,
+               bd.name,
+               r.name as roomName,
+               r.thumbnailImage,
+               r.address,
+               r.address2,
+               r.lat,
+               r.lng
+        from bookingDetail bd
+                 inner join room r
+                            on bd.roomNum = r.num
+                 inner join host h
+                            on r.hostNum = h.num
+        where r.hostNum = ${hostNum}
+            and r.name like concat('%', #{search}, '%')
+           or bd.name like concat('%', #{search}, '%')
+    </select>
+
+    <!--호스트Num에 따른 검색기능 가져오기 -->
 </mapper>
 
 
