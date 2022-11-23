@@ -8,12 +8,16 @@ import data.mapper.HostMapper;
 import data.mapper.MemberMapper;
 import data.mapper.NoticeMapper;
 import data.mapper.RoomMapper;
+import data.util.ChangeName;
+import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +25,8 @@ import java.util.List;
 @CrossOrigin
 public class AdminController {
 
+    String uploadFileName;
+    ArrayList<String> uploadFileNames = new ArrayList<>();
     @Autowired
     MemberMapper memberMapper;
 
@@ -148,6 +154,54 @@ public class AdminController {
         System.out.println("NoticeList map = "+ map);
 
         return noticeMapper.getNoticeSearchList(map);
+    }
+
+    //관리자 페이지에서 공지사항 작성하기
+    @PostMapping("/admin/noticeInsert")
+    public void noticeInsert (@RequestBody MultipartFile uploadFile,
+                              HttpServletRequest request,
+                              @RequestParam String noticeType,
+                              String noticeTitle,
+                              String noticeContent
+                              ){
+
+        // 업로드할 폴더 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+
+        //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
+        if (uploadFileName != null) {
+            FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
+        }
+
+        //업로드 파일을 변수에 담기
+        uploadFileName = uploadFile.getOriginalFilename();
+
+        //이전 업로드한 사진을 지운 후 현재 사진 업로드하기(파일명을 날짜타입으로 변경)
+        uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
+
+        try {
+            //path 경로에 파일 업로드 진행
+            uploadFile.transferTo(new File(path + "/" + uploadFileName));
+
+//            Path saveFile=Paths.get(path+"/"+uploadFileName);
+//            uploadFile.transferTo(saveFile);
+
+            System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        
+        //DB에 Insert하기
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("noticeType",noticeType);
+        map.put("noticeTitle",noticeTitle);
+        map.put("noticeContent",noticeContent);
+        map.put("uploadFile",uploadFileName);
+
+        noticeMapper.noticeInsert(map);
+
+
     }
 }
 

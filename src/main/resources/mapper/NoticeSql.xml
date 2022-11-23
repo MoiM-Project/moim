@@ -2,9 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="data.mapper.NoticeMapper">
 
-    <!--  notice > getNoticeList (Search)  -->
+    <!--  main / admin > notice > getNoticeList (Search)  -->
     <select id="getNoticeSearchList" parameterType="map" resultType="NoticeDto">
         select * from notice where (title like concat('%',#{searchWord},'%') or content like concat('%',#{searchWord},'%'))
+        order by num desc
     </select>
+
+    <!--  admin > notice > insertNotice  -->
+    <insert id="noticeInsert" parameterType="map">
+        insert into notice (num, type, title, content, imageUrl, writeday)
+        values (null, #{noticeType}, #{noticeTitle}, #{noticeContent}, #{uploadFile}, now())
+    </insert>
+
+
 
 </mapper>
