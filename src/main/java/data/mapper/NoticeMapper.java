@@ -10,4 +10,7 @@ import java.util.List;
 public interface NoticeMapper {
 
     List<NoticeDto> getNoticeSearchList(HashMap<String, Object> map);
+
+//    void noticeInsert(HashMap<String, Object> map);
+    void noticeInsert(HashMap<String, Object> map);
 }

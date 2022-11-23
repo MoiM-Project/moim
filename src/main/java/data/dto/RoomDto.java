@@ -52,4 +52,5 @@ public class RoomDto {
 
     //hostDto
     private String companyName;
+    private String logoImage;
 }

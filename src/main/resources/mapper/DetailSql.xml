@@ -7,15 +7,19 @@
     <update id="updateReadCount" parameterType="int">
         update room set readCount=readCount+1 where num=#{num}
     </update>
+    <!-- tag-->
     <select id="getTagName" parameterType="int" resultType="String">
         select tname from tag where roomNum=#{num}
     </select>
+    <!-- img-->
     <select id="getImg" parameterType="int" resultType="String">
         select rimageUrl from roomImage where roomNum=#{num}
     </select>
+    <!-- imformation-->
     <select id="getInformation" parameterType="int" resultType="String">
         select icontent from information where roomNum=#{num}
     </select>
+    <!-- percaution-->
     <select id="getPrecaution" parameterType="int" resultType="String">
         select pcontent from precaution where roomNum=#{num}
     </select>
@@ -34,4 +38,48 @@
         inner join facility f on rf.facilityNum = f.num
         where r.num = #{num};
     </select>
+
+    <!--qna-->
+    <select id="getQnaList" resultType="QnADto" parameterType="int">
+        select nickname,question,answer,writeday,answerday from QnA q
+        inner join member m on q.userNum = m.idx
+        where q.roomNum = #{num} order by writeday desc;
+    </select>
+
+    <insert id="insertQna" >
+        insert into QnA (num,question,status,writeday,userNum,roomNum) values (null,#{question},#{status},now(),#{userNum},#{num})
+    </insert>
+
+    <!--review-->
+    <select id="getReviewList" resultType="ReviewDto" parameterType="int">
+        select nickname,content,answerContent,rating,writeday,reviewImageUrl from review r
+        inner join member m on r.userNum = m.idx
+        where r.roomNum = #{num} order by writeday desc;
+    </select>
+
+    <!--review-->
+    <select id="getReviewPhoto" resultType="ReviewDto" parameterType="int">
+        select nickname,content,answerContent,rating,writeday,reviewImageUrl from review r
+        inner join member m on r.userNum = m.idx
+        where r.roomNum = #{num} and r.reviewImageUrl!='null' order by writeday desc;
+    </select>
+
+    <!--bookingDetail bookingTime -->
+    <select id="getBookingTime" resultType="String" parameterType="Map">
+        select group_concat(bookingTime order by cast(bookingTime AS UNSIGNED )asc) bookingTime from bookingDetail where roomNum=#{num} and
+        bookingDate= #{selectDay} and cancelDate is NULL;
+    </select>
+
+    <select id="getHostByNum" resultType="RoomDto" parameterType="int">
+        select companyName,logoImage from room r
+        inner join host h on r.hostNum = h.num
+        where r.Num = #{num};
+    </select>
+
+    <select id="getRoomByHostNum" resultType="RoomDto" parameterType="Map">
+        select  r.num num,companyName,name,r.address address,headcount,weekAmPrice,payment from room r
+        inner join host h on r.hostNum = h.num
+        where r.hostNum = #{hostNum}  order by ${sort};
+    </select>
+
 </mapper>
