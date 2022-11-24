@@ -4,6 +4,8 @@ import data.config.BaseException;
 import data.config.BaseResponse;
 import data.config.BaseResponseStatus;
 import data.config.JwtTokenUtil;
+import data.mapper.HostMapper;
+import data.mapper.SellerMapper;
 import data.member.model.*;
 import data.seller.PostSellerReq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static data.config.BaseResponseStatus.*;
@@ -29,6 +33,9 @@ public class MemberController {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    SellerMapper sellerMapper;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -134,7 +141,8 @@ public class MemberController {
         try {
             System.out.println("========================== Req: " + postSellerReq);
 
-            PostMemberRes postMemberRes = memberService.createSeller(postSellerReq);
+            String token = UUID.randomUUID().toString();
+            PostMemberRes postMemberRes = memberService.createSeller(postSellerReq,token);
             return new BaseResponse<>(postMemberRes);
 
         } catch (Exception exception) {
@@ -142,6 +150,23 @@ public class MemberController {
             return new BaseResponse<>(BaseResponseStatus.FAIL);
         }
     }
+
+    @PostMapping("/Sellercheck")
+    public Map<String,Object> getLogin(@RequestBody Map<String,String> map) {
+        System.out.println("check id:"+map.get("email"));
+        int check = sellerMapper.getLogin(map);  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
+        // 성공시 회원이름도 보내보다
+        String email="";
+        if(check==1){  // 성공하면
+            email = sellerMapper.getName(map.get("email"));
+        }
+        Map<String, Object> sendmap = new HashMap<>();
+        sendmap.put("check", check);
+        sendmap.put("email", email);
+        return sendmap;
+    }
+
+
 
 
     //     계정 탈퇴 API
