@@ -11,6 +11,11 @@ public interface NoticeMapper {
 
     List<NoticeDto> getNoticeSearchList(HashMap<String, Object> map);
 
-//    void noticeInsert(HashMap<String, Object> map);
     void noticeInsert(HashMap<String, Object> map);
+
+    void deleteNotice(int num);
+
+    void updateNotice(HashMap<String, Object> map);
+
+    NoticeDto getNoticeInfo(int num);
 }

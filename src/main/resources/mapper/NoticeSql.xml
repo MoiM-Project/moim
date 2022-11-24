@@ -14,6 +14,22 @@
         values (null, #{noticeType}, #{noticeTitle}, #{noticeContent}, #{uploadFile}, now())
     </insert>
 
+    <!--  admin > notice > deleteNotice  -->
+    <delete id="deleteNotice" parameterType="int">
+        delete from notice where num = #{num}
+    </delete>
+
+    <!--  main / admin > notice > getNoticeInfo // update를 위한 notice 정보 select  -->
+    <select id="getNoticeInfo" parameterType="int" resultType="NoticeDto">
+        select * from notice where num = #{num}
+    </select>
+
+    <!--  admin > notice > updateNotice  -->
+    <update id="updateNotice" parameterType="map">
+        update notice set type = #{noticeType}, title = #{noticeTitle}, content = #{noticeContent},imageUrl = #{uploadFile}
+        where num = #{num}
+    </update>
+
 
 
 </mapper>
