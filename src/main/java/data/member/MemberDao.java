@@ -70,9 +70,11 @@ public class MemberDao {
 
     public PostMemberRes createSeller(PostSellerReq postSellerReq) {
 
-        String createMemberQuery = "insert into seller (email, password, brandname, phoneNum, gender, birthday, notification) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String createMemberQuery = "insert into host (email, password, companyName, businessNumber, logoImage, phone, address, bank, accountNumber ) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Object[] createMemberParams = new Object[]{postSellerReq.getEmail(), postSellerReq.getPassword(), postSellerReq.getBrandname(), postSellerReq.getPhoneNum(), postSellerReq.getGender(), postSellerReq.getBirthday(), postSellerReq.getNotification()
+        Object[] createMemberParams = new Object[]{postSellerReq.getEmail(), postSellerReq.getPassword(), postSellerReq.getCompanyName(), postSellerReq.getBusinessNumber(), postSellerReq.getLogoImage(), postSellerReq.getPhone(), postSellerReq.getAddress(),
+                postSellerReq.getBank(),postSellerReq.getAccountNumber()
         };
 
         this.jdbcTemplate.update(createMemberQuery, createMemberParams);
@@ -99,6 +101,17 @@ public class MemberDao {
 
     public boolean isValidStatus(JwtRequest authenticationRequest) {
         String checkStatusQuery = "select status from member where email = ?";
+        String checkStatusParams = authenticationRequest.getUsername();
+
+        Integer status = this.jdbcTemplate.queryForObject(checkStatusQuery
+                , Integer.class
+                , checkStatusParams);
+
+        return (status == 1);
+    }
+
+    public boolean isValidSellerStatus(JwtRequest authenticationRequest) {
+        String checkStatusQuery = "select active from host where email = ?";
         String checkStatusParams = authenticationRequest.getUsername();
 
         Integer status = this.jdbcTemplate.queryForObject(checkStatusQuery
