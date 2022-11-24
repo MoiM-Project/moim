@@ -156,13 +156,13 @@ public class MemberController {
         System.out.println("check id:"+map.get("email"));
         int check = sellerMapper.getLogin(map);  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
         // 성공시 회원이름도 보내보다
-        String email="";
+        String name="";
         if(check==1){  // 성공하면
-            email = sellerMapper.getName(map.get("email"));
+            name = sellerMapper.getName(map.get("email"));
         }
         Map<String, Object> sendmap = new HashMap<>();
         sendmap.put("check", check);
-        sendmap.put("email", email);
+        sendmap.put("name", name);
         return sendmap;
     }
 
