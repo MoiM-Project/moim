@@ -16,16 +16,29 @@
         from bookingDetail bd inner join room r
             on bd.roomNum =r.num
         where userNum=#{userNum} and bookingStatus=#{bookingStatus}
-        order by ${sort};
+        order by ${sort}
     </select>
 
     <!-- booking detail page -->
     <select id="getBookingDetailData" parameterType="int" resultType="BookingDetailDto">
         select bd.num, bd.bookingDate, bd.bookingTime, bd.name ,bd.phone ,bd.email , bd.headcount, bd.purpose ,bd.request
                 ,bd.totalPrice ,bd.createdAt ,bd.bookingStatus ,bd.cancelReason ,bd.cancelDate,
-               bd.roomNum ,bd.userNum ,bd.roomOption , r.name as roomName, r.thumbnailImage, r.address, r.address2 , r.lat ,r.lng
+               bd.roomNum ,bd.userNum ,bd.roomOption , r.num as roomNum, r.name as roomName, r.thumbnailImage, r.address, r.address2 , r.lat ,r.lng
         from bookingDetail bd inner join room r
             on bd.roomNum =r.num
         where bd.num=${bookingDetailNum}
+    </select>
+
+    <!-- update booking detail -->
+    <update id="updateCancel" parameterType="HashMap">
+        UPDATE bookingDetail set cancelReason='${cancelReason}', cancelDate=NOW(), bookingStatus=5
+                             WHERE num=#{num}
+    </update>
+
+    <!--Num값 가져오기-->
+    <select id="getData" parameterType="int" resultType="BookingDetailDto">
+        select *
+        from bookingDetail
+        where num=#{num}
     </select>
 </mapper>
