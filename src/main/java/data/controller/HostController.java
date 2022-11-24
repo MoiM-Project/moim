@@ -380,11 +380,8 @@ public class HostController {
         System.out.println(bookingStatus);
         HashMap<String, Object> map = new HashMap<>();
         map.put("hostNum", hostNum);
-        map.put("search", search);
         map.put("bookingStatus", bookingStatus);
         map.put("sort", sort);
-        System.out.println(map);
-        System.out.println(hostMapper.getBookingList(map).size());
         if(bookingStatus.equals("-1"))
             return hostMapper.getBookingList2(hostNum);
 

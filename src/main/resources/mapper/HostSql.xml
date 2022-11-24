@@ -253,8 +253,6 @@
                             on r.hostNum = h.num
         where r.hostNum = ${hostNum}
             and bookingStatus = #{bookingStatus}
-            and r.name like concat('%', #{search}, '%')
-           or bd.name like concat('%', #{search}, '%')
         order by ${sort};
     </select>
     <!--호스트Num에 따른 예약 리스트 가져오기 -->
@@ -288,8 +286,6 @@
                  inner join host h
                             on r.hostNum = h.num
         where r.hostNum = ${hostNum}
-            and r.name like concat('%', #{search}, '%')
-           or bd.name like concat('%', #{search}, '%')
     </select>
 
     <!--호스트Num에 따른 검색기능 가져오기 -->
