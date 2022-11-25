@@ -32,6 +32,6 @@ public class NoticeEventController {
         //map 출력 테스트
         System.out.println("NoticeList map = "+ map);
 
-        return noticeMapper.getNoticeSearchList(map);
+        return noticeMapper.getNoticeList(map);
     }
 }
