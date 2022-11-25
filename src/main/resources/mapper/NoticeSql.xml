@@ -2,10 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="data.mapper.NoticeMapper">
 
-    <!--  main / admin > notice > getNoticeList (Search)  -->
-    <select id="getNoticeSearchList" parameterType="map" resultType="NoticeDto">
+    <!--  main > notice > getNoticeList  -->
+    <select id="getNoticeList" parameterType="map" resultType="NoticeDto">
         select * from notice where (title like concat('%',#{searchWord},'%') or content like concat('%',#{searchWord},'%'))
         order by num desc
+    </select>
+
+    <!--  admin > notice > getNoticeList (Search)  -->
+    <select id="getNoticeSearchList" parameterType="map" resultType="NoticeDto">
+        select * from notice where (title like concat('%',#{searchWord},'%') or content like concat('%',#{searchWord},'%')) ${sort}
+
     </select>
 
     <!--  admin > notice > insertNotice  -->
@@ -21,12 +27,13 @@
 
     <!--  main / admin > notice > getNoticeInfo // update를 위한 notice 정보 select  -->
     <select id="getNoticeInfo" parameterType="int" resultType="NoticeDto">
-        select type, title, content from notice where num = #{num}
+        select type, title, content,imageUrl from notice where num = #{num}
+
     </select>
 
     <!--  admin > notice > updateNotice  -->
     <update id="updateNotice" parameterType="map">
-        update notice set type = #{noticeType}, title = #{noticeTitle}, content = #{noticeContent},imageUrl = #{uploadFile}
+        update notice set type = #{updateType}, title = #{updateTitle}, content = #{updateContent},imageUrl = #{updateFile}
         where num = #{num}
     </update>
 
