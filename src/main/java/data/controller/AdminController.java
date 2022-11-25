@@ -25,8 +25,9 @@ import java.util.List;
 @CrossOrigin
 public class AdminController {
 
+    //파일 첨부를 위한 변수 선언
     String uploadFileName;
-    ArrayList<String> uploadFileNames = new ArrayList<>();
+
     @Autowired
     MemberMapper memberMapper;
 
@@ -122,6 +123,7 @@ public class AdminController {
     }
 
 
+    //관리자페이지 > 공간관리 : 방 리스트 가져오기
     @GetMapping("/admin/spaceList")
     public List<RoomDto> getSpaceList(
             @RequestParam String searchWord,
@@ -139,16 +141,41 @@ public class AdminController {
         return roomMapper.getSpaceSearchList(map);
     }
 
-    //관리자 페이지에서 멤버정보 가져오기
+    //관리자페이지 > 공간관리 : 공간 승인하기
+    @GetMapping("/admin/approveSpace")
+    public void approveSpace(@RequestParam int roomNum)
+    {
+        //넘어온 방 번호 확인
+        System.out.println("대상 방번호 = "+roomNum);
+        
+        //방 번호 넘기기
+        roomMapper.approveSpace(roomNum);
+    }
+
+    //관리자페이지 > 공간관리 : 공간 거부하기
+    @GetMapping("/admin/rejectSpace")
+    public void rejectSpace(@RequestParam int roomNum)
+    {
+        //넘어온 방 번호 확인
+        System.out.println("대상 방번호 = "+roomNum);
+
+        //방 번호 넘기기
+        roomMapper.rejectSpace(roomNum);
+    }
+
+
+    //관리자 페이지에서 공지사항 리스트 가져오기
     @GetMapping("/admin/noticeList")
     public List<NoticeDto> getNoticeSearchList(
-            @RequestParam String searchWord)
+            @RequestParam String searchWord, String sort)
     {
         //saerchWord 넘어오는지 테스트
         System.out.println("Notice searchWord = "+searchWord);
+        System.out.println("Notice sort = "+sort);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("searchWord",searchWord);
+        map.put("sort",sort);
 
         //map 출력 테스트
         System.out.println("NoticeList map = "+ map);
@@ -165,44 +192,175 @@ public class AdminController {
                               String noticeContent
                               ){
 
-        // 업로드할 폴더 구하기
-        String path = request.getSession().getServletContext().getRealPath("/image");
-
-        //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
-        if (uploadFileName != null) {
-            FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
-        }
-
-        //업로드 파일을 변수에 담기
-        uploadFileName = uploadFile.getOriginalFilename();
-
-        //이전 업로드한 사진을 지운 후 현재 사진 업로드하기(파일명을 날짜타입으로 변경)
-        uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
-
-        try {
-            //path 경로에 파일 업로드 진행
-            uploadFile.transferTo(new File(path + "/" + uploadFileName));
-
-//            Path saveFile=Paths.get(path+"/"+uploadFileName);
-//            uploadFile.transferTo(saveFile);
-
-            System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        
-        //DB에 Insert하기
+        //DB에 Insert하기위해 map 선언
         HashMap<String, Object> map = new HashMap<>();
+
+        //uploadFile을 제외하고 map에 담기
         map.put("noticeType",noticeType);
         map.put("noticeTitle",noticeTitle);
         map.put("noticeContent",noticeContent);
-        map.put("uploadFile",uploadFileName);
 
+        //파일을 첨부했는지 안했는지 체크
+        try {
+
+            //upload 파일첨부를 했을때
+//            if(!uploadFile.isEmpty()) {
+            if(uploadFile != null) {
+
+                // 업로드할 폴더의 경로(path) 구하기
+                String path = request.getSession().getServletContext().getRealPath("/image");
+
+                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
+                if (uploadFileName != null) {
+                    FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
+                }
+
+                //업로드 파일을 변수에 담기
+                uploadFileName = uploadFile.getOriginalFilename();
+
+                //파일명을 날짜타입으로 변경
+                uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
+
+                //path 경로에 파일 업로드 진행
+                uploadFile.transferTo(new File(path + "/" + uploadFileName));
+
+                //성공 시 콘솔에 찍기
+                System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
+
+                //map 에 uploadFile 담기
+                map.put("uploadFile",uploadFileName);
+
+            //upload 파일첨부를 안했을때
+            }else {
+
+                //map 에 uploadFile null 로 담기
+                map.put("uploadFile",null);
+            }
+
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        // insert sql 에 map 전달
         noticeMapper.noticeInsert(map);
+    }
 
+    //관리자 페이지에서 공지사항 삭제하기
+    @DeleteMapping("/admin/deleteNotice")
+    public void deleteNotice(
+            @RequestParam int num,
+            HttpServletRequest request)
+    {
+        //넘어온 방 번호 확인
+        System.out.println("delete num값 확인 = "+num);
+
+        //방 번호 넘겨서 정보 가져오기 (첨부 이미지 때문)
+        String oldPhoto = noticeMapper.getNoticeInfo(num).getImageUrl();
+
+        //파일 업로드 경로(path) 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+
+        //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제
+        if (oldPhoto != null) {
+            FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 uploadFileName 을 지운다
+        }
+
+        //방 번호 넘겨서 notice DB 삭제하기
+        noticeMapper.deleteNotice(num);
+        System.out.println("파일 삭제 완료");
 
     }
+
+    //관리자 페이지에서 공지사항 리스트 가져오기 (modal에 띄우기)
+    @GetMapping("/admin/getNoticeInfo")
+    public NoticeDto getNoticeInfo(
+            @RequestParam int num)
+    {
+        //넘어온 Notice 번호 확인
+        System.out.println("num값 확인 = " + num);
+
+        //num 값 전달
+        return noticeMapper.getNoticeInfo(num);
+    }
+
+
+    //관리자 페이지에서 공지사항 수정하기
+    @PostMapping("/admin/updateNotice")
+    public void updateNotice (@RequestBody MultipartFile updateFile,
+                              HttpServletRequest request,
+                              @RequestParam String updateType,
+                              String updateTitle,
+                              String updateContent,
+                              String oldPhoto,
+                              int num
+    ){
+
+        //DB에 update하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        //uploadFile을 제외하고 map에 담기
+        map.put("updateType",updateType);
+        map.put("updateTitle",updateTitle);
+        map.put("updateContent",updateContent);
+        map.put("num",num);
+
+        //파일을 첨부했는지 안했는지 체크
+        try {
+
+            //upload 파일첨부를 했을때
+            if(updateFile != null) {
+
+                // 업로드할 폴더의 경로(path) 구하기
+                String path = request.getSession().getServletContext().getRealPath("/image");
+
+                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
+                if (oldPhoto != null) {
+                    FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 oldPhoto 를 지운다
+                    System.out.println("기존 사진 oldPhoto 삭제 완료");
+                }
+
+                //업로드 파일을 변수에 담기
+                uploadFileName = updateFile.getOriginalFilename();
+
+                //파일명을 날짜타입으로 변경(util 활용)
+                uploadFileName = ChangeName.getChangeFileName(updateFile.getOriginalFilename());
+
+                //path 경로에 uploadFileName 의 파일명으로 업로드 진행
+                updateFile.transferTo(new File(path + "/" + uploadFileName));
+
+                //성공 시 콘솔에 찍기
+                System.out.println("신규 이미지 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
+
+                //map 으로 updateFile에 파일명 담기
+                map.put("updateFile",uploadFileName);
+
+                //upload 파일첨부를 안했을때
+            }else {
+
+                //map 으로 updateFile에 기존 사진(oldPhoto) 으로 담기
+                map.put("updateFile",oldPhoto);
+                System.out.println("기존 파일 유지!");
+            }
+
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        // insert sql 에 map 전달
+        noticeMapper.updateNotice(map);
+    }
+
+
 }
 
 
