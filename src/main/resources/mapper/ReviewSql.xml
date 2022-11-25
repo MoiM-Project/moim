@@ -22,6 +22,12 @@
         where re.userNum=#{userNum} ${sort}
 
     </select>
+
+    <!-- review insert -->
+    <insert id="reviewInsert" parameterType="map">
+        insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum)
+        values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum})
+    </insert>
 </mapper>
 
 

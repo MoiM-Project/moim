@@ -15,4 +15,6 @@ public interface ReviewMapper {
     int getReviewAvg(int num);
     List<ReviewDto> getReviewByUserNum(HashMap<String,Object> map);
 
+    // review insert ( booking detail page)
+    void reviewInsert(HashMap<String, Object> map);
 }
