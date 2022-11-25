@@ -41,4 +41,16 @@ public class BookingDetailController {
 
         return dto;
     }
+
+    @PatchMapping("/update")
+    public void updateCancel(@RequestBody HashMap<String,Object> data){
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("num",data.get("num"));
+        map.put("cancelReason", data.get("cancelReason"));
+
+        System.out.println(map);
+        bookingDetailMapper.updateCancel(map);
+    }
+
 }

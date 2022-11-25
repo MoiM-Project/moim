@@ -46,11 +46,11 @@ public class MemberDao {
     }
 
 
-    public Integer createMemberKakao(String kakaoemail, String nickname) {
+    public Integer createMemberKakao(String kakaoemail, String nickname, String profile_image) {
 
-        String createMemberQuery = "insert into member (email, password, nickname) VALUES (?, ?, ?)";
+        String createMemberQuery = "insert into member (email, password, nickname, profile_image) VALUES (?, ?, ?, ?)";
 
-        Object[] createMemberParams = new Object[]{kakaoemail, "kakao", nickname
+        Object[] createMemberParams = new Object[]{kakaoemail, "kakao", nickname, profile_image
         };
 
         this.jdbcTemplate.update(createMemberQuery, createMemberParams);
@@ -70,9 +70,11 @@ public class MemberDao {
 
     public PostMemberRes createSeller(PostSellerReq postSellerReq) {
 
-        String createMemberQuery = "insert into seller (email, password, brandname, phoneNum, gender, birthday, notification) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String createMemberQuery = "insert into host (email, password, companyName, businessNumber, logoImage, phone, address, bank, accountNumber ) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Object[] createMemberParams = new Object[]{postSellerReq.getEmail(), postSellerReq.getPassword(), postSellerReq.getBrandname(), postSellerReq.getPhoneNum(), postSellerReq.getGender(), postSellerReq.getBirthday(), postSellerReq.getNotification()
+        Object[] createMemberParams = new Object[]{postSellerReq.getEmail(), postSellerReq.getPassword(), postSellerReq.getCompanyName(), postSellerReq.getBusinessNumber(), postSellerReq.getLogoImage(), postSellerReq.getPhone(), postSellerReq.getAddress(),
+                postSellerReq.getBank(),postSellerReq.getAccountNumber()
         };
 
         this.jdbcTemplate.update(createMemberQuery, createMemberParams);
@@ -92,12 +94,24 @@ public class MemberDao {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("nickname"),
+                        rs.getString("profile_image"),
                         Arrays.asList(new SimpleGrantedAuthority(Authority.values()[rs.getObject("role", int.class)].toString()))
                 ), email);
     }
 
     public boolean isValidStatus(JwtRequest authenticationRequest) {
         String checkStatusQuery = "select status from member where email = ?";
+        String checkStatusParams = authenticationRequest.getUsername();
+
+        Integer status = this.jdbcTemplate.queryForObject(checkStatusQuery
+                , Integer.class
+                , checkStatusParams);
+
+        return (status == 1);
+    }
+
+    public boolean isValidSellerStatus(JwtRequest authenticationRequest) {
+        String checkStatusQuery = "select active from host where email = ?";
         String checkStatusParams = authenticationRequest.getUsername();
 
         Integer status = this.jdbcTemplate.queryForObject(checkStatusQuery
@@ -117,6 +131,7 @@ public class MemberDao {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("nickname"),
+                        rs.getString("profile_image"),
                         Arrays.asList(new SimpleGrantedAuthority(Authority.values()[rs.getObject("role", int.class)].toString()))
                 ), email);
     }
@@ -130,6 +145,7 @@ public class MemberDao {
                             rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("nickname"),
+                            rs.getString("profile_image"),
                             new ArrayList<>()
                     ), email);
             if (userLoginRes.getEmail() != null) {

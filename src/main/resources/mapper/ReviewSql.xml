@@ -11,8 +11,16 @@
         select * from review
     </select>
 
+    <!-- rating avg -->
+    <select id="getReviewAvg" parameterType="int" resultType="int">
+        select ifnull(round(avg(rating),0),0) from review where roomNum=#{num};
+    </select>
 
-
+    <!-- review insert -->
+    <insert id="reviewInsert" parameterType="map">
+        insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum)
+        values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum})
+    </insert>
 </mapper>
 
 
