@@ -249,12 +249,12 @@ public class AdminController {
     }
 
     //관리자 페이지에서 공지사항 삭제하기
-    @GetMapping("/admin/deleteNotice")
+    @DeleteMapping("/admin/deleteNotice")
     public void deleteNotice(
             @RequestParam int num)
     {
         //넘어온 방 번호 확인
-        System.out.println("num값 확인 = "+num);
+        System.out.println("delete num값 확인 = "+num);
 
         //방 번호 넘기기
         noticeMapper.deleteNotice(num);

@@ -21,7 +21,7 @@
 
     <!--  main / admin > notice > getNoticeInfo // update를 위한 notice 정보 select  -->
     <select id="getNoticeInfo" parameterType="int" resultType="NoticeDto">
-        select * from notice where num = #{num}
+        select type, title, content from notice where num = #{num}
     </select>
 
     <!--  admin > notice > updateNotice  -->
