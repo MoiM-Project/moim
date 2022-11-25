@@ -24,4 +24,5 @@ public class QnADto {
 
     //member
     private String nickname;
+    private String profile_image;
 }

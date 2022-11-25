@@ -13,7 +13,14 @@
 
     <!-- rating avg -->
     <select id="getReviewAvg" parameterType="int" resultType="int">
-        select ifnull(round(avg(rating),0),0) from review where roomNum=#{num};
+        select ifnull(round(avg(rating),0),0) from review where roomNum=#{num}
+    </select>
+
+    <select id="getReviewByUserNum" parameterType="Map" resultType="reviewDto">
+        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,re.num from review re
+        inner join room r on re.roomNum= r.num
+        where re.userNum=#{userNum} ${sort}
+
     </select>
 </mapper>
 

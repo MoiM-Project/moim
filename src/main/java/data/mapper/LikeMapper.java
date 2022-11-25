@@ -11,4 +11,5 @@ public interface LikeMapper {
     void insertLike(LikeDto dto);
     void deleteLike(LikeDto dto);
     LikeDto selectLike(Map<String,Integer> map);
+
 }

@@ -24,4 +24,5 @@ public interface DetailMapper {
     public String getBookingTime(Map<String,Object> map);
     public RoomDto getHostByNum(int num);
     public List<RoomDto> getRoomByHostNum(Map<String,Object> map);
+    List<QnADto> getQnaByUserNum(HashMap<String,Object> map);
 }
