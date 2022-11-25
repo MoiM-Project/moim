@@ -13,4 +13,7 @@ public interface BookingDetailMapper {
     public List<BookingDetailDto> getBookingDetailList(HashMap<String,Object> map);
     // 상세페이지 (booking detail page)
     public BookingDetailDto getBookingDetailData(int bookingDetailNum);
+    // 예약취소시 업데이트
+    public void updateCancel(HashMap<String,Object> map);
+    public BookingDetailDto getData(int num); //num값 가져오기
 }

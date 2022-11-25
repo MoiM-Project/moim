@@ -43,9 +43,11 @@ public class MemberService {
     }
 
     @Transactional
-    public PostMemberRes createSeller(PostSellerReq postSellerReq) {
+    public PostMemberRes createSeller(PostSellerReq postSellerReq, String token) {
         postSellerReq.setPassword(passwordEncoder.encode(postSellerReq.getPassword()));
-        return memberDao.createSeller(postSellerReq);
+        PostMemberRes postMemberRes = memberDao.createSeller(postSellerReq);
+
+        return postMemberRes;
     }
 
     public PostMemberRes createMember(PostMemberReq postMemberReq, String token) {
