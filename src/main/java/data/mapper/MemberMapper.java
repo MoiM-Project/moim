@@ -20,4 +20,9 @@ public interface MemberMapper {
 
     String LoginTypeCheck(int userNum);
 
+    void profileUpdate(HashMap<String, Object> map);
+
+    MemberDto getMemberInfo(int idx);
+
+    void deleteMember(int idx);
 }

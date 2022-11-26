@@ -24,6 +24,17 @@
         update member set password=1 where idx = #{userNum}
     </update>
 
+    <!--  프로필 사진 변경  -->
+    <insert id="profileUpdate" parameterType="map">
+        update member set profile_image= #{updateFile} where idx = #{idx}
+    </insert>
 
+    <select id="getMemberInfo" parameterType="int" resultType="MemberDto">
+        select * from member where idx=#{idx}
+    </select>
+
+    <delete id="deleteMember" parameterType="int">
+        delete from member where idx=#{idx}
+    </delete>
 
 </mapper>
