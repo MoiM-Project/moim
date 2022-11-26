@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="data.mapper.OrderMapper">
-    
+<mapper namespace="data.mapper.BookingMapper">
+    <!--바로결제-->
+    <insert id="insertBooking">
+        insert into booking (num, totalPrice, pg, merchantUid, createdAt, userNum, roomNum, bookingDetailNum)
+        values (null, #{totalPrice}, #{pg}, #{merchantUid}, now(), #{userNum}, #{roomNum}, #{bookingDetailNum});
+    </insert>
 </mapper>

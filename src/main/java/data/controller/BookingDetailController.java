@@ -1,6 +1,7 @@
 package data.controller;
 
 import data.dto.BookingDetailDto;
+import data.dto.RoomDto;
 import data.mapper.BookingDetailMapper;
 import data.mapper.RoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +50,12 @@ public class BookingDetailController {
         map.put("num",data.get("num"));
         map.put("cancelReason", data.get("cancelReason"));
 
-        System.out.println(map);
         bookingDetailMapper.updateCancel(map);
     }
 
+    @GetMapping("/getMaxNum")
+    public BookingDetailDto LastData()
+    {
+        return bookingDetailMapper.getMaxNum();
+    }
 }
