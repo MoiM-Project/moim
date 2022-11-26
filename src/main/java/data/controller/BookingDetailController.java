@@ -58,4 +58,12 @@ public class BookingDetailController {
     {
         return bookingDetailMapper.getMaxNum();
     }
+
+    @PatchMapping("/updateStatus")
+    public void updateStatus(@RequestBody HashMap<String,Object> data){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("num",data.get("num"));
+
+        bookingDetailMapper.updateBLStatus(map);
+    }
 }

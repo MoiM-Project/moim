@@ -40,4 +40,9 @@
         SELECT * FROM bookingDetail ORDER BY num DESC LIMIT 1;
     </select>
 
+    <!-- 승인 결제 booking status update -->
+    <update id="updateBLStatus" parameterType="HashMap">
+        UPDATE bookingDetail set bookingStatus=3
+        WHERE num=#{num}
+    </update>
 </mapper>
