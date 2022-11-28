@@ -25,4 +25,5 @@ public interface DetailMapper {
     public RoomDto getHostByNum(int num);
     public List<RoomDto> getRoomByHostNum(Map<String,Object> map);
     List<QnADto> getQnaByUserNum(HashMap<String,Object> map);
+    public List<RoomDto> selectRandomRooms(int num);
 }

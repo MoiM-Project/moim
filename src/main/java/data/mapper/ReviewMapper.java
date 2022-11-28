@@ -17,4 +17,7 @@ public interface ReviewMapper {
 
     // review insert ( booking detail page)
     void reviewInsert(HashMap<String, Object> map);
+    void reviewDelete(int num);
+    ReviewDto getReviewByNum(int num);
+    void updateReview(ReviewDto dto);
 }

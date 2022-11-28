@@ -124,7 +124,6 @@ public class DetailController {
 
     @GetMapping("/host/placelist")
     public List<RoomDto> detailHost(@RequestParam int hostNum,  @RequestParam(defaultValue = "readCount desc") String sort){
-        System.out.println(sort);
 
         Map<String, Object> map=new HashMap<>();
 
@@ -139,8 +138,15 @@ public class DetailController {
         map.put("userNum",userNum);
         map.put("sort",sort);
 
-        System.out.println(map);
 
         return detailMapper.getQnaByUserNum(map);
     }
+
+//    비슷한 공간
+    @GetMapping("/detailRandomPlace")
+    public List<RoomDto> selectRandomRooms(int num){
+       return detailMapper.selectRandomRooms(num);
+    }
+
+
 }

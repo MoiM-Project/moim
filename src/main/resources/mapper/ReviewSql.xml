@@ -17,7 +17,7 @@
     </select>
 
     <select id="getReviewByUserNum" parameterType="Map" resultType="reviewDto">
-        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,re.num from review re
+        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,re.num,re.roomNum from review re
         inner join room r on re.roomNum= r.num
         where re.userNum=#{userNum} ${sort}
 
@@ -28,6 +28,19 @@
         insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum)
         values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum})
     </insert>
+
+    <!--review delete   -->
+    <delete id="reviewDelete" parameterType="int">
+        delete from review where num=#{num}
+    </delete>
+    <!--수정데이터 가져오기-->
+    <select id="getReviewByNum" resultType="reviewDto" parameterType="int">
+        select * from review where num=#{num}
+    </select>
+    <!-- member 리뷰 수정   -->
+    <update id="updateReview" parameterType="ReviewDto">
+    update review set content =#{content}, rating=#{rating}, reviewImageUrl= #{uploadFile}, writeday=now() where num=1#{num}
+    </update>
 </mapper>
 
 
