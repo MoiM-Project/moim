@@ -46,4 +46,7 @@
     <delete id="deleteTheme" parameterType="int">
         delete from theme where num=#{num};
     </delete>
+    <delete id="deleteThemeRoom" parameterType="map">
+        delete from roomTheme where roomNum=#{roomNum} and themeNum=#{themeNum}
+    </delete>
 </mapper>

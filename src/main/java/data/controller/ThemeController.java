@@ -73,4 +73,15 @@ public class ThemeController {
 
         return map;
     }
+    @DeleteMapping("/theme/delete/room")
+    public void deleteThemeRoom(int themeNum, int roomNum){
+
+        HashMap<String,Object> map = new HashMap<>();
+
+        map.put("themeNum",themeNum);
+        map.put("roomNum",roomNum);
+        System.out.println(map);
+
+        themeMapper.deleteThemeRoom(map);
+    }
 }

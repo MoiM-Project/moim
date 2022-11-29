@@ -16,4 +16,5 @@ public interface ThemeMapper {
     void updateTheme(ThemeDto dto);
     void deleteTheme(int themeNum);
     int selectThemeCount(int themeNum);
+    void deleteThemeRoom(HashMap<String,Object> map);
 }
