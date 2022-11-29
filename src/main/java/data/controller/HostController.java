@@ -2,19 +2,19 @@ package data.controller;
 
 import data.dto.HostDto;
 import data.mapper.HostMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import data.dto.*;
 import data.mapper.CategoryMapper;
-import data.mapper.HostMapper;
 import data.mapper.TagMapper;
 import data.util.ChangeName;
 import data.util.FileUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
+@Slf4j
 @RequestMapping("/host")
 public class HostController {
 
@@ -45,6 +46,12 @@ public class HostController {
     @GetMapping("/list")
     public List<RoomDto> roomList() {
 //        System.out.println(hostMapper.getRoomList().size());
+        log.info("------로그테스트------");
+        String value1 = "1번값";
+        String value2 = "2번값";
+        log.info("1번값은:" + value1 + " 2번값은:" + value2);
+        log.info("1번값은:{} 2번값은:{}", value1, value2);
+
         return hostMapper.getRoomList();
     }
 
@@ -114,13 +121,17 @@ public class HostController {
     @PostMapping("/optioninsert")
     public void insertOption(@RequestBody Map<String, Object> params) {
 //        System.out.println("호출이라도되나용");
+
         System.out.println(params);
+
         HashMap<String, Object> map = new HashMap<>();
 
         List<Map<String, Object>> OptionList = (List<Map<String, Object>>) params.get("roptionList");
 
-        map.put("OptionList", OptionList);
-        hostMapper.insertRoomOption(map);
+        if (OptionList.size() != 0) {
+            map.put("OptionList", OptionList);
+            hostMapper.insertRoomOption(map);
+        }
     }
 
     //인서트 업데이트
@@ -257,7 +268,7 @@ public class HostController {
 
     //인서트 캔슬
     @DeleteMapping("/cancel")
-    public void deleteRoom(@RequestParam int num, HttpServletRequest request) {
+    public void deleteRoom(@RequestParam int num) {
         System.out.println(num);
         hostMapper.deleteRoom(num);   //DB 데이터 삭제
     }
@@ -265,7 +276,17 @@ public class HostController {
 
     //방 리스트에서 삭제
     @DeleteMapping("/delete")
-    public void deleteRoom(@RequestParam int num){
+    public void deleteRoom(@RequestParam int num, HttpServletRequest request) {
+        System.out.println(num);
+
+        //경로 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+
+        //삭제할 기존 파일명
+        String oldFileName = hostMapper.getData(num).getThumbnailImage();
+        FileUtil.deletePhoto(path, oldFileName);
+
+        System.out.println(oldFileName + "삭제");
         System.out.println(num);
         hostMapper.deleteRoom(num);
     }
@@ -282,15 +303,106 @@ public class HostController {
         hostMapper.updateStatus(dto);
     }
 
+    @PatchMapping("/update")
+    public void firstUpdateForm(@RequestBody RoomDto dto) {
+        System.out.println(dto.getNum());
+        hostMapper.updateForm1(dto);
+    }
 
 
     // booking detail page - host info
     @GetMapping("/info")
-    public HostDto getHostInfoList(int num)
-    {
+    public HostDto getHostInfoList(int num) {
         HostDto dto = hostMapper.getHostInfoList(num);
 //        System.out.println(dto);
         return dto;
     }
 
+    //num에 해당하는 데이터 호출
+    @GetMapping("/select")
+    public RoomDto getData(@RequestParam int num) {
+//        System.out.println(num);
+        return hostMapper.getData(num);
+    }
+
+    //roomNum에 해당하는 데이터 호출
+    @GetMapping("/updateform2")
+    public Map<String, Object> updateform2(@RequestParam int roomNum) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("categoryData", hostMapper.getCategoryData(roomNum));
+        map.put("roptionData", hostMapper.getOptionData(roomNum));
+        map.put("imageData", hostMapper.getImageData(roomNum));
+        map.put("tagData", hostMapper.getTagData(roomNum));
+        map.put("infoData", hostMapper.getInfoData(roomNum));
+        map.put("preData", hostMapper.getPreData(roomNum));
+        return map;
+    }
+
+    //수정폼에서 옵션삭제
+    @DeleteMapping("/roptindel")
+    public void roptindel(@RequestParam int num, HttpServletRequest request) {
+        System.out.println(num);
+        //경로 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+        //삭제할 기존 파일명
+        String oldFileName = hostMapper.getOptionNum(num).getOimageUrl();
+        FileUtil.deletePhoto(path, oldFileName);    //사진파일 삭제
+        System.out.println(oldFileName + "삭제완료");
+
+        hostMapper.deleteoption(num);
+    }
+
+    //수정폼에서 이미지들 삭제
+    @DeleteMapping("/imagesdel")
+    public void roomImagedel(@RequestParam int num, HttpServletRequest request) {
+        System.out.println(num);
+        //경로 구하기
+        String path = request.getSession().getServletContext().getRealPath("/image");
+        //삭제할 기존 파일명
+        String oldFileName = hostMapper.getImagesNum(num).getRimageUrl();
+        FileUtil.deletePhoto(path, oldFileName);    //사진파일 삭제
+        System.out.println(oldFileName + "삭제완료");
+
+        hostMapper.deleteimages(num);
+    }
+
+    //수정폼에서 태그,인포,주의사항 삭제
+    @DeleteMapping("/updatedel")
+    public void updatedel(@RequestParam int num) {
+        hostMapper.deltag(num);
+        hostMapper.delinfo(num);
+        hostMapper.delpre(num);
+    }
+
+    //예약리스트 출력
+    @GetMapping("/bookinglist")
+    public List<BookingDetailDto> getBookingList(int hostNum, @RequestParam(defaultValue = "-1") String bookingStatus, @RequestParam(defaultValue = "num desc") String sort, @RequestParam(defaultValue = "") String search) {
+        System.out.println(bookingStatus);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("hostNum", hostNum);
+        map.put("bookingStatus", bookingStatus);
+        map.put("sort", sort);
+        if(bookingStatus.equals("-1"))
+            return hostMapper.getBookingList2(hostNum);
+
+        return hostMapper.getBookingList(map);
+    }
+
+    //예약리스트 디테일페이지
+    @GetMapping("/bookingdetail")
+    public BookingDetailDto getBookingDetailHost(int bookingDetailNum){
+        System.out.println(bookingDetailNum);
+        BookingDetailDto dto = hostMapper.getBookingDetailHost(bookingDetailNum);
+        return dto;
+    }
+
+    @PatchMapping("/bookingStatusUpdate")
+    public void updateCancel(@RequestBody HashMap<String,Object> data){
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("num",data.get("num"));
+
+        System.out.println(map);
+        hostMapper.bookingStatusUpdate(map);
+    }
 }

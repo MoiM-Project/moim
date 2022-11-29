@@ -44,6 +44,18 @@
              where (name like concat('%',#{searchWord},'%') or companyName like concat('%',#{searchWord},'%')) ${sort}
     </select>
 
+    <!--  admin > Space > approve Space : 공간 승인 // 공개 여부는 호스트가 하는걸로  -->
+    <update id="approveSpace" parameterType="int">
+        update room set approvalStatus = 1
+        where num = #{roomNum}
+    </update>
+
+    <!--  admin > Space > reject Space : 공간 거부 + 공개여부: 비공개  -->
+    <update id="rejectSpace" parameterType="int">
+        update room set approvalStatus = 0, hideStatus = 0
+        where num = #{roomNum}
+    </update>
+
 
 
 </mapper>
