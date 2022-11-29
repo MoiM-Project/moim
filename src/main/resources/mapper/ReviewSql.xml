@@ -13,7 +13,14 @@
 
     <!-- rating avg -->
     <select id="getReviewAvg" parameterType="int" resultType="int">
-        select ifnull(round(avg(rating),0),0) from review where roomNum=#{num};
+        select ifnull(round(avg(rating),0),0) from review where roomNum=#{num}
+    </select>
+
+    <select id="getReviewByUserNum" parameterType="Map" resultType="reviewDto">
+        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,re.num,re.roomNum from review re
+        inner join room r on re.roomNum= r.num
+        where re.userNum=#{userNum} ${sort}
+
     </select>
 
     <!-- review insert -->
@@ -21,6 +28,19 @@
         insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum)
         values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum})
     </insert>
+
+    <!--review delete   -->
+    <delete id="reviewDelete" parameterType="int">
+        delete from review where num=#{num}
+    </delete>
+    <!--수정데이터 가져오기-->
+    <select id="getReviewByNum" resultType="reviewDto" parameterType="int">
+        select * from review where num=#{num}
+    </select>
+    <!-- member 리뷰 수정   -->
+    <update id="updateReview" parameterType="map">
+    update review set content = #{content}, rating = #{rating}, reviewImageUrl = #{uploadFile} where num = #{num}
+    </update>
 </mapper>
 
 
