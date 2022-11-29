@@ -20,11 +20,11 @@ import java.util.List;
 @CrossOrigin
 public class ReviewQnaController {
 
+    String uploadFileName;
+
     @Autowired
     ReviewMapper reviewMapper;
 
-    String uploadFileName;
-    ArrayList<String> uploadFileNames = new ArrayList<>();
 
     @GetMapping("/reviewQna/reviewList")
     public List<ReviewDto> getReviewByUserNum(@RequestParam int userNum,@RequestParam String sort){
@@ -45,13 +45,25 @@ public class ReviewQnaController {
         return reviewMapper.getReviewByNum(num);
     }
 
-    @PostMapping("/review/update")
+    @PostMapping("/reviewUpdate")
     public void updateReview (@RequestBody MultipartFile uploadFile,
                               HttpServletRequest request,
-                            ReviewDto dto
+                              @RequestParam String content,
+                              int rating,
+                              int num,
+                              String oldPhoto
     ){
 
+        //DB에 Insert하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
 
+        //uploadFile을 제외하고 map에 담기
+        map.put("content",content);
+        map.put("rating",rating);
+        map.put("num",num);
+
+        System.out.println(content);
+        System.out.println(rating);
 
         //파일을 첨부했는지 안했는지 체크
         try {
@@ -64,8 +76,9 @@ public class ReviewQnaController {
                 String path = request.getSession().getServletContext().getRealPath("/image");
 
                 //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
-                if (uploadFileName != null) {
-                    FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
+                if (oldPhoto != null) {
+                    FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 oldPhoto 를 지운다
+                    System.out.println("기존 사진 oldPhoto 삭제 완료");
                 }
 
                 //업로드 파일을 변수에 담기
@@ -81,12 +94,12 @@ public class ReviewQnaController {
                 System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
 
                 //map 에 uploadFile 담기
-                dto.setReviewImageUrl(uploadFileName);
+                map.put("uploadFile",uploadFileName);
 
                 //upload 파일첨부를 안했을때
             }else {
                 //map 에 uploadFile null 로 담기
-                dto.setReviewImageUrl(null);
+                map.put("uploadFile",null);
             }
 
         } catch (IllegalStateException e) {
@@ -100,7 +113,8 @@ public class ReviewQnaController {
 
         }
         // insert sql 에 map 전달
-        reviewMapper.updateReview(dto);
+        reviewMapper.updateReview(map);
+        System.out.println(map);
     }
 
 }

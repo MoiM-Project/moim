@@ -38,8 +38,8 @@
         select * from review where num=#{num}
     </select>
     <!-- member 리뷰 수정   -->
-    <update id="updateReview" parameterType="ReviewDto">
-    update review set content =#{content}, rating=#{rating}, reviewImageUrl= #{uploadFile}, writeday=now() where num=1#{num}
+    <update id="updateReview" parameterType="map">
+    update review set content = #{content}, rating = #{rating}, reviewImageUrl = #{uploadFile} where num = #{num}
     </update>
 </mapper>
 

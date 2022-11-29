@@ -19,5 +19,5 @@ public interface ReviewMapper {
     void reviewInsert(HashMap<String, Object> map);
     void reviewDelete(int num);
     ReviewDto getReviewByNum(int num);
-    void updateReview(ReviewDto dto);
+    void updateReview(HashMap<String,Object> map);
 }
