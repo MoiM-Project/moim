@@ -6,4 +6,8 @@
         insert into booking (num, totalPrice, pg, merchantUid, createdAt, userNum, roomNum, bookingDetailNum)
         values (null, #{totalPrice}, #{pg}, #{merchantUid}, now(), #{userNum}, #{roomNum}, #{bookingDetailNum});
     </insert>
+
+    <delete id="deleteBooking" parameterType="HashMap">
+        delete from booking where bookingDetailNum=#{bookingDetailNum}
+    </delete>
 </mapper>

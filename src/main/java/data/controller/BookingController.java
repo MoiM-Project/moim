@@ -22,4 +22,18 @@ public class BookingController {
     public void insertBooking(@RequestBody BookingDto dto){
         bookingMapper.insertBooking(dto);
     }
+
+//    @PostMapping("/delete")
+//    public void deleteBooking(int num){
+//        bookingMapper.deleteBooking(num);
+//    }
+
+    @PostMapping("/delete")
+    public void deleteBooking(@RequestBody HashMap<String,Object> data){
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("bookingDetailNum",data.get("bookingDetailNum"));
+
+        bookingMapper.deleteBooking(map);
+    }
 }
