@@ -1,13 +1,7 @@
 package data.controller;
 
-import data.dto.HostDto;
-import data.dto.MemberDto;
-import data.dto.NoticeDto;
-import data.dto.RoomDto;
-import data.mapper.HostMapper;
-import data.mapper.MemberMapper;
-import data.mapper.NoticeMapper;
-import data.mapper.RoomMapper;
+import data.dto.*;
+import data.mapper.*;
 import data.util.ChangeName;
 import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +33,9 @@ public class AdminController {
 
     @Autowired
     NoticeMapper noticeMapper;
+
+    @Autowired
+    WarningMapper warningMapper;
     
     //관리자 페이지에서 멤버정보 가져오기
     @GetMapping("/admin/memberList")
@@ -110,6 +107,16 @@ public class AdminController {
         System.out.println("경고초기화 hostNum = "+hostNum);
 
         hostMapper.updateHostWarning(hostNum);
+    }
+
+    //admin > host warningCount reset
+    @GetMapping("/admin/hostActive")
+    public void updateHostActive(@RequestParam int hostNum)
+    {
+        //num 값 확인
+        System.out.println("상태 변경 hostNum = "+hostNum);
+
+        hostMapper.updateHostActive(hostNum);
     }
 
     //admin > host warningCount reset
@@ -358,6 +365,85 @@ public class AdminController {
 
         // insert sql 에 map 전달
         noticeMapper.updateNotice(map);
+    }
+
+
+    
+    // report || warning 신고하기 관련
+    //관리자 페이지에서 신고 DB 가져오기
+    @GetMapping("/admin/reportList")
+    public List<WarningDto> getReportList(
+            @RequestParam String sort)
+    {
+        //sort 넘어오는지 테스트
+        System.out.println("warning sort = "+sort);
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("sort",sort);
+
+        //map 출력 테스트
+        System.out.println("warningList map = "+ map);
+
+        return warningMapper.getReportList(map);
+    }
+
+    //방 상세정보에서 신고하기 작성
+    @PostMapping("/admin/reportInsert")
+    public void reportInsert (@RequestParam String reportType,
+                              String reportContent,
+                              int roomNum,
+                              int userNum
+    ){
+
+        //값 받아오는지 확인
+//        System.out.println(reportType);
+//        System.out.println(reportContent);
+//        System.out.println(roomNum);
+//        System.out.println(userNum);
+
+        //DB에 Insert하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        // map에 담기
+        map.put("reportType",reportType);
+        map.put("reportContent",reportContent);
+        map.put("status","신고 접수");
+        map.put("QnANum",null);
+        map.put("reviewNum",null);
+        map.put("roomNum",roomNum);
+        map.put("userNum",userNum);
+
+        System.out.println(map);
+
+        // insert sql 에 map 전달
+        warningMapper.reportInsert(map);
+    }
+
+
+    //마이페이지 > QNA 목록에서 신고하기 작성
+    @PostMapping("/admin/reportQnaInsert")
+    public void reportQnaInsert (@RequestParam String reportType,
+                              String reportContent,
+                              int qnaNum,
+                              int userNum
+    ){
+
+        //DB에 Insert하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        // map에 담기
+        map.put("reportType",reportType);
+        map.put("reportContent",reportContent);
+        map.put("status","신고 접수");
+        map.put("QnANum",qnaNum);
+        map.put("reviewNum",null);
+        map.put("roomNum",null);
+        map.put("userNum",userNum);
+
+        System.out.println(map);
+
+        // insert sql 에 map 전달
+        warningMapper.reportInsert(map);
     }
 
 

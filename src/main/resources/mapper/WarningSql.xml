@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="data.mapper.WarningMapper">
+
+    <!--  admin > warning(report) > reportList  -->
+    <select id="getReportList" parameterType="map" resultType="WarningDto">
+        select *
+        from warning
+        where companyName like concat('%', #{searchWord}, '%')
+           or email like concat('%', #{searchWord}, '%') ${sort}
+
+    </select>
+
+    <!--  report > insertReport  -->
+    <!--  방 상세정보, QnA, 리뷰 에서 각각 신고할 때 아래 SQL문을 공동 사용 // 컨트롤러에서 값을 정해줘서 넣을 예정  -->
+    <insert id="reportInsert" parameterType="map">
+        insert into warning (num, type, content, status, writeday, finishday, QnANum,reviewNum, roomNum, userNum)
+        values (null, #{reportType}, #{reportContent}, #{status}, now(), null, #{QnANum}, #{reviewNum}, #{roomNum}, #{userNum})
+    </insert>
+</mapper>

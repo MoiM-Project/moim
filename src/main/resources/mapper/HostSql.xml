@@ -3,7 +3,6 @@
 <mapper namespace="data.mapper.HostMapper">
 
     <!--  admin > hostList  -->
-
     <select id="getHostSearchList" parameterType="map" resultType="HostDto">
         select *
         from host
@@ -14,8 +13,7 @@
     <!--  admin > hostList > update Warning reset  -->
     <update id="updateHostWarning" parameterType="int">
         UPDATE host
-        SET warningCount = 0,
-            active       = 0
+        SET warningCount = 0
         WHERE num = #{hostNum};
     </update>
 
@@ -25,6 +23,11 @@
         update host
         set password=1
         where num = #{hostNum}
+    </update>
+
+    <!--  admin > hostList > hostBlock 호스트 차단  -->
+    <update id="updateHostActive" parameterType="int">
+        UPDATE host SET active = IF (active=0, 1, 0) WHERE num = #{hostNum};
     </update>
 
     <!--방 전체 리스트-->
