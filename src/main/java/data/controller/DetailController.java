@@ -2,6 +2,7 @@ package data.controller;
 
 import data.dto.LikeDto;
 import data.dto.QnADto;
+import data.dto.ReviewDto;
 import data.dto.RoomDto;
 import data.mapper.DetailMapper;
 import data.mapper.LikeMapper;
@@ -115,6 +116,7 @@ public class DetailController {
         map.put("host",detailMapper.getHostByNum(num));
         map.put("roomData",detailMapper.getRoomData(num));
 
+
         return map;
     }
 
@@ -122,7 +124,6 @@ public class DetailController {
 
     @GetMapping("/host/placelist")
     public List<RoomDto> detailHost(@RequestParam int hostNum,  @RequestParam(defaultValue = "readCount desc") String sort){
-        System.out.println(sort);
 
         Map<String, Object> map=new HashMap<>();
 
@@ -131,4 +132,21 @@ public class DetailController {
 
         return detailMapper.getRoomByHostNum(map);
     }
+    @GetMapping("/reviewQna/qnaList")
+    public List<QnADto> getQnaByUserNum(@RequestParam int userNum, @RequestParam String sort){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userNum",userNum);
+        map.put("sort",sort);
+
+
+        return detailMapper.getQnaByUserNum(map);
+    }
+
+//    비슷한 공간
+    @GetMapping("/detailRandomPlace")
+    public List<RoomDto> selectRandomRooms(int num){
+       return detailMapper.selectRandomRooms(num);
+    }
+
+
 }
