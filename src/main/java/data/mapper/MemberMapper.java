@@ -18,6 +18,15 @@ public interface MemberMapper {
     //멤버 비밀번호 초기화
     void updateMemberPassword(int userNum);
 
+    void updatePassword(HashMap<String,Object>map);
+
     String LoginTypeCheck(int userNum);
 
+    void profileUpdate(HashMap<String, Object> map);
+
+    MemberDto getMemberInfo(int idx);
+
+    void deleteMember(int idx);
+
+    Integer findUserByUserId(String email);
 }
