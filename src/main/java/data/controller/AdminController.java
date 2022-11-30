@@ -387,6 +387,22 @@ public class AdminController {
         return warningMapper.getReportList(sort);
     }
 
+    @GetMapping("/admin/reportInfo")
+    public List<WarningDto> getReportInfo(
+            @RequestParam int num)
+    {
+        //sort 넘어오는지 테스트
+        System.out.println("warning sort = "+sort);
+
+//        HashMap<String, Object> map = new HashMap<>();
+//        map.put("sort",sort);
+//
+//        //map 출력 테스트
+//        System.out.println("warningList map = "+ map);
+
+        return warningMapper.getReportList(sort);
+    }
+
     //방 상세정보에서 신고하기 작성
     @PostMapping("/admin/reportInsert")
     public void reportInsert (@RequestParam String reportType,

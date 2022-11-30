@@ -5,7 +5,7 @@
     <!--  admin > warning(report) > reportList  -->
     <select id="getReportList" parameterType="string" resultType="WarningDto">
         select
-            w.num, w.type, w.content, w.status, w.writeday, w.finishday, QnaNum, reviewNum, roomNum, r.name, hostNum, userNum, m.nickname, h.companyName
+            w.num, w.type, w.content, w.status, w.writeday, w.finishday, w.qnaNum, reviewNum, roomNum, r.name, hostNum, userNum, m.nickname, h.companyName
         from warning w
             left join member m on m.idx = w.userNum
             left join room r on r.num = w.roomNum
@@ -19,4 +19,10 @@
         insert into warning (num, type, content, status, writeday, finishday, QnANum,reviewNum, roomNum, userNum)
         values (null, #{reportType}, #{reportContent}, #{status}, now(), null, #{QnANum}, #{reviewNum}, #{roomNum}, #{userNum})
     </insert>
+
+    <!--  report > getReportInfo  -->
+    <select id="getReportInfo" parameterType="int" resultType="WarningDto">
+        select * from warning where num = #{num}
+    </select>
+
 </mapper>

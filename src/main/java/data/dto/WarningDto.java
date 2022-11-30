@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 @Data
 @Alias("WarningDto")
 public class WarningDto {
+    private int num;
     private String content;
     private String type;
     private String status;
@@ -21,7 +22,7 @@ public class WarningDto {
 
     private int userNum;
     private int roomNum;
-    private int QnANum;
+    private int qnaNum;
     private int reviewNum;
     
     // join을 위한 dto 추가

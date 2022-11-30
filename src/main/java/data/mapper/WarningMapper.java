@@ -15,4 +15,6 @@ public interface WarningMapper {
 
     void reportInsert(HashMap<String, Object> map);  //신고하기 Insert (방 상세 / 리뷰 / QnA 에서 각각 활용)
 
+    WarningDto getReportInfo(int num);  //관리자 > 신고하기
+
 }
