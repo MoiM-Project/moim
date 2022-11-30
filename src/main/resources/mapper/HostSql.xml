@@ -323,13 +323,55 @@
                             on r.hostNum = h.num
         where bd.num = #{bookingDetailNum}
     </select>
+
     <!-- update booking detail -->
     <update id="bookingStatusUpdate" parameterType="HashMap">
-        UPDATE bookingDetail set bookingStatus=2
-        WHERE num=#{num}
+        UPDATE bookingDetail
+        set bookingStatus=2
+        WHERE num = #{num}
     </update>
 
+    <select id="bookingGet" parameterType="int" resultType="bookingDto">
+        select b.num,
+               b.totalPrice,
+               b.pg,
+               b.createdAt,
+               b.bookingDetailnum,
+               r.num  as roomNum,
+               r.name as roomName,
+               bd.name,
+               b.merchantUid
+        from booking b
+                 inner join room r on b.roomNum = r.num
+                 inner join bookingDetail bd on b.bookingDetailNum = bd.num
+                 inner join host h on r.hostNum = h.num
+        where h.num = #{hostNum}
+    </select>
 
+    <select id="searchBooking" parameterType="map" resultType="bookingDto">
+        select b.num,
+        b.totalPrice,
+        b.pg,
+        b.createdAt,
+        b.bookingDetailnum,
+        r.num as roomNum,
+        r.name as roomName,
+        r.hostNum,
+        bd.name,
+        bd.bookingStatus,
+        b.merchantUid
+        from booking b
+        inner join room r on b.roomNum = r.num
+        inner join bookingDetail bd on b.bookingDetailNum = bd.num
+        inner join host h on r.hostNum = h.num
+        where (bd.bookingStatus=4 or bd.bookingStatus=5)
+        and b.createdAt &gt;= #{sdate}
+        and b.createdAt &lt;= #{edate}
+        <if test="roomName!='전체보기'">
+            and r.name = #{roomName}
+        </if>
+        and r.hostNum = #{hostNum}
+    </select>
 </mapper>
 
 
