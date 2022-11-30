@@ -39,7 +39,7 @@
     </select>
     <!-- member 리뷰 수정   -->
     <update id="updateReview" parameterType="map">
-    update review set content = #{content}, rating = #{rating}, reviewImageUrl = #{uploadFile} where num = #{num}
+    update review set content = #{content}, rating = #{rating}, reviewImageUrl = #{uploadFile},writeday = now() where num = #{num}
     </update>
 </mapper>
 
