@@ -27,7 +27,7 @@
 
     <!--  admin > report > updateReport  -->
     <update id="updateReport" parameterType="map">
-        update warning set answer = #{answer}, status = #{status}
+        update warning set answer = #{reportAnswer}, status = #{reportStatus}
         where num = #{num}
     </update>
 
