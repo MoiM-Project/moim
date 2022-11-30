@@ -1,4 +1,4 @@
-package data.config;
+package data.config.mail;
 
 import java.util.Properties;
 

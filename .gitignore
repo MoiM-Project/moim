@@ -452,4 +452,4 @@ $RECYCLE.BIN/
 
 application.yml
 
-config/MailConfig.javas
+config/mail/*
