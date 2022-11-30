@@ -428,6 +428,10 @@ public class AdminController {
                               int userNum,
                               int roomNum
     ){
+
+        //확인
+        System.out.println(roomNum);
+
         //DB에 Insert하기위해 map 선언
         HashMap<String, Object> map = new HashMap<>();
 
