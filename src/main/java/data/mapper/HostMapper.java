@@ -41,16 +41,24 @@ public interface HostMapper {
     public void delpre(int num); //수정시 인포 삭제
     public List<BookingDetailDto> getBookingList(HashMap<String,Object> map); // 호스트넘에 대한 정렬 예약리스트 가져오기
     public List<BookingDetailDto> getBookingList2(int hostNum);
+    public BookingDetailDto getBookingDetailHost(int bookingDetailNum);
+    public void bookingStatusUpdate(HashMap<String,Object> map);
+    public List<BookingDto> bookingGet (int hostNum);
+    public List<BookingDto> searchBooking(HashMap<String,Object> map);
 
 
 
 
 
-//    public void HostHome();
+
+
+    // admin Host 관련
     
     List<HostDto> getHostSearchList(HashMap<String,Object> map);    // admin > hostList 출력
 
-    void updateHostWarning(int hostNum);
+    void updateHostWarning(int hostNum);    // admin > host 경고누적 초기화
 
-    void updateHostPassword(int hostNum);
+    void updateHostPassword(int hostNum);   // admin > host 비밀번호 초기화
+
+    void updateHostActive(int hostNum);   // admin > host 비밀번호 초기화
 }

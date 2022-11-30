@@ -3,7 +3,6 @@
 <mapper namespace="data.mapper.HostMapper">
 
     <!--  admin > hostList  -->
-
     <select id="getHostSearchList" parameterType="map" resultType="HostDto">
         select *
         from host
@@ -14,8 +13,7 @@
     <!--  admin > hostList > update Warning reset  -->
     <update id="updateHostWarning" parameterType="int">
         UPDATE host
-        SET warningCount = 0,
-            active       = 0
+        SET warningCount = 0
         WHERE num = #{hostNum};
     </update>
 
@@ -25,6 +23,11 @@
         update host
         set password=1
         where num = #{hostNum}
+    </update>
+
+    <!--  admin > hostList > hostBlock 호스트 차단  -->
+    <update id="updateHostActive" parameterType="int">
+        UPDATE host SET active = IF (active=0, 1, 0) WHERE num = #{hostNum};
     </update>
 
     <!--방 전체 리스트-->
@@ -241,7 +244,7 @@
                bd.userNum,
                bd.roomOption,
                bd.headcount as headCount,
-               r.name as roomName,
+               r.name       as roomName,
                r.thumbnailImage,
                r.address,
                r.address2,
@@ -253,7 +256,7 @@
                  inner join host h
                             on r.hostNum = h.num
         where r.hostNum = ${hostNum}
-            and bookingStatus = #{bookingStatus}
+          and bookingStatus = #{bookingStatus}
         order by ${sort};
     </select>
     <!--호스트Num에 따른 예약 리스트 가져오기 -->
@@ -276,7 +279,7 @@
                bd.roomOption,
                bd.name,
                bd.headcount as headCount,
-               r.name as roomName,
+               r.name       as roomName,
                r.thumbnailImage,
                r.address,
                r.address2,
@@ -290,7 +293,88 @@
         where r.hostNum = ${hostNum}
     </select>
 
-    <!--호스트Num에 따른 검색기능 가져오기 -->
+    <!--호스트Num에 따른 부킹 디테일 페이지-->
+    <select id="getBookingDetailHost" parameterType="int" resultType="BookingDetailDto">
+        select bd.num,
+               bd.bookingDate,
+               bd.bookingTime,
+               bd.name,
+               bd.phone,
+               bd.email,
+               bd.headcount,
+               bd.purpose,
+               bd.request,
+               bd.totalPrice,
+               bd.createdAt,
+               bd.bookingStatus,
+               bd.cancelReason,
+               bd.cancelDate,
+               bd.roomNum,
+               bd.userNum,
+               bd.roomOption,
+               r.num  as roomNum,
+               r.name as roomName,
+               r.thumbnailImage,
+               r.address,
+               r.address2,
+               r.lat,
+               r.lng
+        from bookingDetail bd
+                 inner join room r
+                            on bd.roomNum = r.num
+                 inner join host h
+                            on r.hostNum = h.num
+        where bd.num = #{bookingDetailNum}
+    </select>
+
+    <!-- update booking detail -->
+    <update id="bookingStatusUpdate" parameterType="HashMap">
+        UPDATE bookingDetail
+        set bookingStatus=2
+        WHERE num = #{num}
+    </update>
+
+    <select id="bookingGet" parameterType="int" resultType="bookingDto">
+        select b.num,
+               b.totalPrice,
+               b.pg,
+               b.createdAt,
+               b.bookingDetailnum,
+               r.num  as roomNum,
+               r.name as roomName,
+               bd.name,
+               b.merchantUid
+        from booking b
+                 inner join room r on b.roomNum = r.num
+                 inner join bookingDetail bd on b.bookingDetailNum = bd.num
+                 inner join host h on r.hostNum = h.num
+        where h.num = #{hostNum}
+    </select>
+
+    <select id="searchBooking" parameterType="map" resultType="bookingDto">
+        select b.num,
+        b.totalPrice,
+        b.pg,
+        b.createdAt,
+        b.bookingDetailnum,
+        r.num as roomNum,
+        r.name as roomName,
+        r.hostNum,
+        bd.name,
+        bd.bookingStatus,
+        b.merchantUid
+        from booking b
+        inner join room r on b.roomNum = r.num
+        inner join bookingDetail bd on b.bookingDetailNum = bd.num
+        inner join host h on r.hostNum = h.num
+        where (bd.bookingStatus=4 or bd.bookingStatus=5)
+        and b.createdAt &gt;= #{sdate}
+        and b.createdAt &lt;= #{edate}
+        <if test="roomName!='전체보기'">
+            and r.name = #{roomName}
+        </if>
+        and r.hostNum = #{hostNum}
+    </select>
 </mapper>
 
 

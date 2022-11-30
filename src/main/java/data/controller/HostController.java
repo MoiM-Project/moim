@@ -374,7 +374,7 @@ public class HostController {
         hostMapper.delpre(num);
     }
 
-
+    //예약리스트 출력
     @GetMapping("/bookinglist")
     public List<BookingDetailDto> getBookingList(int hostNum, @RequestParam(defaultValue = "-1") String bookingStatus, @RequestParam(defaultValue = "num desc") String sort, @RequestParam(defaultValue = "") String search) {
         System.out.println(bookingStatus);
@@ -386,6 +386,47 @@ public class HostController {
             return hostMapper.getBookingList2(hostNum);
 
         return hostMapper.getBookingList(map);
-
     }
+
+    //예약리스트 디테일페이지
+    @GetMapping("/bookingdetail")
+    public BookingDetailDto getBookingDetailHost(int bookingDetailNum){
+        System.out.println(bookingDetailNum);
+        BookingDetailDto dto = hostMapper.getBookingDetailHost(bookingDetailNum);
+        return dto;
+    }
+
+    //대기중인거 승인으로 바꿔주기
+    @PatchMapping("/bookingStatusUpdate")
+    public void updateCancel(@RequestBody HashMap<String,Object> data){
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("num",data.get("num"));
+
+        System.out.println(map);
+        hostMapper.bookingStatusUpdate(map);
+    }
+
+    //정산리스트
+    @GetMapping("/acount")
+    public List<BookingDto> getBookinglist(int hostNum){
+        return hostMapper.bookingGet(hostNum);
+    }
+
+    //정산 검색
+    @GetMapping("/bsearch")
+    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName){
+        System.out.println(hostNum);
+
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("hostNum",hostNum);
+        map.put("sdate",sdate);
+        map.put("edate",edate);
+        map.put("roomName",roomName);
+
+        System.out.println(map);
+        System.out.println(hostMapper.searchBooking(map));
+        return hostMapper.searchBooking(map);
+    }
+
 }

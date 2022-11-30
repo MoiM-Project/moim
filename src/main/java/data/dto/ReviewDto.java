@@ -22,4 +22,6 @@ public class ReviewDto {
 
     //member
     private String nickname;
+    private String profile_image;
+    private String name;
 }
