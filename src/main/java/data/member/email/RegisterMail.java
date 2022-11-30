@@ -30,7 +30,7 @@ public class RegisterMail implements MailServiceInter {
         MimeMessage message = emailsender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to);// 보내는 대상
-        message.setSubject("GoodJob 회원가입 이메일 인증");// 제목
+        message.setSubject("MoiM 비밀번호 변경 이메일 인증");// 제목
 
         String msgg = "";
         msgg += "<div style='margin:100px;'>";
