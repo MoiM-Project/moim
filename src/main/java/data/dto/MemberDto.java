@@ -21,7 +21,7 @@ public class MemberDto {
     private String birthday;
     private String notification;
     private int status;
-    private String profile_image;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private Timestamp created_at;
