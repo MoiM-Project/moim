@@ -2,5 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="data.mapper.QnAMapper">
 
+    <!-- mypage qna    -->
+    <select id="getQnaByUserNum" parameterType="Map" resultType="QnaDto">
+        select q.num, r.name,question,answer,status,q.writeday,answerday,roomNum,title from QnA q
+        inner join room r on q.roomNum= r.num
+        where q.userNum=#{userNum} ${sort}
+
+    </select>
 
 </mapper>
