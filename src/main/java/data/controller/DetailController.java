@@ -6,6 +6,7 @@ import data.dto.ReviewDto;
 import data.dto.RoomDto;
 import data.mapper.DetailMapper;
 import data.mapper.LikeMapper;
+import data.mapper.QnAMapper;
 import data.mapper.ReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,9 @@ public class DetailController {
 
     @Autowired
     LikeMapper likeMapper;
+
+    @Autowired
+    QnAMapper qnAMapper;
 
 
 //    detail.js(태그,룸이미지,룸정보)
@@ -139,7 +143,7 @@ public class DetailController {
         map.put("sort",sort);
 
 
-        return detailMapper.getQnaByUserNum(map);
+        return qnAMapper.getQnaByUserNum(map);
     }
 
 //    비슷한 공간
