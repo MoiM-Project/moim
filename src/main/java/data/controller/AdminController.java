@@ -387,15 +387,42 @@ public class AdminController {
         return warningMapper.getReportList(sort);
     }
 
-//    @GetMapping("/admin/reportInfo")
-//    public List<WarningDto> getReportInfo(
-//            @RequestParam int num)
-//    {
-//        //sort 넘어오는지 테스트
-//        System.out.println("report num = "+num);
-//
-//        return warningMapper.getReportInfo(num);
-//    }
+    //admin > report > 상세보기
+    @GetMapping("/admin/reportInfo")
+    public WarningDto getReportInfo(@RequestParam int num)
+    {
+        //sort 넘어오는지 테스트
+        System.out.println("report num = "+num);
+
+        return warningMapper.getReportInfo(num);
+    }
+
+
+    //관리자 페이지에서 공지사항 수정하기
+    @PostMapping("/admin/reportUpdate")
+    public void reportResult (@RequestParam String updateType,
+                              String updateTitle,
+                              String updateContent,
+
+                              int num
+    ){
+
+        //DB에 update하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        //uploadFile을 제외하고 map에 담기
+        map.put("updateType",updateType);
+        map.put("updateTitle",updateTitle);
+        map.put("updateContent",updateContent);
+        map.put("num",num);
+
+        // insert sql 에 map 전달
+        noticeMapper.updateNotice(map);
+    }
+
+
+
+
 
     //방 상세정보에서 신고하기 작성
     @PostMapping("/admin/reportInsert")

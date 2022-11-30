@@ -16,13 +16,20 @@
     <!--  report > insertReport  -->
     <!--  방 상세정보, QnA, 리뷰 에서 각각 신고할 때 아래 SQL문을 공동 사용 // 컨트롤러에서 값을 정해줘서 넣을 예정  -->
     <insert id="reportInsert" parameterType="map">
-        insert into warning (num, type, content, status, writeday, finishday, QnANum,reviewNum, roomNum, userNum)
-        values (null, #{reportType}, #{reportContent}, #{status}, now(), null, #{QnANum}, #{reviewNum}, #{roomNum}, #{userNum})
+        insert into warning (num, type, content, status, answer, writeday, finishday, QnANum,reviewNum, roomNum, userNum)
+        values (null, #{reportType}, #{reportContent}, #{status}, #{answer}, now(), null, #{QnANum}, #{reviewNum}, #{roomNum}, #{userNum})
     </insert>
 
-    <!--  report > getReportInfo  -->
+    <!--  admin > report > getReportInfo  -->
     <select id="getReportInfo" parameterType="int" resultType="WarningDto">
         select * from warning where num = #{num}
     </select>
+
+    <!--  admin > report > updateReport  -->
+    <update id="updateReport" parameterType="map">
+        update warning set answer = #{answer}, status = #{status}
+        where num = #{num}
+    </update>
+
 
 </mapper>

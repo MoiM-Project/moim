@@ -10,9 +10,10 @@ import java.sql.Timestamp;
 @Alias("WarningDto")
 public class WarningDto {
     private int num;
-    private String content;
     private String type;
+    private String content;
     private String status;
+    private String answer;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp writeday;
