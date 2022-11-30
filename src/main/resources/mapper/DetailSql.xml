@@ -85,7 +85,7 @@
 
 <!-- mypage qna    -->
     <select id="getQnaByUserNum" parameterType="Map" resultType="QnaDto">
-        select r.name,question,answer,status,q.writeday,answerday from QnA q
+        select r.name,question,answer,status,q.writeday,answerday,r.num from QnA q
         inner join room r on q.roomNum= r.num
         where q.userNum=#{userNum} ${sort}
 
