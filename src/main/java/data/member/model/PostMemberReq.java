@@ -14,4 +14,5 @@ public class PostMemberReq {
     private String gender;
     private String birthday;
     private String notification;
+    private String certificated;
 }
