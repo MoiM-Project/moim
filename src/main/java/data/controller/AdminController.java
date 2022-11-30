@@ -378,13 +378,13 @@ public class AdminController {
         //sort 넘어오는지 테스트
         System.out.println("warning sort = "+sort);
 
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("sort",sort);
+//        HashMap<String, Object> map = new HashMap<>();
+//        map.put("sort",sort);
+//
+//        //map 출력 테스트
+//        System.out.println("warningList map = "+ map);
 
-        //map 출력 테스트
-        System.out.println("warningList map = "+ map);
-
-        return warningMapper.getReportList(map);
+        return warningMapper.getReportList(sort);
     }
 
     //방 상세정보에서 신고하기 작성
@@ -425,9 +425,9 @@ public class AdminController {
     public void reportQnaInsert (@RequestParam String reportType,
                               String reportContent,
                               int qnaNum,
-                              int userNum
+                              int userNum,
+                              int roomNum
     ){
-
         //DB에 Insert하기위해 map 선언
         HashMap<String, Object> map = new HashMap<>();
 
@@ -437,7 +437,7 @@ public class AdminController {
         map.put("status","신고 접수");
         map.put("QnANum",qnaNum);
         map.put("reviewNum",null);
-        map.put("roomNum",null);
+        map.put("roomNum",roomNum);
         map.put("userNum",userNum);
 
         System.out.println(map);

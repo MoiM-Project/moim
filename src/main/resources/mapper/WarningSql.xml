@@ -3,12 +3,14 @@
 <mapper namespace="data.mapper.WarningMapper">
 
     <!--  admin > warning(report) > reportList  -->
-    <select id="getReportList" parameterType="map" resultType="WarningDto">
-        select *
-        from warning
-        where companyName like concat('%', #{searchWord}, '%')
-           or email like concat('%', #{searchWord}, '%') ${sort}
-
+    <select id="getReportList" parameterType="string" resultType="WarningDto">
+        select
+            w.num, w.type, w.content, w.status, w.writeday, w.finishday, QnaNum, reviewNum, roomNum, r.name, hostNum, userNum, m.nickname, h.companyName
+        from warning w
+            left join member m on m.idx = w.userNum
+            left join room r on r.num = w.roomNum
+            left join host h on r.hostNum = h.num
+        ${sort}
     </select>
 
     <!--  report > insertReport  -->
