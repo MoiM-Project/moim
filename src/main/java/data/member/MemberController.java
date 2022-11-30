@@ -5,18 +5,15 @@ import data.config.BaseResponse;
 import data.config.BaseResponseStatus;
 import data.config.JwtTokenUtil;
 import data.dto.MemberDto;
-import data.dto.NoticeDto;
-import data.mapper.HostMapper;
 import data.mapper.MemberMapper;
 import data.mapper.SellerMapper;
-import data.member.email.MailDto;
-import data.member.email.SendEmailService;
 import data.member.model.*;
 import data.seller.PostSellerReq;
 import data.util.ChangeName;
 import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,10 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static data.config.BaseResponseStatus.*;
 import static data.util.Validation.isValidatedIdx;
@@ -56,9 +50,6 @@ public class MemberController {
     MemberMapper memberMapper;
 
     @Autowired
-    SendEmailService sendEmailService;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -66,6 +57,9 @@ public class MemberController {
 
     @Autowired
     private EmailCertService emailCertService;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Autowired
     public MemberController(MemberDao memberDao) {
@@ -324,14 +318,6 @@ public class MemberController {
         catch (AuthenticationCredentialsNotFoundException e) {
             throw new AuthenticationCredentialsNotFoundException("인증 요구 거부.", e);
         }
-    }
-
-    //등록된 이메일로 임시비밀번호를 발송하고 발송된 임시비밀번호로 사용자의 pw를 변경하는 컨트롤러
-    @PostMapping("/check/findPw/sendEmail")
-    public @ResponseBody void sendEmail(String userEmail){
-        MailDto dto = sendEmailService.createMailAndChangePassword(userEmail);
-        sendEmailService.mailSend(dto);
-
     }
 
 
