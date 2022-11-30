@@ -18,4 +18,10 @@
         select * from moim.like where roomNum=#{num} and userNum=#{userNum}
     </select>
 
+    <select id="selectLikeByUserNum" parameterType="Map" resultType="RoomDto">
+        select  r.num num,name,r.address address,headcount,weekAmPrice,payment from room r
+        inner join moim.like l on l.roomNum = r.num
+        where userNum=#{userNum} order by ${sort}
+    </select>
+
 </mapper>
