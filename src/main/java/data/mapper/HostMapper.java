@@ -43,6 +43,9 @@ public interface HostMapper {
     public List<BookingDetailDto> getBookingList2(int hostNum);
     public BookingDetailDto getBookingDetailHost(int bookingDetailNum);
     public void bookingStatusUpdate(HashMap<String,Object> map);
+    public List<BookingDto> bookingGet (int hostNum);
+    public List<BookingDto> searchBooking(HashMap<String,Object> map);
+
 
 
 
