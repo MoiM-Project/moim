@@ -47,4 +47,7 @@
         delete from member where idx=#{idx}
     </delete>
 
+    <select id="searchSocial" parameterType="String" resultType="String">
+        select password from member where email=#{email}
+    </select>
 </mapper>

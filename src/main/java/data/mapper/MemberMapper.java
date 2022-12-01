@@ -29,4 +29,7 @@ public interface MemberMapper {
     void deleteMember(int idx);
 
     Integer findUserByUserId(String email);
+
+    // 소셜 여부 확인
+    String searchSocial(String email);
 }

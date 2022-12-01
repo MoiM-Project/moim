@@ -260,6 +260,25 @@ public class MemberController {
         memberMapper.profileUpdate(map);
     }
 
+    //  계정 수정 API
+    @PostMapping("/updatePassword")
+    public void updatePassword(@RequestParam String password,@RequestParam String email) {
+//        System.out.println("update email 확인 = "+email);
+        System.out.println("회원 수정");
+        memberService.updatePassword(password, email);
+    }
+
+    // 소셜 타입 구분
+    @GetMapping("/checksocial")
+    public String checkSocial(@RequestParam String email){
+        System.out.println("확인할 이메일="+email);
+
+        String check = "normal";
+        if(memberMapper.searchSocial(email).equals("kakao")){
+            check = "social";
+        }
+        return check;
+    }
 
     //  계정 탈퇴 API
     @DeleteMapping("/delete")
