@@ -451,3 +451,6 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/git,windows,macos,java,intellij,intellij+all,intellij+iml,eclipse,linux
 
 application.yml
+
+# config 폴더 하위 파일들 ignore
+MailConfig.java
