@@ -19,7 +19,7 @@ public class CategoryRoomController {
     CategoryMapper categoryMapper;
 
     @GetMapping("/category/data")
-    public CategoryDto categoryData(int categoryNum){
+    public CategoryDto categoryData(@RequestParam int categoryNum){
         return categoryMapper.selectCategory(categoryNum);
     }
 
@@ -34,7 +34,10 @@ public class CategoryRoomController {
             @RequestParam(defaultValue = "0")int sprice,
             @RequestParam(defaultValue = "500000")int eprice,
             @RequestParam(defaultValue = "1")int facilityLength,
-            @RequestParam(defaultValue = "1") String facility){
+            @RequestParam(defaultValue = "1") String facility,
+            @RequestParam(defaultValue = "")String holiday,
+            @RequestParam(defaultValue = "0")int stime,
+            @RequestParam(defaultValue = "24")int etime){
         HashMap<String, Object> map = new HashMap<>();
 
         List<String> facilityList = Arrays.asList(facility);
@@ -49,6 +52,9 @@ public class CategoryRoomController {
         map.put("eprice",eprice);
         map.put("facilityCount",facilityLength);
         map.put("facilityList",facilityList);
+        map.put("holiday",holiday);
+        map.put("stime",stime);
+        map.put("etime",etime);
         System.out.println(map);
         return categoryMapper.getCategoryRoom(map);
     }

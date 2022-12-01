@@ -47,7 +47,7 @@
     </select>
 
     <insert id="insertQna" >
-        insert into QnA (num,question,status,writeday,userNum,roomNum) values (null,#{question},#{status},now(),#{userNum},#{num})
+        insert into QnA (num,question,status,writeday,userNum,roomNum,title) values (null,#{question},#{status},now(),#{userNum},#{num},#{title})
     </insert>
 
     <!--review-->
@@ -83,13 +83,6 @@
     </select>
 
 
-<!-- mypage qna    -->
-    <select id="getQnaByUserNum" parameterType="Map" resultType="QnaDto">
-        select r.name,question,answer,status,q.writeday,answerday from QnA q
-        inner join room r on q.roomNum= r.num
-        where q.userNum=#{userNum} ${sort}
-
-    </select>
 <!--무작위 추출-->
     <select id="selectRandomRooms" resultType="RoomDto" parameterType="int">
         select num,name,address address,headcount,weekAmPrice,payment from room where num != #{num} Order by rand() limit 6

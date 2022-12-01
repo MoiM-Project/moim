@@ -19,4 +19,10 @@ public class BookingDto {
     private int userNum;
     private int roomNum;
     private int bookingDetailNum;
+
+    //조인되서 가져오는것 부킹
+    private String name;
+    private String roomName;
+    private int hostNum;
+    private int bookingStatus;
 }
