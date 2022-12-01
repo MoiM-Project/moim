@@ -29,57 +29,63 @@
         select cname from room r
         inner join roomCategory rc on r.num = rc.roomNum
         inner join category c on rc.categoryNum = c.num
-        where r.num = #{num};
+        where r.num = #{num}
     </select>
     <!--facilityList-->
     <select id="getFacilityList" resultType="RoomDto" parameterType="int">
         select fname, imageUrl from room r
         inner join roomFacility rf on r.num = rf.roomNum
         inner join facility f on rf.facilityNum = f.num
-        where r.num = #{num};
+        where r.num = #{num}
     </select>
 
     <!--qna-->
     <select id="getQnaList" resultType="QnADto" parameterType="int">
-        select nickname,question,answer,writeday,answerday from QnA q
+        select nickname,question,answer,writeday,answerday,profile_image from QnA q
         inner join member m on q.userNum = m.idx
-        where q.roomNum = #{num} order by writeday desc;
+        where q.roomNum = #{num} order by writeday desc
     </select>
 
     <insert id="insertQna" >
-        insert into QnA (num,question,status,writeday,userNum,roomNum) values (null,#{question},#{status},now(),#{userNum},#{num})
+        insert into QnA (num,question,status,writeday,userNum,roomNum,title) values (null,#{question},#{status},now(),#{userNum},#{num},#{title})
     </insert>
 
     <!--review-->
     <select id="getReviewList" resultType="ReviewDto" parameterType="int">
-        select nickname,content,answerContent,rating,writeday,reviewImageUrl from review r
+        select nickname,profile_image,content,answerContent,rating,writeday,reviewImageUrl from review r
         inner join member m on r.userNum = m.idx
-        where r.roomNum = #{num} order by writeday desc;
+        where r.roomNum = #{num} order by writeday desc
     </select>
 
     <!--review-->
     <select id="getReviewPhoto" resultType="ReviewDto" parameterType="int">
-        select nickname,content,answerContent,rating,writeday,reviewImageUrl from review r
+        select nickname,content,answerContent,rating,writeday,reviewImageUrl,profile_image from review r
         inner join member m on r.userNum = m.idx
-        where r.roomNum = #{num} and r.reviewImageUrl!='null' order by writeday desc;
+        where r.roomNum = #{num} and r.reviewImageUrl!='null' order by writeday desc
     </select>
 
     <!--bookingDetail bookingTime -->
     <select id="getBookingTime" resultType="String" parameterType="Map">
         select group_concat(bookingTime order by cast(bookingTime AS UNSIGNED )asc) bookingTime from bookingDetail where roomNum=#{num} and
-        bookingDate= #{selectDay} and cancelDate is NULL;
+        bookingDate= #{selectDay} and cancelDate is NULL
     </select>
 
     <select id="getHostByNum" resultType="RoomDto" parameterType="int">
         select companyName,logoImage from room r
         inner join host h on r.hostNum = h.num
-        where r.Num = #{num};
+        where r.Num = #{num}
     </select>
 
     <select id="getRoomByHostNum" resultType="RoomDto" parameterType="Map">
-        select  r.num num,companyName,name,r.address address,headcount,weekAmPrice,payment from room r
+        select  r.num num,name,r.address address,headcount,weekAmPrice,payment from room r
         inner join host h on r.hostNum = h.num
-        where r.hostNum = #{hostNum}  order by ${sort};
+        where r.hostNum = #{hostNum}  order by ${sort}
+    </select>
+
+
+<!--무작위 추출-->
+    <select id="selectRandomRooms" resultType="RoomDto" parameterType="int">
+        select num,name,address address,headcount,weekAmPrice,payment from room where num != #{num} Order by rand() limit 6
     </select>
 
 </mapper>

@@ -24,6 +24,8 @@ public interface RoomMapper {
 
     //adminPage (search) space = room
     List<RoomDto> getSpaceSearchList(HashMap<String,Object> map);
+    void approveSpace(int roomNum); //공간 승인을 위한 방 번호 넘기기
+    void rejectSpace(int roomNum); //공간 거부를 위한 방 번호 넘기기
 
 
 }

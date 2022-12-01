@@ -15,6 +15,7 @@ public class QnADto {
     private String status;
     private int roomNum;
     private int userNum;
+    private String title;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp writeday;
@@ -24,4 +25,6 @@ public class QnADto {
 
     //member
     private String nickname;
+    private String profile_image;
+    private String name;
 }

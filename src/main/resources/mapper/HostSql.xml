@@ -4,18 +4,30 @@
 
     <!--  admin > hostList  -->
     <select id="getHostSearchList" parameterType="map" resultType="HostDto">
-        select * from host where companyName like concat('%',#{searchWord},'%') or email like concat('%',#{searchWord},'%') ${sort}
+        select *
+        from host
+        where companyName like concat('%', #{searchWord}, '%')
+           or email like concat('%', #{searchWord}, '%') ${sort}
     </select>
 
     <!--  admin > hostList > update Warning reset  -->
     <update id="updateHostWarning" parameterType="int">
-        UPDATE host SET warningCount = 0, active = 0 WHERE num = #{hostNum};
+        UPDATE host
+        SET warningCount = 0
+        WHERE num = #{hostNum};
     </update>
 
     <!--  admin > hostList > update password / 호스트 비밀번호 초기화  -->
     <!--  비밀번호가 1일 경우 로그인하면 비밀번호 변경 화면으로 이동되도록?  -->
     <update id="updateHostPassword" parameterType="int">
-        update host set password=1 where num = #{hostNum}
+        update host
+        set password=1
+        where num = #{hostNum}
+    </update>
+
+    <!--  admin > hostList > hostBlock 호스트 차단  -->
+    <update id="updateHostActive" parameterType="int">
+        UPDATE host SET active = IF (active=0, 1, 0) WHERE num = #{hostNum};
     </update>
 
     <!--방 전체 리스트-->
@@ -26,7 +38,9 @@
     </select>
 
     <select id="getHostInfoList" resultType="HostDto" parameterType="int">
-        select * from host where num=#{num}
+        select *
+        from host
+        where num = #{num}
     </select>
 
     <!--메인카테고리 리스트-->
@@ -45,8 +59,10 @@
 
     <!--인서트 기본-->
     <insert id="insertRoom" parameterType="RoomDto">
-        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2, writeday,lat,lng,hostNum)
-        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address}, #{address2},now(),#{lat},#{lng},1)
+        insert into room (name, oneIntroduction, fullIntroduction, thumbnailImage, address, address2,
+        writeday,lat,lng,hostNum)
+        values (#{name}, #{oneIntroduction}, #{fullIntroduction}, #{thumbnailImage}, #{address},
+        #{address2},now(),#{lat},#{lng},1)
         <selectKey keyProperty="num" resultType="int" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -93,7 +109,8 @@
         </foreach>
     </insert>
 
-    <!--    인포메이션 인서트-->
+
+    <!--인포메이션 인서트-->
     <insert id="insertInformation" parameterType="InformationDto">
         insert into information (icontent, roomNum) value
             (#{icontent}, #{roomNum})
@@ -120,6 +137,244 @@
         where num = #{num}
     </update>
 
+
+    <!--첫번째 업데이트 폼-->
+    <update id="updateForm1" parameterType="RoomDto">
+        update room
+        set name=#{name},
+            oneIntroduction=#{oneIntroduction},
+            fullIntroduction=#{fullIntroduction},
+            thumbnailImage=#{thumbnailImage},
+            address=#{address},
+            address2=#{address2},
+            lat=#{lat},
+            lng=#{lng}
+        where num = #{num}
+    </update>
+
+    <!-- 수정시 옵션삭제-->
+    <delete id="deleteoption" parameterType="int">
+        delete
+        from roption
+        where num = #{num}
+    </delete>
+    <select id="getOptionNum" parameterType="int" resultType="RoptionDto">
+        select *
+        from roption
+        where num = #{num}
+    </select>
+
+    <!-- 수정시 사진삭제-->
+    <delete id="deleteimages" parameterType="int">
+        delete
+        from roomImage
+        where num = #{num}
+    </delete>
+    <select id="getImagesNum" parameterType="int" resultType="RoomImageDto">
+        select *
+        from roomImage
+        where num = #{num}
+    </select>
+
+    <!--수정시 인포,주의사항,태그 삭제-->
+    <delete id="deltag" parameterType="int">
+        delete
+        from tag
+        where num = #{num}
+    </delete>
+    <delete id="delinfo" parameterType="int">
+        delete
+        from information
+        where num = #{num}
+    </delete>
+    <delete id="delpre" parameterType="int">
+        delete
+        from precaution
+        where num = #{num}
+    </delete>
+
+    <!--roomNum값 가져오기-->
+    <select id="getCategoryData" parameterType="int" resultType="RoomCategoryDto">
+        select *
+        from roomCategory
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getOptionData" parameterType="int" resultType="RoptionDto">
+        select *
+        from roption
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getImageData" parameterType="int" resultType="RoomImageDto">
+        select *
+        from roomImage
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getTagData" parameterType="int" resultType="TagDto">
+        select *
+        from tag
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getInfoData" parameterType="int" resultType="InformationDto">
+        select *
+        from information
+        where roomNum = #{roomNum}
+    </select>
+    <select id="getPreData" parameterType="int" resultType="PrecautionDto">
+        select *
+        from precaution
+        where roomNum = #{roomNum}
+    </select>
+
+    <!--호스트Num에 따른 예약 리스트 가져오기 -->
+    <select id="getBookingList" parameterType="int" resultType="BookingDetailDto">
+        select bd.num,
+               bd.bookingDate,
+               bd.bookingTime,
+               bd.name,
+               bd.phone,
+               bd.email,
+               bd.purpose,
+               bd.request,
+               bd.totalPrice,
+               bd.createdAt,
+               bd.bookingStatus,
+               bd.cancelReason,
+               bd.cancelDate,
+               bd.roomNum,
+               bd.userNum,
+               bd.roomOption,
+               bd.headcount as headCount,
+               r.name       as roomName,
+               r.thumbnailImage,
+               r.address,
+               r.address2,
+               r.lat,
+               r.lng
+        from bookingDetail bd
+                 inner join room r
+                            on bd.roomNum = r.num
+                 inner join host h
+                            on r.hostNum = h.num
+        where r.hostNum = ${hostNum}
+          and bookingStatus = #{bookingStatus}
+        order by ${sort};
+    </select>
+    <!--호스트Num에 따른 예약 리스트 가져오기 -->
+    <select id="getBookingList2" parameterType="int" resultType="BookingDetailDto">
+        select bd.num,
+               bd.bookingDate,
+               bd.bookingTime,
+               bd.name,
+               bd.phone,
+               bd.email,
+               bd.purpose,
+               bd.request,
+               bd.totalPrice,
+               bd.createdAt,
+               bd.bookingStatus,
+               bd.cancelReason,
+               bd.cancelDate,
+               bd.roomNum,
+               bd.userNum,
+               bd.roomOption,
+               bd.name,
+               bd.headcount as headCount,
+               r.name       as roomName,
+               r.thumbnailImage,
+               r.address,
+               r.address2,
+               r.lat,
+               r.lng
+        from bookingDetail bd
+                 inner join room r
+                            on bd.roomNum = r.num
+                 inner join host h
+                            on r.hostNum = h.num
+        where r.hostNum = ${hostNum}
+    </select>
+
+    <!--호스트Num에 따른 부킹 디테일 페이지-->
+    <select id="getBookingDetailHost" parameterType="int" resultType="BookingDetailDto">
+        select bd.num,
+               bd.bookingDate,
+               bd.bookingTime,
+               bd.name,
+               bd.phone,
+               bd.email,
+               bd.headcount,
+               bd.purpose,
+               bd.request,
+               bd.totalPrice,
+               bd.createdAt,
+               bd.bookingStatus,
+               bd.cancelReason,
+               bd.cancelDate,
+               bd.roomNum,
+               bd.userNum,
+               bd.roomOption,
+               r.num  as roomNum,
+               r.name as roomName,
+               r.thumbnailImage,
+               r.address,
+               r.address2,
+               r.lat,
+               r.lng
+        from bookingDetail bd
+                 inner join room r
+                            on bd.roomNum = r.num
+                 inner join host h
+                            on r.hostNum = h.num
+        where bd.num = #{bookingDetailNum}
+    </select>
+
+    <!-- update booking detail -->
+    <update id="bookingStatusUpdate" parameterType="HashMap">
+        UPDATE bookingDetail
+        set bookingStatus=2
+        WHERE num = #{num}
+    </update>
+
+    <select id="bookingGet" parameterType="int" resultType="bookingDto">
+        select b.num,
+               b.totalPrice,
+               b.pg,
+               b.createdAt,
+               b.bookingDetailnum,
+               r.num  as roomNum,
+               r.name as roomName,
+               bd.name,
+               b.merchantUid
+        from booking b
+                 inner join room r on b.roomNum = r.num
+                 inner join bookingDetail bd on b.bookingDetailNum = bd.num
+                 inner join host h on r.hostNum = h.num
+        where h.num = #{hostNum}
+    </select>
+
+    <select id="searchBooking" parameterType="map" resultType="bookingDto">
+        select b.num,
+        b.totalPrice,
+        b.pg,
+        b.createdAt,
+        b.bookingDetailnum,
+        r.num as roomNum,
+        r.name as roomName,
+        r.hostNum,
+        bd.name,
+        bd.bookingStatus,
+        b.merchantUid
+        from booking b
+        inner join room r on b.roomNum = r.num
+        inner join bookingDetail bd on b.bookingDetailNum = bd.num
+        inner join host h on r.hostNum = h.num
+        where (bd.bookingStatus=4 or bd.bookingStatus=5)
+        and b.createdAt &gt;= #{sdate}
+        and b.createdAt &lt;= #{edate}
+        <if test="roomName!='전체보기'">
+            and r.name = #{roomName}
+        </if>
+        and r.hostNum = #{hostNum}
+    </select>
 </mapper>
 
 
