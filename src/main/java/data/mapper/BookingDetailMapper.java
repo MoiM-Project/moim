@@ -15,5 +15,7 @@ public interface BookingDetailMapper {
     public BookingDetailDto getBookingDetailData(int bookingDetailNum);
     // 예약취소시 업데이트
     public void updateCancel(HashMap<String,Object> map);
-    public BookingDetailDto getData(int num); //num값 가져오기
+    public BookingDetailDto getMaxNum(); // max num : 바로결제
+    // 승인 결제시 업데이트
+    public void updateBLStatus(HashMap<String,Object> map);
 }

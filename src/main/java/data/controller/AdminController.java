@@ -1,13 +1,7 @@
 package data.controller;
 
-import data.dto.HostDto;
-import data.dto.MemberDto;
-import data.dto.NoticeDto;
-import data.dto.RoomDto;
-import data.mapper.HostMapper;
-import data.mapper.MemberMapper;
-import data.mapper.NoticeMapper;
-import data.mapper.RoomMapper;
+import data.dto.*;
+import data.mapper.*;
 import data.util.ChangeName;
 import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +33,9 @@ public class AdminController {
 
     @Autowired
     NoticeMapper noticeMapper;
+
+    @Autowired
+    WarningMapper warningMapper;
     
     //관리자 페이지에서 멤버정보 가져오기
     @GetMapping("/admin/memberList")
@@ -47,15 +44,15 @@ public class AdminController {
             @RequestParam String sort)
     {
         //saerchWord 넘어오는지 테스트
-        System.out.println("Member searchWord = "+searchWord);
-        System.out.println("Member sort = "+sort);
+//        System.out.println("Member searchWord = "+searchWord);
+//        System.out.println("Member sort = "+sort);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("searchWord",searchWord);
         map.put("sort",sort);
 
         //map 출력 테스트
-        System.out.println("MemberList map = "+ map);
+//        System.out.println("MemberList map = "+ map);
 
         return memberMapper.getMemberSearchList(map);
     }
@@ -65,7 +62,7 @@ public class AdminController {
     public void updateMemberAcitve(@RequestParam int userNum)
     {
         //num 값 확인
-        System.out.println("num = "+userNum);
+//        System.out.println("num = "+userNum);
 
         memberMapper.updateMemberActive(userNum);
     }
@@ -74,7 +71,7 @@ public class AdminController {
     public void updateMemberPassword(@RequestParam int userNum)
     {
         //num 값 확인
-        System.out.println("num = "+userNum);
+//        System.out.println("num = "+userNum);
 
 
         memberMapper.updateMemberPassword(userNum);
@@ -89,15 +86,15 @@ public class AdminController {
             @RequestParam String sort)
     {
         //saerchWord 넘어오는지 테스트
-        System.out.println("Host searchWord = "+searchWord);
-        System.out.println("Host sort = "+sort);
+//        System.out.println("Host searchWord = "+searchWord);
+//        System.out.println("Host sort = "+sort);
         
         HashMap<String, Object> map = new HashMap<>();
         map.put("searchWord",searchWord);
         map.put("sort",sort);
 
         //map 출력 테스트
-        System.out.println("HostList map = "+ map);
+//        System.out.println("HostList map = "+ map);
         
         return hostMapper.getHostSearchList(map);
     }
@@ -107,9 +104,19 @@ public class AdminController {
     public void updateHostWarning(@RequestParam int hostNum)
     {
         //num 값 확인
-        System.out.println("경고초기화 hostNum = "+hostNum);
+//        System.out.println("경고초기화 hostNum = "+hostNum);
 
         hostMapper.updateHostWarning(hostNum);
+    }
+
+    //admin > host warningCount reset
+    @GetMapping("/admin/hostActive")
+    public void updateHostActive(@RequestParam int hostNum)
+    {
+        //num 값 확인
+//        System.out.println("상태 변경 hostNum = "+hostNum);
+
+        hostMapper.updateHostActive(hostNum);
     }
 
     //admin > host warningCount reset
@@ -117,7 +124,7 @@ public class AdminController {
     public void updateHostPassword(@RequestParam int hostNum)
     {
         //num 값 확인
-        System.out.println("비번초기화 hostNum = "+hostNum);
+//        System.out.println("비번초기화 hostNum = "+hostNum);
 
         hostMapper.updateHostPassword(hostNum);
     }
@@ -129,14 +136,14 @@ public class AdminController {
             @RequestParam String searchWord,
             @RequestParam String sort)
     {
-        System.out.println("Space sort = "+sort);
-        System.out.println("Space searchWord = "+ searchWord);
+//        System.out.println("Space sort = "+sort);
+//        System.out.println("Space searchWord = "+ searchWord);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("searchWord",searchWord);
         map.put("sort",sort);
 
-        System.out.println("SpaceList map = "+ map);
+//        System.out.println("SpaceList map = "+ map);
 
         return roomMapper.getSpaceSearchList(map);
     }
@@ -146,7 +153,7 @@ public class AdminController {
     public void approveSpace(@RequestParam int roomNum)
     {
         //넘어온 방 번호 확인
-        System.out.println("대상 방번호 = "+roomNum);
+//        System.out.println("대상 방번호 = "+roomNum);
         
         //방 번호 넘기기
         roomMapper.approveSpace(roomNum);
@@ -157,7 +164,7 @@ public class AdminController {
     public void rejectSpace(@RequestParam int roomNum)
     {
         //넘어온 방 번호 확인
-        System.out.println("대상 방번호 = "+roomNum);
+//        System.out.println("대상 방번호 = "+roomNum);
 
         //방 번호 넘기기
         roomMapper.rejectSpace(roomNum);
@@ -170,15 +177,15 @@ public class AdminController {
             @RequestParam String searchWord, String sort)
     {
         //saerchWord 넘어오는지 테스트
-        System.out.println("Notice searchWord = "+searchWord);
-        System.out.println("Notice sort = "+sort);
+//        System.out.println("Notice searchWord = "+searchWord);
+//        System.out.println("Notice sort = "+sort);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("searchWord",searchWord);
         map.put("sort",sort);
 
         //map 출력 테스트
-        System.out.println("NoticeList map = "+ map);
+//        System.out.println("NoticeList map = "+ map);
 
         return noticeMapper.getNoticeSearchList(map);
     }
@@ -257,7 +264,7 @@ public class AdminController {
             HttpServletRequest request)
     {
         //넘어온 방 번호 확인
-        System.out.println("delete num값 확인 = "+num);
+//        System.out.println("delete num값 확인 = "+num);
 
         //방 번호 넘겨서 정보 가져오기 (첨부 이미지 때문)
         String oldPhoto = noticeMapper.getNoticeInfo(num).getImageUrl();
@@ -282,7 +289,7 @@ public class AdminController {
             @RequestParam int num)
     {
         //넘어온 Notice 번호 확인
-        System.out.println("num값 확인 = " + num);
+//        System.out.println("num값 확인 = " + num);
 
         //num 값 전달
         return noticeMapper.getNoticeInfo(num);
@@ -358,6 +365,122 @@ public class AdminController {
 
         // insert sql 에 map 전달
         noticeMapper.updateNotice(map);
+    }
+
+
+    
+    // report || warning 신고하기 관련
+    //관리자 페이지에서 신고 DB 가져오기
+    @GetMapping("/admin/reportList")
+    public List<WarningDto> getReportList(
+            @RequestParam String sort)
+    {
+        //sort 넘어오는지 테스트
+//        System.out.println("warning sort = "+sort);
+
+//        HashMap<String, Object> map = new HashMap<>();
+//        map.put("sort",sort);
+//
+//        //map 출력 테스트
+//        System.out.println("warningList map = "+ map);
+
+        return warningMapper.getReportList(sort);
+    }
+
+    //admin > report > 상세보기
+    @GetMapping("/admin/reportInfo")
+    public WarningDto getReportInfo(@RequestParam int num)
+    {
+        //sort 넘어오는지 테스트
+//        System.out.println("report num = "+num);
+
+        return warningMapper.getReportInfo(num);
+    }
+
+
+    //관리자 페이지에서 공지사항 수정하기
+    @PostMapping("/admin/reportUpdate")
+    public void reportUpdate (@RequestParam String reportStatus,
+                              String reportAnswer,
+                              int num
+    ){
+
+        //DB에 update하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        //uploadFile을 제외하고 map에 담기
+        map.put("reportStatus",reportStatus);
+        map.put("reportAnswer",reportAnswer);
+        map.put("num",num);
+
+        System.out.println(map);
+
+        // insert sql 에 map 전달
+        warningMapper.updateReport(map);
+    }
+
+
+    //방 상세정보에서 신고하기 작성
+    @PostMapping("/admin/reportInsert")
+    public void reportInsert (@RequestParam String reportType,
+                              String reportContent,
+                              int roomNum,
+                              int userNum
+    ){
+
+        //값 받아오는지 확인
+//        System.out.println(reportType);
+//        System.out.println(reportContent);
+//        System.out.println(roomNum);
+//        System.out.println(userNum);
+
+        //DB에 Insert하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        // map에 담기
+        map.put("reportType",reportType);
+        map.put("reportContent",reportContent);
+        map.put("status","신고 접수");
+        map.put("QnANum",null);
+        map.put("reviewNum",null);
+        map.put("roomNum",roomNum);
+        map.put("userNum",userNum);
+
+//        System.out.println(map);
+
+        // insert sql 에 map 전달
+        warningMapper.reportInsert(map);
+    }
+
+
+    //마이페이지 > QNA 목록에서 신고하기 작성
+    @PostMapping("/admin/reportQnaInsert")
+    public void reportQnaInsert (@RequestParam String reportType,
+                              String reportContent,
+                              int qnaNum,
+                              int userNum,
+                              int roomNum
+    ){
+
+        //확인
+//        System.out.println(roomNum);
+
+        //DB에 Insert하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        // map에 담기
+        map.put("reportType",reportType);
+        map.put("reportContent",reportContent);
+        map.put("status","신고 접수");
+        map.put("QnANum",qnaNum);
+        map.put("reviewNum",null);
+        map.put("roomNum",roomNum);
+        map.put("userNum",userNum);
+
+//        System.out.println(map);
+
+        // insert sql 에 map 전달
+        warningMapper.reportInsert(map);
     }
 
 
