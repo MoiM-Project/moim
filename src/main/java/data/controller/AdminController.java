@@ -67,6 +67,7 @@ public class AdminController {
         memberMapper.updateMemberActive(userNum);
     }
 
+    //관리자 페이지에서 멤버 비밀번호 초기화
     @GetMapping("/admin/memberPassReset")
     public void updateMemberPassword(@RequestParam int userNum)
     {
@@ -373,18 +374,18 @@ public class AdminController {
     //관리자 페이지에서 신고 DB 가져오기
     @GetMapping("/admin/reportList")
     public List<WarningDto> getReportList(
-            @RequestParam String sort)
+            @RequestParam String sort,
+            String searchWord)
     {
-        //sort 넘어오는지 테스트
-//        System.out.println("warning sort = "+sort);
 
-//        HashMap<String, Object> map = new HashMap<>();
-//        map.put("sort",sort);
-//
-//        //map 출력 테스트
-//        System.out.println("warningList map = "+ map);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("sort",sort);
+        map.put("searchWord",searchWord);
 
-        return warningMapper.getReportList(sort);
+        //map 출력 테스트
+        System.out.println("warningList map = "+ map);
+
+        return warningMapper.getReportList(map);
     }
 
     //admin > report > 상세보기
@@ -412,6 +413,7 @@ public class AdminController {
         map.put("reportStatus",reportStatus);
         map.put("reportAnswer",reportAnswer);
         map.put("num",num);
+        //finishday 는 수정일자로 진행하고, SQL(xml)에 now()로 설정해둠
 
         System.out.println(map);
 
@@ -427,7 +429,6 @@ public class AdminController {
                               int roomNum,
                               int userNum
     ){
-
         //값 받아오는지 확인
 //        System.out.println(reportType);
 //        System.out.println(reportContent);
@@ -450,6 +451,29 @@ public class AdminController {
 
         // insert sql 에 map 전달
         warningMapper.reportInsert(map);
+
+        // hostNum 구하기
+        int hostNum = roomMapper.getRoomHostNum(roomNum);
+        System.out.println("호스트번호:"+ hostNum);
+
+        // warningCount 증가
+        hostMapper.addWarningCount(hostNum);    //void add
+
+        // warningCount 가 5를 넘을 경우 비활성화(inActive) 시키기
+        int warningCount = hostMapper.getWarningCount(hostNum);
+
+        if(warningCount < 5)
+        {
+            System.out.println("누적 경고 수 : "+ warningCount);
+
+        }else {
+            System.out.println("누적 경고 수 : "+ warningCount);
+
+            // 5를 넘을 경우 계정 비활성화
+            hostMapper.updateHostBlock(hostNum);
+
+            System.out.println("신고가 누적되어 계정이 정지됩니다");
+        }
     }
 
 
@@ -481,6 +505,30 @@ public class AdminController {
 
         // insert sql 에 map 전달
         warningMapper.reportInsert(map);
+
+        // hostNum 구하기
+        int hostNum = roomMapper.getRoomHostNum(roomNum);
+        System.out.println("호스트번호:"+ hostNum);
+
+        // warningCount 증가
+        hostMapper.addWarningCount(hostNum);    //void add
+
+        // warningCount 가 5를 넘을 경우 비활성화(inActive) 시키기
+        int warningCount = hostMapper.getWarningCount(hostNum);
+
+
+        if(warningCount < 5)
+        {
+            System.out.println("누적 경고 수 : "+ warningCount);
+
+        }else {
+            System.out.println("누적 경고 수 : "+ warningCount);
+
+            // 5를 넘을 경우 계정 비활성화
+            hostMapper.updateHostBlock(hostNum);
+
+            System.out.println("신고가 누적되어 계정이 정지됩니다");
+        }
     }
 
 

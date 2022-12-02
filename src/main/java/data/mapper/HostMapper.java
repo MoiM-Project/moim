@@ -61,4 +61,8 @@ public interface HostMapper {
     void updateHostPassword(int hostNum);   // admin > host 비밀번호 초기화
 
     void updateHostActive(int hostNum);   // admin > host 비밀번호 초기화
+
+    void addWarningCount(int hostNum);  // host warningCount 증가
+    void updateHostBlock(int hostNUm);  // host 를 비활성화
+    int getWarningCount(int hostNUm);   // host의 warningCount 조회
 }
