@@ -1,13 +1,16 @@
 package data.controller;
 
 import data.dto.RoomDto;
-import data.dto.TagDto;
 import data.dto.ThemeDto;
 import data.mapper.*;
+import data.util.ChangeName;
+import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,8 @@ public class ThemeController {
     LikeMapper likeMapper;
     @Autowired
     RoomMapper roomMapper;
+
+    String uploadFileName;
 
     @GetMapping("/main/theme")
     public List<ThemeDto> selectThemeList() {
@@ -83,5 +88,104 @@ public class ThemeController {
         System.out.println(map);
 
         themeMapper.deleteThemeRoom(map);
+    }
+
+    @DeleteMapping("/theme/delete")
+    public void deleteTheme(int num){
+        themeMapper.deleteTheme(num);
+    }
+
+    @PatchMapping("/theme/update")
+    public void updateTheme (@RequestBody MultipartFile file,
+                              HttpServletRequest request,
+                              String title,
+                              String description,
+                              int num
+    ){
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("title",title);
+        map.put("description",description);
+        map.put("num",num);
+
+        try {
+            if(file != null) {
+                String path = request.getSession().getServletContext().getRealPath("/image");
+                if (uploadFileName != null) {
+                    FileUtil.deletePhoto(path, uploadFileName);
+                }
+                uploadFileName = file.getOriginalFilename();
+                uploadFileName = ChangeName.getChangeFileName(file.getOriginalFilename());
+                file.transferTo(new File(path + "/" + uploadFileName));
+                System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
+                map.put("file",uploadFileName);
+            }else {
+                map.put("file",null);
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+        }
+        themeMapper.updateTheme(map);
+    }
+
+    @PostMapping("/theme/insert")
+    public void insertTheme (@RequestBody MultipartFile file,
+                              HttpServletRequest request,
+                              String title,
+                              String description
+    ){
+        System.out.println(title);
+        System.out.println(description);
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("title",title);
+        map.put("description",description);
+
+        try {
+            if(file != null) {
+                String path = request.getSession().getServletContext().getRealPath("/image");
+                if (uploadFileName != null) {
+                    FileUtil.deletePhoto(path, uploadFileName);
+                }
+                uploadFileName = file.getOriginalFilename();
+                uploadFileName = ChangeName.getChangeFileName(file.getOriginalFilename());
+                file.transferTo(new File(path + "/" + uploadFileName));
+                System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
+                map.put("file",uploadFileName);
+            }else {
+                map.put("file",null);
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+        }
+        System.out.println(map);
+        themeMapper.insertTheme(map);
+    }
+
+    @PostMapping("/theme/insert/room")
+    public void insertThemeRoom(@RequestBody HashMap<String,Object> params){
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("roomNumList",params.get("roomNumList"));
+        map.put("themeNum",params.get("themeNum"));
+
+        System.out.println(map);
+
+        themeMapper.insertThemeRoom(map);
+    }
+    @GetMapping("/theme/select/exclude/room")
+    public List<RoomDto> selectThemeExcludeRoom(int themeNum){
+        System.out.println(themeNum);
+        return roomMapper.selectThemeExcludeRoom(themeNum);
     }
 }

@@ -56,6 +56,10 @@
         where num = #{roomNum}
     </update>
 
+    <select id="selectThemeExcludeRoom" parameterType="int" resultType="RoomDto">
+        select * from room where num not in (select roomNum from roomTheme where themeNum=#{themeNum})
+    </select>
+
 
 
 </mapper>
