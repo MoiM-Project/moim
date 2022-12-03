@@ -28,5 +28,7 @@ public class WarningDto {
     
     // join을 위한 dto 추가
     private String nickname;
+    private String memail;  //member email : alias
+    private String hemail;  //host email : alias
     private String companyName;
 }

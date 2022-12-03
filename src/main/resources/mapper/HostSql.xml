@@ -25,9 +25,24 @@
         where num = #{hostNum}
     </update>
 
-    <!--  admin > hostList > hostBlock 호스트 차단  -->
+    <!--  admin > hostList > hostBlock 호스트 차단/해제  -->
     <update id="updateHostActive" parameterType="int">
-        UPDATE host SET active = IF (active=0, 1, 0) WHERE num = #{hostNum};
+        UPDATE host SET active = IF (active=0, 1, 0) WHERE num = #{hostNum}
+    </update>
+
+    <!--  호스트 warningCount 증가 쿼리  -->
+    <update id="addWarningCount" parameterType="int">
+        UPDATE host SET warningCount = warningCount+1 WHERE num = #{hostNum}
+    </update>
+
+    <!--  호스트 warningCount 조회 쿼리  -->
+    <select id="getWarningCount" resultType="int">
+        select warningCount from host where num = #{hostNum}
+    </select>
+
+    <!--  hostNum에 해당하는 host를 비활성화 (inactive)  -->
+    <update id="updateHostBlock" parameterType="int">
+        UPDATE host SET active = 1 WHERE num = #{hostNum}
     </update>
 
     <!--방 전체 리스트-->
