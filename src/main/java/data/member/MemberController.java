@@ -4,23 +4,30 @@ import data.config.BaseException;
 import data.config.BaseResponse;
 import data.config.BaseResponseStatus;
 import data.config.JwtTokenUtil;
-import data.mapper.HostMapper;
+import data.dto.BookingDetailDto;
+import data.dto.MemberDto;
+import data.mapper.MemberMapper;
 import data.mapper.SellerMapper;
 import data.member.model.*;
 import data.seller.PostSellerReq;
+import data.util.ChangeName;
+import data.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static data.config.BaseResponseStatus.*;
 import static data.util.Validation.isValidatedIdx;
@@ -31,11 +38,17 @@ import static data.util.Validation.isValidatedIdx;
 public class MemberController {
     private final MemberDao memberDao;
 
+    String uploadFileName;
+    ArrayList<String> uploadFileNames = new ArrayList<>();
+
     @Autowired
     MemberService memberService;
 
     @Autowired
     SellerMapper sellerMapper;
+
+    @Autowired
+    MemberMapper memberMapper;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -45,6 +58,9 @@ public class MemberController {
 
     @Autowired
     private EmailCertService emailCertService;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Autowired
     public MemberController(MemberDao memberDao) {
@@ -166,31 +182,120 @@ public class MemberController {
         return sendmap;
     }
 
+    @GetMapping("/getMemberInfo")
+    public MemberDto getMemberInfo(
+            @RequestParam int idx)
+    {
+        //넘어온 Notice 번호 확인
+        System.out.println("num값 확인 = " + idx);
+
+        //num 값 전달
+        return memberMapper.getMemberInfo(idx);
+    }
 
 
+    // 프로필 사진 변경
+    @PostMapping("/modify/profileImage")
+    public void noticeInsert (@RequestBody MultipartFile updateFile,
+                              HttpServletRequest request,
+                              @RequestParam String oldPhoto,
+                              int idx
+    ){
 
-    //     계정 탈퇴 API
-    @ResponseBody
-    @DeleteMapping("/delete/{idx}")
-    public BaseResponse<GetMemberRes> deleteUser(@PathVariable BigInteger idx) {
-        System.out.println("계정 탈퇴");
-        if (idx == null) {
-            System.out.println("번호없음");
-            return new BaseResponse<>(EMPTY_IDX);
-        }
-        if (!isValidatedIdx(idx)) {
-            System.out.println("유효한 번호아님");
-            return new BaseResponse<>(INVALID_IDX);
-        }
+        //DB에 update하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
 
+        //uploadFile을 제외하고 map에 담기
+        map.put("idx",idx);
+
+        //파일을 첨부했는지 안했는지 체크
         try {
-            System.out.println("일단 삭제");
-            GetMemberRes getMemberRes = memberService.deleteUser(idx);
-            return new BaseResponse<>(getMemberRes);
-        } catch (BaseException exception) {
-            System.out.println("일단 삭제안됨");
-            return new BaseResponse<>(exception.getStatus());
+
+            //upload 파일첨부를 했을때
+            if(updateFile != null) {
+
+                // 업로드할 폴더의 경로(path) 구하기
+                String path = request.getSession().getServletContext().getRealPath("/image");
+
+                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
+                if (oldPhoto != null) {
+                    FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 oldPhoto 를 지운다
+                    System.out.println("기존 사진 oldPhoto 삭제 완료");
+                }
+
+                //업로드 파일을 변수에 담기
+                uploadFileName = updateFile.getOriginalFilename();
+
+                //파일명을 날짜타입으로 변경(util 활용)
+                uploadFileName = ChangeName.getChangeFileName(updateFile.getOriginalFilename());
+
+                //path 경로에 uploadFileName 의 파일명으로 업로드 진행
+                updateFile.transferTo(new File(path + "/" + uploadFileName));
+
+                //성공 시 콘솔에 찍기
+                System.out.println("신규 이미지 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
+
+                //map 으로 updateFile에 파일명 담기
+                map.put("updateFile",uploadFileName);
+
+                System.out.println(map);
+                System.out.println("프사 변경");
+                //upload 파일첨부를 안했을때
+            }else {
+
+                //map 으로 updateFile에 기존 사진(oldPhoto) 으로 담기
+                map.put("updateFile",oldPhoto);
+                System.out.println("기존 파일 유지!");
+            }
+
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
+        // insert sql 에 map 전달
+        memberMapper.profileUpdate(map);
+    }
+
+    //  비밀번호 수정 API
+    @PostMapping("/updatePassword")
+    public void updatePassword(@RequestParam String password,@RequestParam String email) {
+//        System.out.println("update email 확인 = "+email);
+        System.out.println("회원 수정");
+        memberService.updatePassword(password, email);
+    }
+
+    @PostMapping("/updateNickname")
+    public void updateNickname(@RequestParam int idx,@RequestParam String nickname){
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("idx",idx);
+        map.put("nickname",nickname);
+        memberMapper.updateNickname(map);
+    }
+
+    // 소셜 타입 구분
+    @GetMapping("/checksocial")
+    public String checkSocial(@RequestParam String email){
+        System.out.println("확인할 이메일="+email);
+
+        String check = "normal";
+        if(memberMapper.searchSocial(email).equals("kakao")){
+            check = "social";
+        }
+        return check;
+    }
+
+    //  계정 탈퇴 API
+    @DeleteMapping("/delete")
+    public void deleteUser(@RequestParam int idx) {
+        System.out.println("delete num값 확인 = "+idx);
+        System.out.println("회원 삭제");
+        memberMapper.deleteMember(idx);
     }
 
     @ResponseBody
@@ -243,4 +348,6 @@ public class MemberController {
             throw new AuthenticationCredentialsNotFoundException("인증 요구 거부.", e);
         }
     }
+
+
 }

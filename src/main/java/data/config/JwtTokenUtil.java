@@ -56,6 +56,8 @@ public class JwtTokenUtil implements Serializable {
         UserLoginRes userLoginRes = (UserLoginRes) userDetails;
         Map<String, Object> claims = new HashMap<>();
         claims.put("social", "email");
+        // 비밀번호를 토큰에 담아 소셜로그인과 구분해줌
+        claims.put("password", "password");
         claims.put("email", userLoginRes.getUsername());
         claims.put("idx", userLoginRes.getIdx());
         claims.put("nickname", userLoginRes.getNickname());

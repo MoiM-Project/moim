@@ -396,6 +396,7 @@ public class HostController {
         return dto;
     }
 
+    //대기중인거 승인으로 바꿔주기
     @PatchMapping("/bookingStatusUpdate")
     public void updateCancel(@RequestBody HashMap<String,Object> data){
         HashMap<String, Object> map = new HashMap<>();
@@ -405,4 +406,27 @@ public class HostController {
         System.out.println(map);
         hostMapper.bookingStatusUpdate(map);
     }
+
+    //정산리스트
+    @GetMapping("/acount")
+    public List<BookingDto> getBookinglist(int hostNum){
+        return hostMapper.bookingGet(hostNum);
+    }
+
+    //정산 검색
+    @GetMapping("/bsearch")
+    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName){
+        System.out.println(hostNum);
+
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("hostNum",hostNum);
+        map.put("sdate",sdate);
+        map.put("edate",edate);
+        map.put("roomName",roomName);
+
+        System.out.println(map);
+        System.out.println(hostMapper.searchBooking(map));
+        return hostMapper.searchBooking(map);
+    }
+
 }
