@@ -20,6 +20,8 @@ public interface MemberMapper {
 
     void updatePassword(HashMap<String,Object>map);
 
+    void updateNickname(HashMap<String,Object>map);
+
     String LoginTypeCheck(int userNum);
 
     void profileUpdate(HashMap<String, Object> map);
@@ -32,4 +34,5 @@ public interface MemberMapper {
 
     // 소셜 여부 확인
     String searchSocial(String email);
+
 }

@@ -20,6 +20,7 @@ public class CategoryRoomController {
 
     @GetMapping("/category/data")
     public CategoryDto categoryData(@RequestParam int categoryNum){
+        System.out.println("카테고리 정보 호출");
         return categoryMapper.selectCategory(categoryNum);
     }
 

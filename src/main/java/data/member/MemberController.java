@@ -4,6 +4,7 @@ import data.config.BaseException;
 import data.config.BaseResponse;
 import data.config.BaseResponseStatus;
 import data.config.JwtTokenUtil;
+import data.dto.BookingDetailDto;
 import data.dto.MemberDto;
 import data.mapper.MemberMapper;
 import data.mapper.SellerMapper;
@@ -182,7 +183,7 @@ public class MemberController {
     }
 
     @GetMapping("/getMemberInfo")
-    public MemberDto getNoticeInfo(
+    public MemberDto getMemberInfo(
             @RequestParam int idx)
     {
         //넘어온 Notice 번호 확인
@@ -260,12 +261,21 @@ public class MemberController {
         memberMapper.profileUpdate(map);
     }
 
-    //  계정 수정 API
+    //  비밀번호 수정 API
     @PostMapping("/updatePassword")
     public void updatePassword(@RequestParam String password,@RequestParam String email) {
 //        System.out.println("update email 확인 = "+email);
         System.out.println("회원 수정");
         memberService.updatePassword(password, email);
+    }
+
+    @PostMapping("/updateNickname")
+    public void updateNickname(@RequestParam int idx,@RequestParam String nickname){
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("idx",idx);
+        map.put("nickname",nickname);
+        memberMapper.updateNickname(map);
     }
 
     // 소셜 타입 구분

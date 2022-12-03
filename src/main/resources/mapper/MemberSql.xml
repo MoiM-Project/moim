@@ -29,6 +29,11 @@
         update member set password=#{password} where idx = #{idx}
     </update>
 
+    <!-- 닉네임 변경   -->
+    <update id="updateNickname" parameterType="map">
+        update member set nickname=#{nickname} where idx = #{idx}
+    </update>
+
     <!-- 이메일로 번호 알아내기   -->
     <select id="findUserByUserId" parameterType="String">
         select idx from member where email=#{email}
