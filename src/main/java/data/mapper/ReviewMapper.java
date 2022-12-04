@@ -1,5 +1,6 @@
 package data.mapper;
 
+import data.dto.QnADto;
 import data.dto.ReviewDto;
 import data.dto.TagDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,4 +21,5 @@ public interface ReviewMapper {
     void reviewDelete(int num);
     ReviewDto getReviewByNum(int num);
     void updateReview(HashMap<String,Object> map);
+    List<ReviewDto> getReviewByHostNum(HashMap<String,Object> map);
 }
