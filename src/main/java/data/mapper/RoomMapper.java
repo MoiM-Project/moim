@@ -26,6 +26,7 @@ public interface RoomMapper {
     List<RoomDto> getSpaceSearchList(HashMap<String,Object> map);
     void approveSpace(int roomNum); //공간 승인을 위한 방 번호 넘기기
     void rejectSpace(int roomNum); //공간 거부를 위한 방 번호 넘기기
+    List<RoomDto> selectThemeExcludeRoom(int themeNum);
     int getRoomHostNum(int roomNum); //roomNum에 해당하는 hostNum 가져오기 (report Insert할 때 warningCount 증가 목적)
 
 

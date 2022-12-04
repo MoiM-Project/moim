@@ -60,6 +60,9 @@
         where num = #{roomNum}
     </update>
 
+    <select id="selectThemeExcludeRoom" parameterType="int" resultType="RoomDto">
+        select * from room where num not in (select roomNum from roomTheme where themeNum=#{themeNum})
+    </select>
     <!--  report Insert 할 때 host의 warningCount를 증가시키도록  -->
     <!--  roomNum에 해당하는 host 정보 가져오기  -->
     <select id="getRoomHostNum" resultType="int" parameterType="int">
@@ -67,7 +70,5 @@
             inner join host h on h.num = r.hostNum
         where r.num = #{roomNum}
     </select>
-
-
 </mapper>
 
