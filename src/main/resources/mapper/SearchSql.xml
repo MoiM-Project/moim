@@ -3,10 +3,13 @@
 <mapper namespace="data.mapper.SearchMapper">
 
     <select id="getSearchRoom" parameterType="HashMap" resultType="RoomDto">
-    SELECT * FROM room a
+        SELECT * FROM room a
         where (a.address like concat('%',#{searchWord},'%') or a.name like concat('%',#{searchWord},'%')
-        or a.num in (SELECT roomNum FROM roomCategory b where b.categoryNum in(
-        SELECT c.num FROM category c where c.cname like concat('%',#{searchWord},'%'))))
+            or a.num in (SELECT roomNum FROM roomCategory b where b.categoryNum in(
+                SELECT c.num FROM category c where c.cname like concat('%',#{searchWord},'%'))))
+          and (a.headCount>=#{headCount}) and(a.weekAmPrice between #{sprice} and #{eprice})
+          and(a.payment like CONCAT('%',#{payment},'%'))and(a.holiday != #{holiday})
+          and (a.stime <![CDATA[>=]]> #{stime}) and(a.etime <![CDATA[<=]]> #{etime})
         order by ${sort}
     </select>
 
