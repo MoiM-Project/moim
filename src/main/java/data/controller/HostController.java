@@ -44,15 +44,9 @@ public class HostController {
 
     //전체 리스트
     @GetMapping("/list")
-    public List<RoomDto> roomList() {
+    public List<RoomDto> roomList(int hostNum) {
 //        System.out.println(hostMapper.getRoomList().size());
-        log.info("------로그테스트------");
-        String value1 = "1번값";
-        String value2 = "2번값";
-        log.info("1번값은:" + value1 + " 2번값은:" + value2);
-        log.info("1번값은:{} 2번값은:{}", value1, value2);
-
-        return hostMapper.getRoomList();
+        return hostMapper.getRoomList(hostNum);
     }
 
 
