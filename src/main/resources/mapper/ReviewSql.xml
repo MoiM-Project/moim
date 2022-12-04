@@ -6,9 +6,10 @@
         select count(*) from review where roomNum=#{num}
     </select>
 
-    <!--  mainpage > reviewZone DESC LIST -->
+    <!--  mainpage > reviewZone DESC LIST 메인페이지 리뷰 -->
     <select id="getReviewList" resultType="reviewDto">
-        select * from review
+        select roomNum, name roomName, weekAmPrice, reviewImageUrl, rating, content from review re
+        inner join room ro on re.roomNum = ro.num
     </select>
 
     <!-- rating avg -->
