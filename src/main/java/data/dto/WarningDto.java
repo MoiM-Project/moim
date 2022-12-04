@@ -10,9 +10,10 @@ import java.sql.Timestamp;
 @Alias("WarningDto")
 public class WarningDto {
     private int num;
-    private String content;
     private String type;
+    private String content;
     private String status;
+    private String answer;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp writeday;
@@ -27,5 +28,7 @@ public class WarningDto {
     
     // join을 위한 dto 추가
     private String nickname;
+    private String memail;  //member email : alias
+    private String hemail;  //host email : alias
     private String companyName;
 }
