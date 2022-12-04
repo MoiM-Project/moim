@@ -13,7 +13,7 @@ public interface HostMapper {
     public HostDto getHostInfoList(int num);
 
     //    public void HostHome();
-    public List<RoomDto> getRoomList(); // 룸 리스트
+    public List<RoomDto> getRoomList(int hostNum); // 룸 리스트
     public List<MainCategoryDto> getMainCategoryList(); // 메인카테고리 리스트
     public List<CategoryDto> getCategoryList(); // 카테고리 리스트
     public void insertRoom(RoomDto dto); // 번호 생성 인서트
