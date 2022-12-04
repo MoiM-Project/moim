@@ -42,6 +42,14 @@
     <update id="updateReview" parameterType="map">
     update review set content = #{content}, rating = #{rating}, reviewImageUrl = #{uploadFile},writeday = now() where num = #{num}
     </update>
+
+     <!-- host 기준 리뷰 관리    -->
+    <select id="getReviewByHostNum" resultType="reviewDto" parameterType="Map">
+        select re.num, r.name,content,rating,re.writeday,reviewImageUrl,roomNum,m.nickname from review re
+        inner join room r on re.roomNum= r.num
+        inner join member m on re.userNum= m.idx
+        where r.hostNum= #{hostNum} ${sort};
+    </select>
 </mapper>
 
 
