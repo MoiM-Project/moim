@@ -45,6 +45,14 @@ public class MemberDao {
         return new PostMemberRes(lastInsertIdx, 1);
     }
 
+    public int updatePassword(String password, String email) {
+        System.out.println(password);
+        String modifyMemberQuery = "update member set password=? where email=?";
+        Object[] modifyMemberParams = new Object[]{password, email};
+
+        return this.jdbcTemplate.update(modifyMemberQuery, modifyMemberParams);
+    }
+
 
     public Integer createMemberKakao(String kakaoemail, String nickname, String profile_image) {
 
@@ -247,5 +255,6 @@ public class MemberDao {
 
         return (status == 0);
     }
+
 }
 

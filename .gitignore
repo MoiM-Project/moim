@@ -453,4 +453,4 @@ $RECYCLE.BIN/
 application.yml
 
 # config 폴더 하위 파일들 ignore
-config/
+MailConfig.java

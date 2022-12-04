@@ -366,11 +366,13 @@
         where h.num = #{hostNum}
     </select>
 
+    <!--정산 쿼리문-->
     <select id="searchBooking" parameterType="map" resultType="bookingDto">
         select b.num,
         b.totalPrice,
         b.pg,
         b.createdAt,
+        b.payStatus,
         b.bookingDetailnum,
         r.num as roomNum,
         r.name as roomName,
@@ -382,14 +384,16 @@
         inner join room r on b.roomNum = r.num
         inner join bookingDetail bd on b.bookingDetailNum = bd.num
         inner join host h on r.hostNum = h.num
-        where (bd.bookingStatus=4 or bd.bookingStatus=5)
+        where bd.bookingStatus=4 and (b.payStatus=1 or b.payStatus=0)
         and b.createdAt &gt;= #{sdate}
         and b.createdAt &lt;= #{edate}
         <if test="roomName!='전체보기'">
             and r.name = #{roomName}
         </if>
         and r.hostNum = #{hostNum}
+        and b.payStatus = #{payStatus}
     </select>
+
 </mapper>
 
 

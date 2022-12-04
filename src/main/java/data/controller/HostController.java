@@ -415,10 +415,11 @@ public class HostController {
 
     //정산 검색
     @GetMapping("/bsearch")
-    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName){
+    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName, int payStatus){
         System.out.println(hostNum);
 
         HashMap<String,Object> map = new HashMap<>();
+        map.put("payStatus",payStatus);
         map.put("hostNum",hostNum);
         map.put("sdate",sdate);
         map.put("edate",edate);
@@ -428,5 +429,4 @@ public class HostController {
         System.out.println(hostMapper.searchBooking(map));
         return hostMapper.searchBooking(map);
     }
-
 }
