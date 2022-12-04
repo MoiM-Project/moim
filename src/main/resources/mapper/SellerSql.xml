@@ -15,5 +15,9 @@
     <select id="getName" parameterType="String" resultType="String">
         select companyName from host where email=#{email}
     </select>
+    <!--  이메일에 해당하는 번호  -->
+    <select id="getNum" parameterType="String" resultType="String">
+        select num from host where email=#{email}
+    </select>
 
 </mapper>

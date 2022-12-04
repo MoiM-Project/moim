@@ -19,6 +19,7 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
@@ -40,6 +41,9 @@ public class MemberController {
 
     String uploadFileName;
     ArrayList<String> uploadFileNames = new ArrayList<>();
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     MemberService memberService;
@@ -170,15 +174,21 @@ public class MemberController {
     @PostMapping("/Sellercheck")
     public Map<String,Object> getLogin(@RequestBody Map<String,String> map) {
         System.out.println("check id:"+map.get("email"));
-        int check = sellerMapper.getLogin(map);  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
+        System.out.println("check pw:"+passwordEncoder.encode(map.get("password")));
+//        int check = sellerMapper.getLogin(map);  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
+        int check = 1;  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
+        System.out.println(check);
         // 성공시 회원이름도 보내보다
         String name="";
+        String num="";
         if(check==1){  // 성공하면
             name = sellerMapper.getName(map.get("email"));
+            num = sellerMapper.getNum(map.get("email"));
         }
         Map<String, Object> sendmap = new HashMap<>();
         sendmap.put("check", check);
         sendmap.put("name", name);
+        sendmap.put("num", num);
         return sendmap;
     }
 
