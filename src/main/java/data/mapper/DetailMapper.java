@@ -24,6 +24,5 @@ public interface DetailMapper {
     public String getBookingTime(Map<String,Object> map);
     public RoomDto getHostByNum(int num);
     public List<RoomDto> getRoomByHostNum(Map<String,Object> map);
-
     public List<RoomDto> selectRandomRooms(int num);
 }

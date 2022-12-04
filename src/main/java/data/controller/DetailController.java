@@ -37,7 +37,7 @@ public class DetailController {
     public Map<String,Object> detailroom(@RequestParam int num){
 
         //조회수 증가
-        //detailMapper.updateReadCount(num);
+        detailMapper.updateReadCount(num);
 
         Map<String, Object> map=new HashMap<>();
         map.put("roomData",detailMapper.getRoomData(num));
