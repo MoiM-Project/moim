@@ -235,9 +235,7 @@ public class HostController {
                 //이전 업로드한 사진을 지운 후 현재 사진 업로드하기(파일명을 날짜타입으로 변경)
 //                uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
 
-//                System.out.println(uploadFileName);
                 roomList.add(newFileName);
-//                System.out.println("사진리스트 업로드 성공");
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -382,7 +380,7 @@ public class HostController {
         map.put("hostNum", hostNum);
         map.put("bookingStatus", bookingStatus);
         map.put("sort", sort);
-        if(bookingStatus.equals("-1"))
+        if (bookingStatus.equals("-1"))
             return hostMapper.getBookingList2(hostNum);
 
         return hostMapper.getBookingList(map);
@@ -390,7 +388,7 @@ public class HostController {
 
     //예약리스트 디테일페이지
     @GetMapping("/bookingdetail")
-    public BookingDetailDto getBookingDetailHost(int bookingDetailNum){
+    public BookingDetailDto getBookingDetailHost(int bookingDetailNum) {
         System.out.println(bookingDetailNum);
         BookingDetailDto dto = hostMapper.getBookingDetailHost(bookingDetailNum);
         return dto;
@@ -398,10 +396,10 @@ public class HostController {
 
     //대기중인거 승인으로 바꿔주기
     @PatchMapping("/bookingStatusUpdate")
-    public void updateCancel(@RequestBody HashMap<String,Object> data){
+    public void updateCancel(@RequestBody HashMap<String, Object> data) {
         HashMap<String, Object> map = new HashMap<>();
 
-        map.put("num",data.get("num"));
+        map.put("num", data.get("num"));
 
         System.out.println(map);
         hostMapper.bookingStatusUpdate(map);
@@ -409,21 +407,21 @@ public class HostController {
 
     //정산리스트
     @GetMapping("/acount")
-    public List<BookingDto> getBookinglist(int hostNum){
+    public List<BookingDto> getBookinglist(int hostNum) {
         return hostMapper.bookingGet(hostNum);
     }
 
     //정산 검색
     @GetMapping("/bsearch")
-    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName, int payStatus){
+    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName, int payStatus) {
         System.out.println(hostNum);
 
-        HashMap<String,Object> map = new HashMap<>();
-        map.put("payStatus",payStatus);
-        map.put("hostNum",hostNum);
-        map.put("sdate",sdate);
-        map.put("edate",edate);
-        map.put("roomName",roomName);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("payStatus", payStatus);
+        map.put("hostNum", hostNum);
+        map.put("sdate", sdate);
+        map.put("edate", edate);
+        map.put("roomName", roomName);
 
         System.out.println(map);
         System.out.println(hostMapper.searchBooking(map));
