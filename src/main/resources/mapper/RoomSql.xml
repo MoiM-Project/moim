@@ -33,13 +33,17 @@
 
     <!--  main > suggestRoom List  -->
     <select id="getRoomList" resultType="RoomDto">
-        select * from room limit 3
+--         select * from room limit 6 where hideStatus = 1 and approvalStatus = 1
+        select * from room
+        where hideStatus = 1 and approvalStatus = 1
+        order by num desc
+            limit 6
 
     </select>
 
     <!--  admin > Space (Search) List  -->
     <select id="getSpaceSearchList" parameterType="map" resultType="RoomDto">
-        SELECT r.num, name, weekAmPrice, headcount, writeday, companyName, hideStatus, approvalStatus, readCount, thumbnailImage FROM room r
+        SELECT r.num, name, r.address, weekAmPrice, headcount, writeday, companyName, hideStatus, approvalStatus, readCount, thumbnailImage FROM room r
             inner join host h on r.hostNum = h.num
              where (name like concat('%',#{searchWord},'%') or companyName like concat('%',#{searchWord},'%')) ${sort}
     </select>
@@ -56,6 +60,9 @@
         where num = #{roomNum}
     </update>
 
+    <select id="selectThemeExcludeRoom" parameterType="int" resultType="RoomDto">
+        select * from room where num not in (select roomNum from roomTheme where themeNum=#{themeNum})
+    </select>
     <!--  report Insert 할 때 host의 warningCount를 증가시키도록  -->
     <!--  roomNum에 해당하는 host 정보 가져오기  -->
     <select id="getRoomHostNum" resultType="int" parameterType="int">
@@ -63,7 +70,5 @@
             inner join host h on h.num = r.hostNum
         where r.num = #{roomNum}
     </select>
-
-
 </mapper>
 

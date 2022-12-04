@@ -22,7 +22,6 @@ public class MemberDto {
     private String notification;
     private int status;
 
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private Timestamp created_at;
 

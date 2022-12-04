@@ -25,4 +25,5 @@ public class BookingDto {
     private String roomName;
     private int hostNum;
     private int bookingStatus;
+    private boolean payStatus;
 }

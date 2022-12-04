@@ -3,11 +3,38 @@
 <mapper namespace="data.mapper.QnAMapper">
 
     <!-- mypage qna    -->
-    <select id="getQnaByUserNum" parameterType="Map" resultType="QnaDto">
+    <select id="getQnaByUserNum" parameterType="Map" resultType="QnADto">
         select q.num, r.name,question,answer,status,q.writeday,answerday,roomNum,title from QnA q
         inner join room r on q.roomNum= r.num
         where q.userNum=#{userNum} ${sort}
 
     </select>
 
+    <!--수정데이터 가져오기-->
+    <select id="getQnaByNum" resultType="QnADto" parameterType="int">
+        select * from QnA where num=#{num}
+    </select>
+
+    <!--삭제-->
+    <delete id="qnaDelete" parameterType="int">
+        delete from QnA where num=#{num}
+    </delete>
+
+    <!-- Qna 수정   -->
+    <update id="updateQna" parameterType="map">
+        update QnA set title= #{title}, question = #{question}, writeday = now() where num = #{num}
+    </update>
+
+    <!-- host qna    -->
+    <select id="getQnaByHostNum" parameterType="Map" resultType="QnADto">
+        select q.num, r.name,question,answer,status,q.writeday,answerday,roomNum,title from QnA q
+        inner join room r on q.roomNum= r.num
+        where r.hostNum= #{hostNum} ${sort}
+
+    </select>
+
+    <!-- Qna answer 추가   -->
+    <update id="insertQnaAnswer" parameterType="Map">
+        update QnA set answer= #{answer}, status = '답변완료', answerday = now() where num = #{num}
+    </update>
 </mapper>

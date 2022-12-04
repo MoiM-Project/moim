@@ -19,4 +19,6 @@ public interface SellerMapper {
 
     // 이메일에 해당하는 이름
     public String getName(String email);
+
+    public String getNum(String email);
 }

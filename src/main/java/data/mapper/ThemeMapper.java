@@ -9,11 +9,13 @@ import java.util.List;
 
 @Mapper
 public interface ThemeMapper {
-    void insertTheme(ThemeDto dto);
     List<ThemeDto> selectThemeList();
     ThemeDto selectTheme(int themeNum);
     List<RoomDto> selectThemeRoomList(HashMap<String,Object> map);
-    void updateTheme(ThemeDto dto);
     void deleteTheme(int themeNum);
     int selectThemeCount(int themeNum);
+    void deleteThemeRoom(HashMap<String,Object> map);
+    void insertTheme(HashMap<String,Object> map);
+    void insertThemeRoom(HashMap<String,Object> map);
+    void updateTheme(HashMap<String,Object> map);
 }
