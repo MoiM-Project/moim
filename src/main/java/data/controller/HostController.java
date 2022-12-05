@@ -2,6 +2,8 @@ package data.controller;
 
 import data.dto.HostDto;
 import data.mapper.HostMapper;
+import data.util.S3UploadUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +23,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
+
+@RequiredArgsConstructor
 @RestController
 @CrossOrigin
 @Slf4j
@@ -32,6 +36,10 @@ public class HostController {
     ArrayList<String> uploadFileNames = new ArrayList<>();
 
     List<String> roomList = new ArrayList<>();
+
+    String thumImage;
+
+    private final S3UploadUtil s3UploadUtil;
 
     @Autowired
     HostMapper hostMapper;
@@ -67,15 +75,37 @@ public class HostController {
     //기본 인서트
     @PostMapping("/insert")
     public int insertRoom(@RequestBody RoomDto dto) {
-        //업로드한 파일 이름 넣기
-        dto.setThumbnailImage(uploadFileName);
+
+//        for (String s : roomList) {
+//            dto.setRimageUrl(s);
+//            hostMapper.insertRoomImage(dto);
+//        }
+
+        dto.setThumbnailImage(thumImage);
+        System.out.println(thumImage);
 
         hostMapper.insertRoom(dto);
 
-        uploadFileName = null; //비워줘야 다음에 먼저 첨부했떤 파일이 들어가있지 않음
-
 //        System.out.println(dto.getNum());
         return dto.getNum();
+    }
+    //썸네일 업로드
+    @PostMapping("/photoupload")
+    public String fileUploadlist(@RequestParam MultipartFile uploadFile) throws IOException {
+        System.out.println("React로부터 썸네일 이미지 업로드");
+
+        thumImage = s3UploadUtil.upload(uploadFile, "host");
+
+        return thumImage;
+
+//        thumImage = s3UploadUtil.upload(uploadFile, "host");
+//
+//        return s3UploadUtil.upload(uploadFile, "host");
+
+//        for (MultipartFile multi : uploadFile) {
+//            roomList.add(s3UploadUtil.upload(multi,"host"));
+//        }
+//        return roomList;
     }
 
     @PostMapping("/insert2")
@@ -134,120 +164,50 @@ public class HostController {
         hostMapper.insertUpdateRoom(dto);
     }
 
-    //썸네일 업로드
-    @PostMapping("/photoupload")
-    public String fileUploadlist(@RequestBody MultipartFile uploadFile, HttpServletRequest request) {
-        System.out.println("React로부터 썸네일 이미지 업로드");
 
-        // 업로드할 폴더 구하기
-        String path = request.getSession().getServletContext().getRealPath("/image");
-
-        //기존 업로드 파일이 있을 경우 삭제 후 다시 업로드
-        if (uploadFileName != null) {
-            FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
-        }
-
-        //변수에 담기
-        uploadFileName = uploadFile.getOriginalFilename();
-
-        //이전 업로드한 사진을 지운 후 현재 사진 업로드하기(파일명을 날짜타입으로 변경)
-        uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
-        try {
-            uploadFile.transferTo(new File(path + "/" + uploadFileName));
-
-//            Path saveFile=Paths.get(path+"/"+uploadFileName);
-//            uploadFile.transferTo(saveFile);
-
-            System.out.println("썸네일 업로드 성공");
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return uploadFileName;
-    }
 
     //옵션 사진 업로드
     @PostMapping("/optionimage")
-    public String OptionImage(@RequestBody MultipartFile uploadFile, HttpServletRequest request) {
+    public String OptionImage(@RequestParam MultipartFile uploadFile) throws IOException {
         System.out.println("React로부터 옵션 이미지 업로드");
-
-        // 업로드할 폴더 구하기
-        String path = request.getSession().getServletContext().getRealPath("/image");
-
-        //기존 업로드 파일이 있을 경우 삭제 후 다시 업로드
-        if (uploadFileName != null) {
-            FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
-        }
-
-        //변수에 담기
-        uploadFileName = uploadFile.getOriginalFilename();
-
-        //이전 업로드한 사진을 지운 후 현재 사진 업로드하기(파일명을 날짜타입으로 변경)
-        uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
-        try {
-            uploadFile.transferTo(new File(path + "/" + uploadFileName));
-
-//            Path saveFile=Paths.get(path+"/"+uploadFileName);
-//            uploadFile.transferTo(saveFile);
-
-            System.out.println("옵션 업로드 성공");
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return uploadFileName;
+        return s3UploadUtil.upload(uploadFile, "host");
     }
 
     //사진 리스트 업로드
     //업로드끝난 파일명을 반환해줄거임 -> List<String>
     @PostMapping("/photolistupload")
-    public List<String> photoUpload(@RequestParam List<MultipartFile> uploadFile,
-                                    HttpServletRequest request) {
+    public List<String> photoUpload(@RequestParam List<MultipartFile> uploadFile) throws IOException {
         System.out.println(uploadFile.size() + "개 업로드");
-
-        //업로드할 폴더
-        String path = request.getSession().getServletContext().getRealPath("/image");
-
         // foodList 의 기존 사진명 지우기
         roomList.clear();
 
-        //기존 업로드 파일이 있을 경우 삭제 후 다시 업로드
-        if (uploadFileName != null) {
-            FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
-        }
-        int num = 0;
         for (MultipartFile multi : uploadFile) {
-            try {
-                String newFileName = num + ChangeName.getChangeFileName(multi.getOriginalFilename());
-                System.out.println(newFileName);
-                uploadFileNames.add(newFileName);
-
-                multi.transferTo(new File(path + "/" + newFileName));
-
-                //이전 업로드한 사진을 지운 후 현재 사진 업로드하기(파일명을 날짜타입으로 변경)
-//                uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
-
-                roomList.add(newFileName);
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            num++;
+            roomList.add(s3UploadUtil.upload(multi,"host"));
         }
-
         return roomList;
     }
 
     // 방 이미지들 인서트
     @PostMapping("/roomimages")
-    public void roomimagesInsert(@RequestBody RoomImageDto dto) {
+    public void roomimagesInsert(@RequestBody RoomImageDto dto) throws IOException {
 
-        for (String s : uploadFileNames) {
+//        dto.setThumbnailImage(s3UploadUtil.toString());
+//
+//        hostMapper.insertRoom(dto);
+//
+////        System.out.println(dto.getNum());
+//        return dto.getNum();
+
+        for (String s : roomList) {
             dto.setRimageUrl(s);
             hostMapper.insertRoomImage(dto);
         }
+
+
+//        for (String s : uploadFileNames) {
+//            dto.setRimageUrl(s);
+//            hostMapper.insertRoomImage(dto);
+//        }
         uploadFileNames.clear();
     }
 
@@ -334,28 +294,26 @@ public class HostController {
     @DeleteMapping("/roptindel")
     public void roptindel(@RequestParam int num, HttpServletRequest request) {
         System.out.println(num);
-        //경로 구하기
-        String path = request.getSession().getServletContext().getRealPath("/image");
-        //삭제할 기존 파일명
-        String oldFileName = hostMapper.getOptionNum(num).getOimageUrl();
-        FileUtil.deletePhoto(path, oldFileName);    //사진파일 삭제
-        System.out.println(oldFileName + "삭제완료");
-
+        if(hostMapper.getOptionNum(num).getOimageUrl()!=null){
+            String path = (hostMapper.getOptionNum(num).getOimageUrl().split("/",4)[3]);
+            s3UploadUtil.delete(path);
+        }
+        System.out.println("roption삭제");
         hostMapper.deleteoption(num);
+        System.out.println("roption삭제");
     }
 
     //수정폼에서 이미지들 삭제
     @DeleteMapping("/imagesdel")
     public void roomImagedel(@RequestParam int num, HttpServletRequest request) {
         System.out.println(num);
-        //경로 구하기
-        String path = request.getSession().getServletContext().getRealPath("/image");
-        //삭제할 기존 파일명
-        String oldFileName = hostMapper.getImagesNum(num).getRimageUrl();
-        FileUtil.deletePhoto(path, oldFileName);    //사진파일 삭제
-        System.out.println(oldFileName + "삭제완료");
-
+        if(hostMapper.getImagesNum(num).getRimageUrl()!=null){
+            String path = hostMapper.getImagesNum(num).getRimageUrl().split("/",4)[3];
+            s3UploadUtil.delete(path);
+        }
+        System.out.println("rimage삭제");
         hostMapper.deleteimages(num);
+        System.out.println("rimage삭제");
     }
 
     //수정폼에서 태그,인포,주의사항 삭제

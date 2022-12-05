@@ -9,6 +9,9 @@ import java.util.List;
 @Mapper
 public interface MemberMapper {
 
+    //멤버 등급 확인(로그인 멤버 admin 여부 체크)
+    String adminCheck(int userNum);
+
     //멤버 리스트 출력
     List<MemberDto> getMemberSearchList(HashMap<String,Object> map);
     
