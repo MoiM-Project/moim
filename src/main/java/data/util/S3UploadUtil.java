@@ -2,6 +2,7 @@ package data.util;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,12 +26,10 @@ public class S3UploadUtil {
 
     // S3 파일 업로드
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+
         // MultipartFile -> File
         File convertFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("file convert error")); // 파일을 변환할 수 없으면 에러
-
-//        File convertFile = new File(multipartFile.getOriginalFilename());
-//        multipartFile.transferTo(convertFile);
 
         // S3에 저장할 파일명
         String fileName = dirName + "/" + UUID.randomUUID() + "_" + convertFile.getName();

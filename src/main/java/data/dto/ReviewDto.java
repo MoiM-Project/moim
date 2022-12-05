@@ -16,7 +16,7 @@ public class ReviewDto {
     private String reviewImageUrl;
     private int userNum;
     private int roomNum;
-
+    private int bookingDetailNum;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp writeday;
 

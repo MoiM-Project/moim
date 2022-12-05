@@ -28,8 +28,8 @@
 
     <!-- review insert -->
     <insert id="reviewInsert" parameterType="map">
-        insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum)
-        values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum})
+        insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum, bookingDetailNum)
+        values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum}, #{bookingDetailNum})
     </insert>
 
     <!--review delete   -->
@@ -44,6 +44,10 @@
     <update id="updateReview" parameterType="map">
     update review set content = #{content}, rating = #{rating}, reviewImageUrl = #{uploadFile},writeday = now() where num = #{num}
     </update>
+
+    <select id="reviewCheck" resultType="reviewDto" parameterType="int">
+        select content from review where bookingDetailNum=#{bookingDetailNum};
+    </select>
 
      <!-- host 기준 리뷰 관리    -->
     <select id="getReviewByHostNum" resultType="reviewDto" parameterType="Map">
