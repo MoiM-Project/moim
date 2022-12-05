@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="data.mapper.MemberMapper">
 
+    <!--  member grade check // 로그인 한 회원의 등급 체크 (admin 확인용)  -->
+    <select id="adminCheck" parameterType="int" resultType="String">
+        select grade from member where idx = #{userNum}
+    </select>
+
     <!--  admin > memberList  -->
     <select id="getMemberSearchList" parameterType="map" resultType="MemberDto">
         select * from member where (nickname like concat('%',#{searchWord},'%') or email like concat('%',#{searchWord},'%')) ${sort}
