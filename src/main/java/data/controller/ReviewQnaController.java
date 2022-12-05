@@ -6,6 +6,8 @@ import data.mapper.QnAMapper;
 import data.mapper.ReviewMapper;
 import data.util.ChangeName;
 import data.util.FileUtil;
+import data.util.S3UploadUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
 public class ReviewQnaController {
 
     String uploadFileName;
@@ -29,6 +32,8 @@ public class ReviewQnaController {
 
     @Autowired
     QnAMapper qnaMapper;
+
+    private final S3UploadUtil s3UploadUtil;
 
 //    일반회원 기준 리뷰
     @GetMapping("/reviewQna/reviewList")
@@ -51,6 +56,12 @@ public class ReviewQnaController {
 
     @DeleteMapping("/reviewDelete")
     public void reviewDelete(@RequestParam int num){
+        // db에 이미지가 있는 경우 s3 이미지 파일 삭제
+        if(reviewMapper.getReviewByNum(num).getReviewImageUrl()!=null){
+            String path = reviewMapper.getReviewByNum(num).getReviewImageUrl().split("/",4)[3];
+            s3UploadUtil.delete(path);
+        }
+
         reviewMapper.reviewDelete(num);
     }
 
@@ -60,13 +71,12 @@ public class ReviewQnaController {
     }
 
     @PostMapping("/reviewUpdate")
-    public void updateReview (@RequestBody MultipartFile uploadFile,
-                              HttpServletRequest request,
-                              @RequestParam String content,
+    public void updateReview (@RequestParam(value="uploadFile", required = false) MultipartFile uploadFile,
+                              String content,
                               int rating,
-                              int num,
-                              String oldPhoto
-    ){
+                              int num
+
+    ) throws IOException{
 
         //DB에 Insert하기위해 map 선언
         HashMap<String, Object> map = new HashMap<>();
@@ -77,52 +87,21 @@ public class ReviewQnaController {
         map.put("num",num);
 
 
-        //파일을 첨부했는지 안했는지 체크
-        try {
-
-            //upload 파일첨부를 했을때
-//            if(!uploadFile.isEmpty()) {
-            if(uploadFile != null) {
-
-                // 업로드할 폴더의 경로(path) 구하기
-                String path = request.getSession().getServletContext().getRealPath("/image");
-
-                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
-                if (oldPhoto != null) {
-                    FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 oldPhoto 를 지운다
-                    System.out.println("기존 사진 oldPhoto 삭제 완료");
-                }
-
-                //업로드 파일을 변수에 담기
-                uploadFileName = uploadFile.getOriginalFilename();
-
-                //파일명을 날짜타입으로 변경
-                uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
-
-                //path 경로에 파일 업로드 진행
-                uploadFile.transferTo(new File(path + "/" + uploadFileName));
-
-                //성공 시 콘솔에 찍기
-                System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
-
-                //map 에 uploadFile 담기
-                map.put("uploadFile",uploadFileName);
-
-                //upload 파일첨부를 안했을때
-            }else {
-                //map 에 uploadFile null 로 담기
-                map.put("uploadFile",null);
+        // 이미지파일 첨부 여부 체크
+        if(uploadFile!=null){
+            // 이미지파일 첨부시
+            if(reviewMapper.getReviewByNum(num).getReviewImageUrl()!=null){
+                // db에 이미지 url이 있는 경우
+                // 기존 데이터의 이미지url을 가져온 후 s3파일 삭제
+                String path = reviewMapper.getReviewByNum(num).getReviewImageUrl().split("/",4)[3];
+                s3UploadUtil.delete(path);
             }
-
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } catch (NullPointerException e) {
-
+            // 새로운 이미지 s3에 업로드 후 map에 추가
+            map.put("uploadFile",s3UploadUtil.upload(uploadFile,"review"));
+        } else {
+            // 이미지파일 미첨부시
+            // db의 이미지 url 가져와서 map에 추가
+            map.put("uploadFile",null);
         }
         // insert sql 에 map 전달
         reviewMapper.updateReview(map);
