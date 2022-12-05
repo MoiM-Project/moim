@@ -36,7 +36,16 @@ public class AdminController {
 
     @Autowired
     WarningMapper warningMapper;
-    
+
+    //로그인 한 회원 등급확인 (admin 확인용)
+    @GetMapping("/adminCheck")
+    public String adminCheck(int userNum)
+    {
+        //grade는 ADMIN 이랑 USER 두 종류임
+
+        return memberMapper.adminCheck(userNum);
+    }
+
     //관리자 페이지에서 멤버정보 가져오기
     @GetMapping("/admin/memberList")
     public List<MemberDto> getMemberSearchList(
