@@ -40,9 +40,9 @@
     </select>
 
     <!--  프로필 사진 변경  -->
-    <insert id="profileUpdate" parameterType="map">
+    <update id="profileUpdate" parameterType="map">
         update member set profile_image= #{updateFile} where idx = #{idx}
-    </insert>
+    </update>
 
     <select id="getMemberInfo" parameterType="int" resultType="MemberDto">
         select * from member where idx=#{idx}

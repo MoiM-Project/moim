@@ -39,7 +39,7 @@ public class MailController {
 
         System.out.println("수신자 번호 : " + phoneNumber);
         System.out.println("인증번호 : " + numStr);
-        certificationService.certifiedPhoneNumber(phoneNumber,numStr);
+//        certificationService.certifiedPhoneNumber(phoneNumber,numStr);
         return numStr;
     }
 }
