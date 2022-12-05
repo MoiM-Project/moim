@@ -20,8 +20,9 @@
     </select>
 
     <select id="getReviewByUserNum" parameterType="Map" resultType="reviewDto">
-        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,re.num,re.roomNum from review re
+        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,bd.num,re.roomNum from review re
         inner join room r on re.roomNum= r.num
+        inner join bookingDetail bd on re.bookingDetailNum=bd.num
         where re.userNum=#{userNum} ${sort}
 
     </select>
