@@ -18,7 +18,7 @@
     </select>
 
     <select id="getReviewByUserNum" parameterType="Map" resultType="reviewDto">
-        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,bd.num,re.roomNum from review re
+        select r.name,content,answerContent,rating,reviewImageUrl,re.writeday,bd.num num,re.num reNum,re.roomNum from review re
         inner join room r on re.roomNum= r.num
         inner join bookingDetail bd on re.bookingDetailNum=bd.num
         where re.userNum=#{userNum} ${sort}
@@ -50,9 +50,10 @@
 
      <!-- host 기준 리뷰 관리    -->
     <select id="getReviewByHostNum" resultType="reviewDto" parameterType="Map">
-        select re.num, r.name,content,rating,re.writeday,reviewImageUrl,roomNum,m.nickname from review re
+        select re.num reNum, r.name,content,rating,re.writeday,reviewImageUrl,re.roomNum,m.nickname,bd.num num from review re
         inner join room r on re.roomNum= r.num
         inner join member m on re.userNum= m.idx
+        inner join bookingDetail bd on re.bookingDetailNum=bd.num
         where r.hostNum= #{hostNum} ${sort};
     </select>
 </mapper>
