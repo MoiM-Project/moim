@@ -33,12 +33,11 @@
 
     <!--  main > suggestRoom List  -->
     <select id="getRoomList" resultType="RoomDto">
---         select * from room limit 6 where hideStatus = 1 and approvalStatus = 1
-        select * from room
-        where hideStatus = 1 and approvalStatus = 1
-        order by num desc
-            limit 6
-
+        SELECT r.num, name, r.address, weekAmPrice, headcount, writeday, companyName, hideStatus, approvalStatus, readCount, thumbnailImage FROM room r
+            inner join host h on r.hostNum = h.num
+            where hideStatus = 1 and approvalStatus = 1
+            order by num desc
+            limit 9
     </select>
 
     <!--  admin > Space (Search) List  -->

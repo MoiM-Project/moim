@@ -53,4 +53,12 @@ public class MainPageController {
 
         return reviewMapper.getReviewList();
     }
+
+    //메인페이지 리뷰에 태그Tag 가져오기
+    @GetMapping("/tagList")
+    public List<TagDto> tagList(int num)
+    {
+
+        return tagMapper.selectTagList(num);
+    }
 }
