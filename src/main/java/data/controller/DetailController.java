@@ -8,6 +8,7 @@ import data.mapper.DetailMapper;
 import data.mapper.LikeMapper;
 import data.mapper.QnAMapper;
 import data.mapper.ReviewMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
