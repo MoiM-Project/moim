@@ -79,13 +79,14 @@
     <select id="getRoomByHostNum" resultType="RoomDto" parameterType="Map">
         select  r.num num,name,r.address address,headcount,weekAmPrice,payment from room r
         inner join host h on r.hostNum = h.num
-        where r.hostNum = #{hostNum}  order by ${sort}
+        where r.hostNum = #{hostNum} and (r.hideStatus = 1 and r.approvalStatus = 1) order by ${sort}
     </select>
 
 
 <!--무작위 추출-->
     <select id="selectRandomRooms" resultType="RoomDto" parameterType="int">
-        select num,name,address address,headcount,weekAmPrice,payment from room where num != #{num} Order by rand() limit 6
+        select num,name,address address,headcount,weekAmPrice,payment from room where num != #{num} and  (hideStatus=1 and
+            approvalStatus=1) Order by rand() limit 6
     </select>
 
 </mapper>
