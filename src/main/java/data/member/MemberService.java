@@ -57,6 +57,12 @@ public class MemberService {
         return postMemberRes;
     }
 
+    public int updatePassword(String password, String email) {
+//        passwordEncoder.encode(password);
+        return memberDao.updatePassword(passwordEncoder.encode(password),email);
+//        return postMemberRes;
+    }
+
 
     public UserDetails findByEmailStatusZero(String username) throws UsernameNotFoundException {
         try {

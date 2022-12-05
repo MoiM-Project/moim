@@ -6,9 +6,10 @@
         select count(*) from review where roomNum=#{num}
     </select>
 
-    <!--  mainpage > reviewZone DESC LIST -->
+    <!--  mainpage > reviewZone DESC LIST 메인페이지 리뷰 -->
     <select id="getReviewList" resultType="reviewDto">
-        select * from review
+        select roomNum, name roomName, weekAmPrice, reviewImageUrl, rating, content from review re
+        inner join room ro on re.roomNum = ro.num
     </select>
 
     <!-- rating avg -->
@@ -25,8 +26,8 @@
 
     <!-- review insert -->
     <insert id="reviewInsert" parameterType="map">
-        insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum)
-        values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum})
+        insert into review (num, content, rating, reviewImageUrl, writeday, userNum, roomNum, bookingDetailNum)
+        values (null, #{content}, #{rating}, #{uploadFile}, now(), #{userNum}, #{roomNum}, #{bookingDetailNum})
     </insert>
 
     <!--review delete   -->
@@ -41,6 +42,18 @@
     <update id="updateReview" parameterType="map">
     update review set content = #{content}, rating = #{rating}, reviewImageUrl = #{uploadFile},writeday = now() where num = #{num}
     </update>
+
+    <select id="reviewCheck" resultType="reviewDto" parameterType="int">
+        select content from review where bookingDetailNum=#{bookingDetailNum};
+    </select>
+
+     <!-- host 기준 리뷰 관리    -->
+    <select id="getReviewByHostNum" resultType="reviewDto" parameterType="Map">
+        select re.num, r.name,content,rating,re.writeday,reviewImageUrl,roomNum,m.nickname from review re
+        inner join room r on re.roomNum= r.num
+        inner join member m on re.userNum= m.idx
+        where r.hostNum= #{hostNum} ${sort};
+    </select>
 </mapper>
 
 

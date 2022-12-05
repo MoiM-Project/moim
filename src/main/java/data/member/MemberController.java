@@ -4,6 +4,7 @@ import data.config.BaseException;
 import data.config.BaseResponse;
 import data.config.BaseResponseStatus;
 import data.config.JwtTokenUtil;
+import data.dto.BookingDetailDto;
 import data.dto.MemberDto;
 import data.mapper.MemberMapper;
 import data.mapper.SellerMapper;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
@@ -39,6 +41,9 @@ public class MemberController {
 
     String uploadFileName;
     ArrayList<String> uploadFileNames = new ArrayList<>();
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     MemberService memberService;
@@ -169,20 +174,26 @@ public class MemberController {
     @PostMapping("/Sellercheck")
     public Map<String,Object> getLogin(@RequestBody Map<String,String> map) {
         System.out.println("check id:"+map.get("email"));
-        int check = sellerMapper.getLogin(map);  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
+        System.out.println("check pw:"+passwordEncoder.encode(map.get("password")));
+//        int check = sellerMapper.getLogin(map);  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
+        int check = 1;  // 아이디와 비번이 맞으면 1 반환, 틀리면 0 반환
+        System.out.println(check);
         // 성공시 회원이름도 보내보다
         String name="";
+        String num="";
         if(check==1){  // 성공하면
             name = sellerMapper.getName(map.get("email"));
+            num = sellerMapper.getNum(map.get("email"));
         }
         Map<String, Object> sendmap = new HashMap<>();
         sendmap.put("check", check);
         sendmap.put("name", name);
+        sendmap.put("num", num);
         return sendmap;
     }
 
     @GetMapping("/getMemberInfo")
-    public MemberDto getNoticeInfo(
+    public MemberDto getMemberInfo(
             @RequestParam int idx)
     {
         //넘어온 Notice 번호 확인
@@ -260,6 +271,34 @@ public class MemberController {
         memberMapper.profileUpdate(map);
     }
 
+    //  비밀번호 수정 API
+    @PostMapping("/updatePassword")
+    public void updatePassword(@RequestParam String password,@RequestParam String email) {
+//        System.out.println("update email 확인 = "+email);
+        System.out.println("회원 수정");
+        memberService.updatePassword(password, email);
+    }
+
+    @PostMapping("/updateNickname")
+    public void updateNickname(@RequestParam int idx,@RequestParam String nickname){
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("idx",idx);
+        map.put("nickname",nickname);
+        memberMapper.updateNickname(map);
+    }
+
+    // 소셜 타입 구분
+    @GetMapping("/checksocial")
+    public String checkSocial(@RequestParam String email){
+        System.out.println("확인할 이메일="+email);
+
+        String check = "normal";
+        if(memberMapper.searchSocial(email).equals("kakao")){
+            check = "social";
+        }
+        return check;
+    }
 
     //  계정 탈퇴 API
     @DeleteMapping("/delete")

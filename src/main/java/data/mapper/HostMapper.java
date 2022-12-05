@@ -13,7 +13,7 @@ public interface HostMapper {
     public HostDto getHostInfoList(int num);
 
     //    public void HostHome();
-    public List<RoomDto> getRoomList(); // 룸 리스트
+    public List<RoomDto> getRoomList(int hostNum); // 룸 리스트
     public List<MainCategoryDto> getMainCategoryList(); // 메인카테고리 리스트
     public List<CategoryDto> getCategoryList(); // 카테고리 리스트
     public void insertRoom(RoomDto dto); // 번호 생성 인서트
@@ -61,4 +61,8 @@ public interface HostMapper {
     void updateHostPassword(int hostNum);   // admin > host 비밀번호 초기화
 
     void updateHostActive(int hostNum);   // admin > host 비밀번호 초기화
+
+    void addWarningCount(int hostNum);  // host warningCount 증가
+    void updateHostBlock(int hostNUm);  // host 를 비활성화
+    int getWarningCount(int hostNUm);   // host의 warningCount 조회
 }

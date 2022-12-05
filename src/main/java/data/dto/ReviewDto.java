@@ -16,7 +16,7 @@ public class ReviewDto {
     private String reviewImageUrl;
     private int userNum;
     private int roomNum;
-
+    private int bookingDetailNum;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "Asia/Seoul")
     private Timestamp writeday;
 
@@ -24,4 +24,9 @@ public class ReviewDto {
     private String nickname;
     private String profile_image;
     private String name;
+
+    //room - 메인페이지 리뷰가져오기
+    private String roomName; //리뷰 클릭 시 공간 상세보기 이동을 위한 num
+    private int weekAmPrice; //리뷰에 가격 표시
+    
 }

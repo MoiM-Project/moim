@@ -1,6 +1,8 @@
 package data.controller;
 
+import data.dto.QnADto;
 import data.dto.ReviewDto;
+import data.mapper.QnAMapper;
 import data.mapper.ReviewMapper;
 import data.util.ChangeName;
 import data.util.FileUtil;
@@ -25,7 +27,10 @@ public class ReviewQnaController {
     @Autowired
     ReviewMapper reviewMapper;
 
+    @Autowired
+    QnAMapper qnaMapper;
 
+//    일반회원 기준 리뷰
     @GetMapping("/reviewQna/reviewList")
     public List<ReviewDto> getReviewByUserNum(@RequestParam int userNum,@RequestParam String sort){
         HashMap<String, Object> map = new HashMap<>();
@@ -33,6 +38,15 @@ public class ReviewQnaController {
         map.put("sort",sort);
 
         return reviewMapper.getReviewByUserNum(map);
+    }
+//  호스트 기준 리뷰
+    @GetMapping("/reviewQna/reviewHostList")
+    public List<ReviewDto> getReviewByHostNum(@RequestParam int hostNum,@RequestParam String sort){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("hostNum",hostNum);
+        map.put("sort",sort);
+
+        return reviewMapper.getReviewByHostNum(map);
     }
 
     @DeleteMapping("/reviewDelete")
@@ -62,8 +76,6 @@ public class ReviewQnaController {
         map.put("rating",rating);
         map.put("num",num);
 
-        System.out.println(content);
-        System.out.println(rating);
 
         //파일을 첨부했는지 안했는지 체크
         try {
@@ -117,4 +129,50 @@ public class ReviewQnaController {
         System.out.println(map);
     }
 
+    @GetMapping("/qnaCotent")
+    public QnADto getQnaByNum(@RequestParam int num){
+        return qnaMapper.getQnaByNum(num);
+    }
+    @DeleteMapping("/qnaDelete")
+    public void qnaDelete(@RequestParam int num){
+        qnaMapper.qnaDelete(num);
+    }
+
+    @PostMapping("/qnaUpdate")
+    public void updateQna (
+                              @RequestParam String title,
+                              String question,
+                              int num
+    ){
+
+        //DB에 Insert하기위해 map 선언
+        HashMap<String, Object> map = new HashMap<>();
+
+        //uploadFile을 제외하고 map에 담기
+        map.put("title",title);
+        map.put("question",question);
+        map.put("num",num);
+
+
+        // insert sql 에 map 전달
+        qnaMapper.updateQna(map);
+
+    }
+
+    @GetMapping("/hostQna")
+    public List<QnADto> getQnaByHostNum(@RequestParam int hostNum,@RequestParam String sort){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("hostNum",hostNum);
+        map.put("sort",sort);
+
+        return qnaMapper.getQnaByHostNum(map);
+    }
+
+    @PostMapping("/hostQnaAnswer")
+    public void insertQnaAnswer(@RequestParam String answer,int num){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("answer",answer);
+        map.put("num",num);
+        qnaMapper.insertQnaAnswer(map);
+    }
 }
