@@ -5,7 +5,7 @@
         select * from theme order by num desc
     </select>
     <select id="selectTheme" parameterType="int" resultType="ThemeDto">
-        select * from theme where num=#{themeNum}
+        select * from theme where num=#{themeNum} order by num desc
     </select>
 
     <sql id="res">
