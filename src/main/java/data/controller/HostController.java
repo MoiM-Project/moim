@@ -37,6 +37,8 @@ public class HostController {
 
     List<String> roomList = new ArrayList<>();
 
+    String thumImage;
+
     private final S3UploadUtil s3UploadUtil;
 
     @Autowired
@@ -73,15 +75,37 @@ public class HostController {
     //기본 인서트
     @PostMapping("/insert")
     public int insertRoom(@RequestBody RoomDto dto) {
-        //업로드한 파일 이름 넣기
-        dto.setThumbnailImage(uploadFileName);
+
+//        for (String s : roomList) {
+//            dto.setRimageUrl(s);
+//            hostMapper.insertRoomImage(dto);
+//        }
+
+        dto.setThumbnailImage(thumImage);
+        System.out.println(thumImage);
 
         hostMapper.insertRoom(dto);
 
-        uploadFileName = null; //비워줘야 다음에 먼저 첨부했떤 파일이 들어가있지 않음
-
 //        System.out.println(dto.getNum());
         return dto.getNum();
+    }
+    //썸네일 업로드
+    @PostMapping("/photoupload")
+    public String fileUploadlist(@RequestParam MultipartFile uploadFile) throws IOException {
+        System.out.println("React로부터 썸네일 이미지 업로드");
+
+        thumImage = s3UploadUtil.upload(uploadFile, "host");
+
+        return thumImage;
+
+//        thumImage = s3UploadUtil.upload(uploadFile, "host");
+//
+//        return s3UploadUtil.upload(uploadFile, "host");
+
+//        for (MultipartFile multi : uploadFile) {
+//            roomList.add(s3UploadUtil.upload(multi,"host"));
+//        }
+//        return roomList;
     }
 
     @PostMapping("/insert2")
@@ -140,12 +164,7 @@ public class HostController {
         hostMapper.insertUpdateRoom(dto);
     }
 
-    //썸네일 업로드
-    @PostMapping("/photoupload")
-    public String fileUploadlist(@RequestParam MultipartFile uploadFile) throws IOException {
-        System.out.println("React로부터 썸네일 이미지 업로드");
-        return s3UploadUtil.upload(uploadFile, "host");
-    }
+
 
     //옵션 사진 업로드
     @PostMapping("/optionimage")
@@ -170,12 +189,25 @@ public class HostController {
 
     // 방 이미지들 인서트
     @PostMapping("/roomimages")
-    public void roomimagesInsert(@RequestBody RoomImageDto dto) {
+    public void roomimagesInsert(@RequestBody RoomImageDto dto) throws IOException {
 
-        for (String s : uploadFileNames) {
+//        dto.setThumbnailImage(s3UploadUtil.toString());
+//
+//        hostMapper.insertRoom(dto);
+//
+////        System.out.println(dto.getNum());
+//        return dto.getNum();
+
+        for (String s : roomList) {
             dto.setRimageUrl(s);
             hostMapper.insertRoomImage(dto);
         }
+
+
+//        for (String s : uploadFileNames) {
+//            dto.setRimageUrl(s);
+//            hostMapper.insertRoomImage(dto);
+//        }
         uploadFileNames.clear();
     }
 
