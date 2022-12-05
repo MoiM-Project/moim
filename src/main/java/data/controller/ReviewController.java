@@ -1,5 +1,6 @@
 package data.controller;
 
+import data.dto.ReviewDto;
 import data.mapper.ReviewMapper;
 import data.util.ChangeName;
 import data.util.FileUtil;
@@ -30,7 +31,8 @@ public class ReviewController {
                               @RequestParam String content,
                               int rating,
                               int userNum,
-                              int roomNum
+                              int roomNum,
+                              int bookingDetailNum
     ){
 
         //DB에 Insert하기위해 map 선언
@@ -41,6 +43,7 @@ public class ReviewController {
         map.put("rating",rating);
         map.put("userNum",userNum);
         map.put("roomNum",roomNum);
+        map.put("bookingDetailNum", bookingDetailNum);
 
         //파일을 첨부했는지 안했는지 체크
         try {
@@ -90,5 +93,10 @@ public class ReviewController {
         }
         // insert sql 에 map 전달
         reviewMapper.reviewInsert(map);
+    }
+
+    @GetMapping("/check")
+    public ReviewDto reviewCheck(int bookingDetailNum){
+        return reviewMapper.reviewCheck(bookingDetailNum);
     }
 }
