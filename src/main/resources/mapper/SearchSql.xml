@@ -10,6 +10,8 @@
           and (a.headCount>=#{headCount}) and(a.weekAmPrice between #{sprice} and #{eprice})
           and(a.payment like CONCAT('%',#{payment},'%'))and(a.holiday != #{holiday})
           and (a.stime <![CDATA[>=]]> #{stime}) and(a.etime <![CDATA[<=]]> #{etime})
+          and a.hideStatus != 0
+          and a.approvalStatus != 0
         order by ${sort}
     </select>
 
