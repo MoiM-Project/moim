@@ -11,7 +11,7 @@
         select roomNum, name roomName, weekAmPrice, reviewImageUrl, rating, content from review re
         inner join room ro on re.roomNum = ro.num
         where ro.hideStatus=1 and ro.approvalStatus=1
-        --
+        order by re.num desc
     </select>
 
     <!-- rating avg -->
