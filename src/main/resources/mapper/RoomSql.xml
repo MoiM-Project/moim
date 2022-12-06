@@ -49,7 +49,7 @@
 
     <!--  admin > Space > approve Space : 공간 승인 // 공개 여부는 호스트가 하는걸로  -->
     <update id="approveSpace" parameterType="int">
-        update room set approvalStatus = 1
+        update room set approvalStatus = 1, hideStatus = 1
         where num = #{roomNum}
     </update>
 
