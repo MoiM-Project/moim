@@ -28,6 +28,8 @@ public interface RoomMapper {
     void rejectSpace(int roomNum); //공간 거부를 위한 방 번호 넘기기
     List<RoomDto> selectThemeExcludeRoom(int themeNum);
     int getRoomHostNum(int roomNum); //roomNum에 해당하는 hostNum 가져오기 (report Insert할 때 warningCount 증가 목적)
+    List<RoomDto> getPopularSpace();    //관리자페이지 메인 > 인기있는 공간
+    List<RoomDto> waitSpaceList();  //관리자페이지 > 메인 > 등록 대기중인 공간
 
 
 }

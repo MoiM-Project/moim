@@ -53,7 +53,6 @@ public interface HostMapper {
 
 
     // admin Host 관련
-    
     List<HostDto> getHostSearchList(HashMap<String,Object> map);    // admin > hostList 출력
 
     void updateHostWarning(int hostNum);    // admin > host 경고누적 초기화
@@ -65,4 +64,5 @@ public interface HostMapper {
     void addWarningCount(int hostNum);  // host warningCount 증가
     void updateHostBlock(int hostNUm);  // host 를 비활성화
     int getWarningCount(int hostNUm);   // host의 warningCount 조회
+    List<HostDto> getWarningHost ();    // admin > main > 신고누적 top5
 }
