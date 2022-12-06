@@ -12,6 +12,8 @@ import data.member.model.*;
 import data.seller.PostSellerReq;
 import data.util.ChangeName;
 import data.util.FileUtil;
+import data.util.S3UploadUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -36,8 +38,13 @@ import static data.util.Validation.isValidatedIdx;
 @CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/member")
+//@RequiredArgsConstructor
 public class MemberController {
     private final MemberDao memberDao;
+//    private final S3UploadUtil s3UploadUtil;
+
+    @Autowired
+    S3UploadUtil s3UploadUtil;
 
     String uploadFileName;
     ArrayList<String> uploadFileNames = new ArrayList<>();
@@ -203,73 +210,118 @@ public class MemberController {
         return memberMapper.getMemberInfo(idx);
     }
 
+//    @PostMapping("/modify/profileImage")
+//    public void insertTheme (@RequestParam("updateFile") MultipartFile multipartFile,
+//                             int idx
+//    ) throws IOException {
+//
+//        HashMap<String, Object> map = new HashMap<>();
+//
+//        map.put("idx",idx);
+//        map.put("file",s3UploadUtil.upload(multipartFile,"user"));
+//
+//        System.out.println(map);
+//        memberMapper.profileUpdate(map);
+//    }
 
-    // 프로필 사진 변경
-    @PostMapping("/modify/profileImage")
-    public void noticeInsert (@RequestBody MultipartFile updateFile,
-                              HttpServletRequest request,
-                              @RequestParam String oldPhoto,
-                              int idx
-    ){
+    @PatchMapping("/modify/profileImage")
+    public void updateTheme (@RequestParam(value="updateFile", required = false) MultipartFile multipartFile,
+                             int idx
+    ) throws IOException {
 
-        //DB에 update하기위해 map 선언
         HashMap<String, Object> map = new HashMap<>();
 
-        //uploadFile을 제외하고 map에 담기
         map.put("idx",idx);
 
-        //파일을 첨부했는지 안했는지 체크
-        try {
-
-            //upload 파일첨부를 했을때
-            if(updateFile != null) {
-
-                // 업로드할 폴더의 경로(path) 구하기
-                String path = request.getSession().getServletContext().getRealPath("/image");
-
-                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
-                if (oldPhoto != null) {
-                    FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 oldPhoto 를 지운다
-                    System.out.println("기존 사진 oldPhoto 삭제 완료");
-                }
-
-                //업로드 파일을 변수에 담기
-                uploadFileName = updateFile.getOriginalFilename();
-
-                //파일명을 날짜타입으로 변경(util 활용)
-                uploadFileName = ChangeName.getChangeFileName(updateFile.getOriginalFilename());
-
-                //path 경로에 uploadFileName 의 파일명으로 업로드 진행
-                updateFile.transferTo(new File(path + "/" + uploadFileName));
-
-                //성공 시 콘솔에 찍기
-                System.out.println("신규 이미지 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
-
-                //map 으로 updateFile에 파일명 담기
-                map.put("updateFile",uploadFileName);
-
-                System.out.println(map);
-                System.out.println("프사 변경");
-                //upload 파일첨부를 안했을때
-            }else {
-
-                //map 으로 updateFile에 기존 사진(oldPhoto) 으로 담기
-                map.put("updateFile",oldPhoto);
-                System.out.println("기존 파일 유지!");
+        // 이미지파일 첨부 여부 체크
+        if(multipartFile!=null){
+            // 이미지파일 첨부시
+            if(memberMapper.getMemberInfo(idx).getProfile_image()!=null){
+                // db에 이미지 url이 있는 경우
+                // 기존 데이터의 이미지url을 가져온 후 s3파일 삭제
+                String path = memberMapper.getMemberInfo(idx).getProfile_image().split("/",4)[3];
+                s3UploadUtil.delete(path);
             }
-
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            // 새로운 이미지 s3에 업로드 후 map에 추가
+            map.put("updateFile",s3UploadUtil.upload(multipartFile,"user"));
+        } else {
+            // 이미지파일 미첨부시
+            // db의 이미지 url 가져와서 map에 추가
+            map.put("updateFile",memberMapper.getMemberInfo(idx).getProfile_image());
         }
+        System.out.println("업데이트");
+        System.out.println(map);
 
-        // insert sql 에 map 전달
         memberMapper.profileUpdate(map);
+        System.out.println(map);
     }
+
+    // 프로필 사진 변경
+//    @PostMapping("/modify/profileImage")
+//    public void noticeInsert (@RequestBody MultipartFile updateFile,
+//                              HttpServletRequest request,
+//                              @RequestParam String oldPhoto,
+//                              int idx
+//    ){
+//
+//        //DB에 update하기위해 map 선언
+//        HashMap<String, Object> map = new HashMap<>();
+//
+//        //uploadFile을 제외하고 map에 담기
+//        map.put("idx",idx);
+//
+//        //파일을 첨부했는지 안했는지 체크
+//        try {
+//
+//            //upload 파일첨부를 했을때
+//            if(updateFile != null) {
+//
+//                // 업로드할 폴더의 경로(path) 구하기
+//                String path = request.getSession().getServletContext().getRealPath("/image");
+//
+//                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
+//                if (oldPhoto != null) {
+//                    FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 oldPhoto 를 지운다
+//                    System.out.println("기존 사진 oldPhoto 삭제 완료");
+//                }
+//
+//                //업로드 파일을 변수에 담기
+//                uploadFileName = updateFile.getOriginalFilename();
+//
+//                //파일명을 날짜타입으로 변경(util 활용)
+//                uploadFileName = ChangeName.getChangeFileName(updateFile.getOriginalFilename());
+//
+//                //path 경로에 uploadFileName 의 파일명으로 업로드 진행
+//                updateFile.transferTo(new File(path + "/" + uploadFileName));
+//
+//                //성공 시 콘솔에 찍기
+//                System.out.println("신규 이미지 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
+//
+//                //map 으로 updateFile에 파일명 담기
+//                map.put("updateFile",uploadFileName);
+//
+//                System.out.println(map);
+//                System.out.println("프사 변경");
+//                //upload 파일첨부를 안했을때
+//            }else {
+//
+//                //map 으로 updateFile에 기존 사진(oldPhoto) 으로 담기
+//                map.put("updateFile",oldPhoto);
+//                System.out.println("기존 파일 유지!");
+//            }
+//
+//        } catch (IllegalStateException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//
+//        // insert sql 에 map 전달
+//        memberMapper.profileUpdate(map);
+//    }
 
     //  비밀번호 수정 API
     @PostMapping("/updatePassword")

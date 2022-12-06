@@ -21,6 +21,8 @@
         and a.weekAmPrice between #{sprice} and #{eprice}
         and a.address like CONCAT('%',#{address},'%')
         and a.payment like CONCAT('%',#{payment},'%')
+        and a.hideStatus != 0
+        and a.approvalStatus != 0
         and a.num in
         (select roomNum from roomCategory b where
         <if test="facilityCount!=0">
