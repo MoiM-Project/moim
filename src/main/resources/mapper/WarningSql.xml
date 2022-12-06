@@ -34,4 +34,11 @@
 
     <!--  Host 호스트 warningCount 증가는 host sql에서!  -->
 
+
+    <!--  admin > main > 신고 게시글 목록  -->
+    <select id="waitReportList" resultType="WarningDto">
+        select * from warning
+        where status != "처리 완료"
+        order by num asc
+    </select>
 </mapper>
