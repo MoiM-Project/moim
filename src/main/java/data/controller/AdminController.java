@@ -4,6 +4,9 @@ import data.dto.*;
 import data.mapper.*;
 import data.util.ChangeName;
 import data.util.FileUtil;
+import data.util.S3UploadUtil;
+import lombok.RequiredArgsConstructor;
+import org.apache.catalina.Host;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,10 +20,11 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
+@RequiredArgsConstructor
 public class AdminController {
 
     //파일 첨부를 위한 변수 선언
-    String uploadFileName;
+//    String uploadFileName;
 
     @Autowired
     MemberMapper memberMapper;
@@ -36,6 +40,9 @@ public class AdminController {
 
     @Autowired
     WarningMapper warningMapper;
+
+    //AWS S3 유틸 import
+    private final S3UploadUtil s3UploadUtil;
 
     //로그인 한 회원 등급확인 (admin 확인용)
     @GetMapping("/adminCheck")
@@ -202,12 +209,12 @@ public class AdminController {
 
     //관리자 페이지에서 공지사항 작성하기
     @PostMapping("/admin/noticeInsert")
-    public void noticeInsert (@RequestBody MultipartFile uploadFile,
-                              HttpServletRequest request,
-                              @RequestParam String noticeType,
-                              String noticeTitle,
-                              String noticeContent
-                              ){
+    public void noticeInsert (
+            @RequestParam("uploadFile") MultipartFile multipartFile,
+            String noticeType,
+            String noticeTitle,
+            String noticeContent
+    ){
 
         //DB에 Insert하기위해 map 선언
         HashMap<String, Object> map = new HashMap<>();
@@ -219,33 +226,14 @@ public class AdminController {
 
         //파일을 첨부했는지 안했는지 체크
         try {
+            //파일첨부를 했을때
+            if(multipartFile != null) {
 
-            //upload 파일첨부를 했을때
-//            if(!uploadFile.isEmpty()) {
-            if(uploadFile != null) {
+                //s3에 파일 업로드하고 map에 담기
+                map.put("uploadFile",s3UploadUtil.upload(multipartFile,"notice"));
 
-                // 업로드할 폴더의 경로(path) 구하기
-                String path = request.getSession().getServletContext().getRealPath("/image");
-
-                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
-                if (uploadFileName != null) {
-                    FileUtil.deletePhoto(path, uploadFileName);   //있을 경우 path 경로의 uploadFileName 을 지운다
-                }
-
-                //업로드 파일을 변수에 담기
-                uploadFileName = uploadFile.getOriginalFilename();
-
-                //파일명을 날짜타입으로 변경
-                uploadFileName = ChangeName.getChangeFileName(uploadFile.getOriginalFilename());
-
-                //path 경로에 파일 업로드 진행
-                uploadFile.transferTo(new File(path + "/" + uploadFileName));
-
-                //성공 시 콘솔에 찍기
-                System.out.println("파일 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
-
-                //map 에 uploadFile 담기
-                map.put("uploadFile",uploadFileName);
+                //성공 확인 sout
+                System.out.println("AWS에 업로드 성공!");
 
             //upload 파일첨부를 안했을때
             }else {
@@ -269,27 +257,21 @@ public class AdminController {
 
     //관리자 페이지에서 공지사항 삭제하기
     @DeleteMapping("/admin/deleteNotice")
-    public void deleteNotice(
-            @RequestParam int num,
-            HttpServletRequest request)
+    public void deleteNotice(@RequestParam int num)
     {
         //넘어온 방 번호 확인
 //        System.out.println("delete num값 확인 = "+num);
 
         //방 번호 넘겨서 정보 가져오기 (첨부 이미지 때문)
-        String oldPhoto = noticeMapper.getNoticeInfo(num).getImageUrl();
+        String path = noticeMapper.getNoticeInfo(num).getImageUrl().split("/",4)[3];
 
-        //파일 업로드 경로(path) 구하기
-        String path = request.getSession().getServletContext().getRealPath("/image");
-
-        //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제
-        if (oldPhoto != null) {
-            FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 uploadFileName 을 지운다
-        }
+        System.out.println("기존의 파일은 AWS 에서 삭제합니다");
+        //기존 업로드 파일이 있을 경우 AWS 경로에서 파일 삭제
+        s3UploadUtil.delete(path);
 
         //방 번호 넘겨서 notice DB 삭제하기
         noticeMapper.deleteNotice(num);
-        System.out.println("파일 삭제 완료");
+        System.out.println("DB에서 데이터 row 삭제 완료");
 
     }
 
@@ -308,9 +290,8 @@ public class AdminController {
 
     //관리자 페이지에서 공지사항 수정하기
     @PostMapping("/admin/updateNotice")
-    public void updateNotice (@RequestBody MultipartFile updateFile,
-                              HttpServletRequest request,
-                              @RequestParam String updateType,
+    public void updateNotice (@RequestParam(value="updateFile", required = false) MultipartFile multipartFile,
+                              String updateType,
                               String updateTitle,
                               String updateContent,
                               String oldPhoto,
@@ -328,64 +309,47 @@ public class AdminController {
 
         //파일을 첨부했는지 안했는지 체크
         try {
+            // 이미지파일 첨부 여부 체크
+            if (multipartFile != null) {
 
-            //upload 파일첨부를 했을때
-            if(updateFile != null) {
+                // 이미지파일 첨부시
+                if (noticeMapper.getNoticeInfo(num).getImageUrl() != null) {
+                    // db에 이미지 url이 있는 경우
+                    // 기존 데이터의 이미지url을 가져온 후 s3파일 삭제
+                    String path = noticeMapper.getNoticeInfo(num).getImageUrl().split("/", 4)[3];
 
-                // 업로드할 폴더의 경로(path) 구하기
-                String path = request.getSession().getServletContext().getRealPath("/image");
+                    System.out.println("기존의 파일은 AWS 에서 삭제합니다");
+                    s3UploadUtil.delete(path);
 
-                //기존 업로드 파일이 있을 경우 path 경로에서 파일 삭제 후 다시 업로드
-                if (oldPhoto != null) {
-                    FileUtil.deletePhoto(path, oldPhoto);   //있을 경우 path 경로의 oldPhoto 를 지운다
-                    System.out.println("기존 사진 oldPhoto 삭제 완료");
+                    // 새로운 이미지 s3에 업로드 하면서, map에 추가
+                    map.put("updateFile", s3UploadUtil.upload(multipartFile, "notice"));
+                    System.out.println("새로 첨부한 파일을 DB에 업로드합니다.");
+
+                    // 이미지파일 미첨부시
+                } else {
+
+                    // db의 이미지 url 가져와서 map에 추가
+                    map.put("updateFile", oldPhoto);
+                    System.out.println("기존 파일 유지!");
                 }
-
-                //업로드 파일을 변수에 담기
-                uploadFileName = updateFile.getOriginalFilename();
-
-                //파일명을 날짜타입으로 변경(util 활용)
-                uploadFileName = ChangeName.getChangeFileName(updateFile.getOriginalFilename());
-
-                //path 경로에 uploadFileName 의 파일명으로 업로드 진행
-                updateFile.transferTo(new File(path + "/" + uploadFileName));
-
-                //성공 시 콘솔에 찍기
-                System.out.println("신규 이미지 업로드 성공 -> 경로 // 파일명 " + path + "//" +uploadFileName );
-
-                //map 으로 updateFile에 파일명 담기
-                map.put("updateFile",uploadFileName);
-
-                //upload 파일첨부를 안했을때
-            }else {
-
-                //map 으로 updateFile에 기존 사진(oldPhoto) 으로 담기
-                map.put("updateFile",oldPhoto);
-                System.out.println("기존 파일 유지!");
             }
-
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
+
 
         // insert sql 에 map 전달
         noticeMapper.updateNotice(map);
     }
 
 
-    
+
     // report || warning 신고하기 관련
     //관리자 페이지에서 신고 DB 가져오기
     @GetMapping("/admin/reportList")
-    public List<WarningDto> getReportList(
-            @RequestParam String sort,
-            String searchWord)
-    {
+    public List<WarningDto> getReportList (@RequestParam String sort,
+                String searchWord
+        ){
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("sort",sort);
@@ -538,6 +502,38 @@ public class AdminController {
 
             System.out.println("신고가 누적되어 계정이 정지됩니다");
         }
+    }
+
+    //관리자 페이지 메인에 신고누적 호스트 가져오기 -> 보류 (인기있는 공간&호스트 로 변경)
+    @GetMapping("/admin/warningHost5")
+    public List<HostDto> getWarningHost()
+    {
+
+        return hostMapper.getWarningHost();
+    }
+
+    //관리자 페이지 메인에 인기있는 공간&호스트 가져오기
+    @GetMapping("/admin/popularSpace")
+    public List<RoomDto> getPopularSpace()
+    {
+
+        return roomMapper.getPopularSpace();
+    }
+
+    //관리자 페이지 메인에 등록 대기중인 공간 가져오기
+    @GetMapping("/admin/waitSpace")
+    public List<RoomDto> getWaitSpaceList()
+    {
+
+        return roomMapper.waitSpaceList();
+    }
+
+    //관리자 페이지 메인에 등록 대기중인 공간 가져오기
+    @GetMapping("/admin/waitReport")
+    public List<WarningDto> getWaitReportList()
+    {
+
+        return warningMapper.waitReportList();
     }
 
 

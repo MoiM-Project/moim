@@ -38,7 +38,7 @@ public class MainPageController {
         return categoryMapper.getAllCategory();
     }
     
-    //메인페이지에 추천공간(room) 가져오기
+    //메인페이지에 suggest 추천공간(room) 가져오기
     @GetMapping("/roomList")
     public List<RoomDto> roomList()
     {

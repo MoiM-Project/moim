@@ -59,6 +59,23 @@
         where num = #{roomNum}
     </update>
 
+    <!--  admin > main > 인기있는 공간(+호스트)  -->
+    <select id="getPopularSpace" resultType="RoomDto">
+        select * from room r
+        inner join host h on h.num = r.hostNum
+        order by r.readcount desc
+            limit 5
+    </select>
+
+    <!--  admin > main > 등록 대기중인 공간(approvalStatus = 0)  -->
+    <select id="waitSpaceList" resultType="RoomDto">
+        select * from room r
+        inner join host h on r.hostNum = h.num
+        where approvalStatus = 0
+        order by r.num desc
+    </select>
+
+
     <select id="selectThemeExcludeRoom" parameterType="int" resultType="RoomDto">
         select * from room where num not in (select roomNum from roomTheme where themeNum=#{themeNum})
     </select>
