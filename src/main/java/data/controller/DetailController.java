@@ -147,11 +147,15 @@ public class DetailController {
         return qnAMapper.getQnaByUserNum(map);
     }
 
+    @GetMapping("/host/hostName")
+    public String getHostByHostNum(@RequestParam int num){
+         return detailMapper.getHostByHostNum(num);
+    }
+
 //    비슷한 공간
     @GetMapping("/detailRandomPlace")
     public List<RoomDto> selectRandomRooms(int num){
        return detailMapper.selectRandomRooms(num);
     }
-
 
 }
