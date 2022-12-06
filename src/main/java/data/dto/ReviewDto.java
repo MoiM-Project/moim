@@ -28,5 +28,5 @@ public class ReviewDto {
     //room - 메인페이지 리뷰가져오기
     private String roomName; //리뷰 클릭 시 공간 상세보기 이동을 위한 num
     private int weekAmPrice; //리뷰에 가격 표시
-    
+    private int reNum;
 }
