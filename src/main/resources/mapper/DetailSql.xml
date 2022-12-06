@@ -76,6 +76,11 @@
         where r.Num = #{num}
     </select>
 
+
+    <select id="getHostByHostNum" resultType="String" parameterType="int">
+        select companyName from host where num = #{num}
+    </select>
+
     <select id="getRoomByHostNum" resultType="RoomDto" parameterType="Map">
         select  r.num num,name,r.address address,headcount,weekAmPrice,payment from room r
         inner join host h on r.hostNum = h.num
