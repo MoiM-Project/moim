@@ -32,6 +32,8 @@ public class BookingDetailController {
         map.put("userNum",userNum);
         map.put("bookingStatus",bookingStatus);
         map.put("sort",sort);
+        if (bookingStatus.equals("-1"))
+            return bookingDetailMapper.getBookingDetailList2(userNum);
 
         return bookingDetailMapper.getBookingDetailList(map);
     }

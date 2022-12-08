@@ -23,7 +23,8 @@ public class BookingDto {
     //조인되서 가져오는것 부킹
     private String name;
     private String roomName;
+    private String bookingName;
     private int hostNum;
+    private int payStatus;
     private int bookingStatus;
-    private boolean payStatus;
 }

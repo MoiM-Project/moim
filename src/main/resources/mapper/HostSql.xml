@@ -27,31 +27,39 @@
 
     <!--  admin > hostList > hostBlock 호스트 차단/해제  -->
     <update id="updateHostActive" parameterType="int">
-        UPDATE host SET active = IF (active=0, 1, 0) WHERE num = #{hostNum}
+        UPDATE host
+        SET active = IF(active = 0, 1, 0)
+        WHERE num = #{hostNum}
     </update>
 
     <!--  호스트 warningCount 증가 쿼리  -->
     <update id="addWarningCount" parameterType="int">
-        UPDATE host SET warningCount = warningCount+1 WHERE num = #{hostNum}
+        UPDATE host
+        SET warningCount = warningCount + 1
+        WHERE num = #{hostNum}
     </update>
 
     <!--  호스트 warningCount 조회 쿼리  -->
     <select id="getWarningCount" resultType="int">
-        select warningCount from host where num = #{hostNum}
+        select warningCount
+        from host
+        where num = #{hostNum}
     </select>
 
     <!--  hostNum에 해당하는 host를 비활성화 (inactive)  -->
     <update id="updateHostBlock" parameterType="int">
-        UPDATE host SET active = 1 WHERE num = #{hostNum}
+        UPDATE host
+        SET active = 1
+        WHERE num = #{hostNum}
     </update>
 
     <!--  adminMain > 신고 누적 호스트 순위   -->
     <!--  잠시 보류 // 인기있는 공간으로 대체 (room SQL)  -->
     <select id="getWarningHost" resultType="HostDto">
-        select * from host
+        select *
+        from host
         where warningCount > 0
-        order by warningCount desc
-            limit 5;
+        order by warningCount desc limit 5;
     </select>
 
     <!--방 전체 리스트-->
@@ -378,30 +386,16 @@
 
     <!--정산 쿼리문-->
     <select id="searchBooking" parameterType="map" resultType="bookingDto">
-        select b.num,
-        b.totalPrice,
-        b.pg,
-        b.createdAt,
-        b.payStatus,
-        b.bookingDetailnum,
-        r.num as roomNum,
-        r.name as roomName,
-        r.hostNum,
-        bd.name,
-        bd.bookingStatus,
-        b.merchantUid
-        from booking b
-        inner join room r on b.roomNum = r.num
-        inner join bookingDetail bd on b.bookingDetailNum = bd.num
-        inner join host h on r.hostNum = h.num
-        where bd.bookingStatus=4 and (b.payStatus=1 or b.payStatus=0)
+        select b.num, b.totalPrice, b.pg, b.createdAt, b.payStatus, b.bookingDetailNum, b.merchantUid, bd.name as bookingName, bd.bookingStatus, r.num as roomNum, r.name as roomName, r.hostNum
+        from moim.booking b inner join moim.bookingDetail bd on b.bookingDetailNum = bd.num inner join moim.room r on
+        r.num = b.roomNum inner join host h on h.num = r.hostNum
+        where bd.bookingStatus = 4 and b.payStatus = 0
         and b.createdAt &gt;= #{sdate}
         and b.createdAt &lt;= #{edate}
         <if test="roomName!='전체보기'">
             and r.name = #{roomName}
         </if>
-        and r.hostNum = #{hostNum}
-        and b.payStatus = #{payStatus}
+        and r.hostNum = #{hostNum};
     </select>
 
 </mapper>
