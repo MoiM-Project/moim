@@ -52,6 +52,8 @@ public interface HostMapper {
 
 
 
+
+
     // admin Host 관련
     List<HostDto> getHostSearchList(HashMap<String,Object> map);    // admin > hostList 출력
 

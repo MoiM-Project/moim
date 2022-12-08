@@ -365,17 +365,21 @@ public class HostController {
 
     //정산 검색
     @GetMapping("/bsearch")
-    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName, int payStatus) {
+    public List<BookingDto> getSearchBooking(int hostNum, String sdate, String edate, String roomName) {
         System.out.println(hostNum);
+        System.out.println(sdate);
+        System.out.println(edate);
+        System.out.println(roomName);
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("payStatus", payStatus);
         map.put("hostNum", hostNum);
         map.put("sdate", sdate);
         map.put("edate", edate);
         map.put("roomName", roomName);
-
         System.out.println(map);
+
+
+
         System.out.println(hostMapper.searchBooking(map));
         return hostMapper.searchBooking(map);
     }
